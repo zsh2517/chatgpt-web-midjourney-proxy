@@ -12,20 +12,20 @@ const fsRef= ref() ;
 const runway= ref<{image_prompt?:string,seed:number,text_prompt:string}>({image_prompt:'',seed:1675247627,text_prompt:''});
 const st= ref({isDo:false,uploading:false, version:'gen2',time:5,image_as_end_frame:false});
 const ms = useMessage();
-const exRunway= ref<RunwayTask>()
+const exRunway= ref<RunwayTask>();
 async function  selectFile(input:any){
-    mlog("selectFile", input.target.files[0])
-    const file = input.target.files[0]  
+    mlog('selectFile', input.target.files[0]);
+    const file = input.target.files[0];  
 
-    st.value.uploading= true
+    st.value.uploading= true;
     try{
-    let d= await runwayUpload( file,'DATASET_PREVIEW')
-    mlog("runwayFetch",d)
-    runway.value.image_prompt= d.url
+        let d= await runwayUpload( file,'DATASET_PREVIEW');
+        mlog('runwayFetch',d);
+        runway.value.image_prompt= d.url;
     }catch(e :any){
-       ms.error(e )
+        ms.error(e );
     }
-     st.value.uploading= false
+    st.value.uploading= false;
     
 }
 function getRandomInt(min: number, max: number): number {
@@ -35,110 +35,110 @@ function getRandomInt(min: number, max: number): number {
 }
 
 const canPost = computed(() => {
-    return (runway.value.image_prompt!='' || runway.value.text_prompt!='' ) && !st.value.isDo
-})
+    return (runway.value.image_prompt!='' || runway.value.text_prompt!='' ) && !st.value.isDo;
+});
 
 const generate= async ()=>{
-    st.value.isDo= true
+    st.value.isDo= true;
     //runway.value.seed= getRandomInt(1675247627, 3275247627)
     let seed= getRandomInt(1375247627, 3975247627);
     try{
         let obj={
-            "taskType": "gen2",
-            "internal": false,
-            "options": {
-                "name": `Gen-2 ${seed}`,
-                "seconds": 4,
-                "gen2Options": {
-                "mode": "gen2",
-                "seed": seed,
-                "interpolate": true,
-                "upscale": false,
-                "watermark": true,
-                "motion_score": 22,
-                "use_motion_score": true,
-                "use_motion_vectors": false,
-                "text_prompt":  runway.value.text_prompt,
-                "image_prompt": runway.value.image_prompt, 
-                "init_image": runway.value.image_prompt
+            'taskType': 'gen2',
+            'internal': false,
+            'options': {
+                'name': `Gen-2 ${seed}`,
+                'seconds': 4,
+                'gen2Options': {
+                    'mode': 'gen2',
+                    'seed': seed,
+                    'interpolate': true,
+                    'upscale': false,
+                    'watermark': true,
+                    'motion_score': 22,
+                    'use_motion_score': true,
+                    'use_motion_vectors': false,
+                    'text_prompt':  runway.value.text_prompt,
+                    'image_prompt': runway.value.image_prompt, 
+                    'init_image': runway.value.image_prompt
                 },
-                "exploreMode": false,
-                "assetGroupName": "Generative Video"
+                'exploreMode': false,
+                'assetGroupName': 'Generative Video'
             },
-           // "asTeamId": 17485144
-        }
+            // "asTeamId": 17485144
+        };
 
-//         {
-//   "name": "Gen-3 Alpha 2584627205, 笑起来, Cropped - cqkrcrc8j3",
-//   "seconds": 5,
-//   "text_prompt": "笑起来",
-//   "seed": 2584627205,
-//   "exploreMode": true,
-//   "watermark": false,
-//   "enhance_prompt": true,
-//   "init_image": "https://d2jqrm6oza8nb6.cloudfront.net/previews/21fb66fc-c9d0-4c92-863d-623b77ab742b.webp?_jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJrZXlIYXNoIjoiNjI5MzQ4YTc0ODIwYWZiMiIsImJ1Y2tldCI6InJ1bndheS1kYXRhc2V0cyIsInN0YWdlIjoicHJvZCIsImV4cCI6MTcyMjY0MzIwMH0.x5f94vMk6Yt4dQTw4ueBnWOJ1EFRqOAp_vaLUcT5bs0",
-//   "resolution": "720p",
-//   "assetGroupName": "Generative Video"
-// }
+        //         {
+        //   "name": "Gen-3 Alpha 2584627205, 笑起来, Cropped - cqkrcrc8j3",
+        //   "seconds": 5,
+        //   "text_prompt": "笑起来",
+        //   "seed": 2584627205,
+        //   "exploreMode": true,
+        //   "watermark": false,
+        //   "enhance_prompt": true,
+        //   "init_image": "https://d2jqrm6oza8nb6.cloudfront.net/previews/21fb66fc-c9d0-4c92-863d-623b77ab742b.webp?_jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJrZXlIYXNoIjoiNjI5MzQ4YTc0ODIwYWZiMiIsImJ1Y2tldCI6InJ1bndheS1kYXRhc2V0cyIsInN0YWdlIjoicHJvZCIsImV4cCI6MTcyMjY0MzIwMH0.x5f94vMk6Yt4dQTw4ueBnWOJ1EFRqOAp_vaLUcT5bs0",
+        //   "resolution": "720p",
+        //   "assetGroupName": "Generative Video"
+        // }
         let gen3= {
-                "taskType": "europa",
-                "internal": false,
-                "options": {
-                    "name": `Gen-3 Alpha  ${seed}`,
-                    "seconds": st.value.time,
-                    "text_prompt":runway.value.text_prompt,
-                    "seed":seed,
-                    "exploreMode": true,
-                    "watermark": false,
-                    "enhance_prompt": true,
-                    "width": 1280,
-                    "height": 768,
-                    "image_as_end_frame": false,
-                    "assetGroupName": "Generative Video",
-                    "init_image": runway.value.image_prompt,
-                    "resolution": '720p'// runway.value.image_prompt,
-                    ,"extended_from_task_id":(exRunway.value&&exRunway.value.id)?exRunway.value.id:undefined
-                    ,"init_video": ( exRunway.value && exRunway.value.artifacts && exRunway.value.artifacts[0].url)?exRunway.value.artifacts[0].url:undefined
-                },
+            'taskType': 'europa',
+            'internal': false,
+            'options': {
+                'name': `Gen-3 Alpha  ${seed}`,
+                'seconds': st.value.time,
+                'text_prompt':runway.value.text_prompt,
+                'seed':seed,
+                'exploreMode': true,
+                'watermark': false,
+                'enhance_prompt': true,
+                'width': 1280,
+                'height': 768,
+                'image_as_end_frame': false,
+                'assetGroupName': 'Generative Video',
+                'init_image': runway.value.image_prompt,
+                'resolution': '720p'// runway.value.image_prompt,
+                ,'extended_from_task_id':(exRunway.value&&exRunway.value.id)?exRunway.value.id:undefined
+                ,'init_video': ( exRunway.value && exRunway.value.artifacts && exRunway.value.artifacts[0].url)?exRunway.value.artifacts[0].url:undefined
+            },
             //    "asTeamId": 17511575
-        }
+        };
         let gen3_trubo=    {
-                "taskType": "gen3a_turbo",
-                "internal": false,
-                "options": {
-                    "name": `Gen-3 Alpha Turbo ${seed}`,
-                    "seconds":st.value.time,
-                    "text_prompt": runway.value.text_prompt ,
-                    "seed": seed,
-                    "exploreMode": false,
-                    "watermark": false,
-                    "enhance_prompt": true,
-                    "init_image":  runway.value.image_prompt,
-                    "resolution": "720p",
-                    "image_as_end_frame": false,
-                    "assetGroupName": "Generative Video"
-                   ,"extended_from_task_id":(exRunway.value&&exRunway.value.id)?exRunway.value.id:undefined
-                    ,"init_video": ( exRunway.value && exRunway.value.artifacts && exRunway.value.artifacts[0].url)?exRunway.value.artifacts[0].url:undefined
-                }
-        }
-        let v_gen3={
-            "taskType": "europa",
-            "internal": false,
-            "options": {
-                "name": `Gen-3 Alpha  ${seed}`,
-                "seconds": st.value.time,
-                "text_prompt":runway.value.text_prompt,
-                "seed":seed,
-                "exploreMode": true,
-                "watermark": false,
-                "enhance_prompt": true,
-                "video_prompt":  runway.value.image_prompt ,
-                "structure_transformation": 0.3,
-                "width": 1280,
-                "height": 768,
-                "assetGroupName": "Generative Video"
+            'taskType': 'gen3a_turbo',
+            'internal': false,
+            'options': {
+                'name': `Gen-3 Alpha Turbo ${seed}`,
+                'seconds':st.value.time,
+                'text_prompt': runway.value.text_prompt ,
+                'seed': seed,
+                'exploreMode': false,
+                'watermark': false,
+                'enhance_prompt': true,
+                'init_image':  runway.value.image_prompt,
+                'resolution': '720p',
+                'image_as_end_frame': false,
+                'assetGroupName': 'Generative Video'
+                ,'extended_from_task_id':(exRunway.value&&exRunway.value.id)?exRunway.value.id:undefined
+                ,'init_video': ( exRunway.value && exRunway.value.artifacts && exRunway.value.artifacts[0].url)?exRunway.value.artifacts[0].url:undefined
             }
-        }
+        };
+        let v_gen3={
+            'taskType': 'europa',
+            'internal': false,
+            'options': {
+                'name': `Gen-3 Alpha  ${seed}`,
+                'seconds': st.value.time,
+                'text_prompt':runway.value.text_prompt,
+                'seed':seed,
+                'exploreMode': true,
+                'watermark': false,
+                'enhance_prompt': true,
+                'video_prompt':  runway.value.image_prompt ,
+                'structure_transformation': 0.3,
+                'width': 1280,
+                'height': 768,
+                'assetGroupName': 'Generative Video'
+            }
+        };
   
 
         if( obj.options.gen2Options.image_prompt==''){
@@ -157,78 +157,78 @@ const generate= async ()=>{
             delete gen3.options.extended_from_task_id;
             delete gen3_trubo.options.extended_from_task_id;
         }
-        gen3.options.image_as_end_frame=st.value.image_as_end_frame
-        gen3_trubo.options.image_as_end_frame=st.value.image_as_end_frame
+        gen3.options.image_as_end_frame=st.value.image_as_end_frame;
+        gen3_trubo.options.image_as_end_frame=st.value.image_as_end_frame;
         
-        gen3.options.exploreMode= st.value.version=='europa'
-        v_gen3.options.exploreMode= st.value.version=='europa'
+        gen3.options.exploreMode= st.value.version=='europa';
+        v_gen3.options.exploreMode= st.value.version=='europa';
         let sobj:any = gen3;
         if(  st.value.version=='gen2' ){
-            sobj= obj
+            sobj= obj;
         }
         if(  st.value.version=='gen3a_turbo' ){
-            sobj= gen3_trubo
+            sobj= gen3_trubo;
             if(gen3_trubo.options.init_image=='') {
-                ms.error( t('video.gen3a_turbo_img') )
-                return 
+                ms.error( t('video.gen3a_turbo_img') );
+                return; 
             }
         }
         if(runway.value.image_prompt && isMp4(runway.value.image_prompt)){
             if( st.value.version=='gen2'){
-                ms.error( 'gen2 不支持视频' )
-                return 
+                ms.error( 'gen2 不支持视频' );
+                return; 
             }
-            v_gen3.taskType='europa'
+            v_gen3.taskType='europa';
             if( st.value.version=='gen3a_turbo' ){
-                v_gen3.taskType='gen3a_turbo'
+                v_gen3.taskType='gen3a_turbo';
             }
-            sobj= v_gen3
+            sobj= v_gen3;
         }
-       // const d=  await runwayFetch('/tasks', st.value.version=='gen2'?obj: gen3 ) 
-        const d=  await runwayFetch('/tasks',  sobj ) 
-        mlog("runwayGen2",d) 
-        d.task && d.task.id&& runwayFeed(d.task.id)
+        // const d=  await runwayFetch('/tasks', st.value.version=='gen2'?obj: gen3 ) 
+        const d=  await runwayFetch('/tasks',  sobj ); 
+        mlog('runwayGen2',d); 
+        d.task && d.task.id&& runwayFeed(d.task.id);
     }catch(e:any){
-        ms.error(e)
+        ms.error(e);
     }
-    st.value.isDo=false
+    st.value.isDo=false;
 
-}
+};
 const isMp4=(url:string)=>{
-    return url.indexOf('.mp4')>0
-}
+    return url.indexOf('.mp4')>0;
+};
 
 const mvOption= [
-{label: t('video.rwgen2'),value: 'gen2'}
-,{label:t('video.rwgen3'),value: 'europa'}
-,{label:t('video.rwgen3fast'),value: 'europa-fast'}
-,{label:t('video.rwgen3turbo'),value: 'gen3a_turbo'}
- ]
- const timeOption= [
-{label: 'Duration: 5s',value: 5}
-,{label:'Duration: 10s',value: 10}
- ]
+    {label: t('video.rwgen2'),value: 'gen2'}
+    ,{label:t('video.rwgen3'),value: 'europa'}
+    ,{label:t('video.rwgen3fast'),value: 'europa-fast'}
+    ,{label:t('video.rwgen3turbo'),value: 'gen3a_turbo'}
+];
+const timeOption= [
+    {label: 'Duration: 5s',value: 5}
+    ,{label:'Duration: 10s',value: 10}
+];
 
  
 
 const clearInput=()=>{
-    runway.value.image_prompt ='' 
-    runway.value.text_prompt =''
-    exRunway.value= undefined
-}
+    runway.value.image_prompt =''; 
+    runway.value.text_prompt ='';
+    exRunway.value= undefined;
+};
 watch(()=>st.value.version,(n:string)=>{
-    gptServerStore.setMyData({RRUNWAY_VERSION:n})
-})
+    gptServerStore.setMyData({RRUNWAY_VERSION:n});
+});
 onMounted(() => {
-    homeStore.setMyData({ms:ms})
-    st.value.version= gptServerStore.myData.RRUNWAY_VERSION?gptServerStore.myData.RRUNWAY_VERSION: 'gen2'
+    homeStore.setMyData({ms:ms});
+    st.value.version= gptServerStore.myData.RRUNWAY_VERSION?gptServerStore.myData.RRUNWAY_VERSION: 'gen2';
 });
 
 watch(()=>homeStore.myData.act, (n)=>{
-     if(n=='runway.extend'){
-       mlog("runway.extend", homeStore.myData.actData )
-       exRunway.value = homeStore.myData.actData as RunwayTask
-     }
+    if(n=='runway.extend'){
+        mlog('runway.extend', homeStore.myData.actData );
+        exRunway.value = homeStore.myData.actData as RunwayTask;
+    }
 });
 </script>
 <template>

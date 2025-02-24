@@ -2,41 +2,43 @@
 import { pikaFeed } from '@/api/pika';
 import { PikaTask, pikaStore } from '@/api/pikaStore';
 import { onMounted, ref, watch } from 'vue';
-import {NEmpty,NButton,NPopover, NButtonGroup, useMessage,NPopconfirm} from "naive-ui"
+import {NEmpty,NButton,NPopover, NButtonGroup, useMessage,NPopconfirm} from 'naive-ui';
 import { mlog } from '@/api';
-import {SvgIcon} from '@/components/common'
+import {SvgIcon} from '@/components/common';
 import { t } from '@/locales';
 import { homeStore } from '@/store';
 
 const st= ref({pIndex:-1});
 const list= ref<PikaTask[]>([]);
-const csuno= new pikaStore()
+const csuno= new pikaStore();
 
 const ms= useMessage();
 
 const initLoad=()=>{
     let arr = csuno.getObjs();
-    list.value= arr.reverse()
-}
+    list.value= arr.reverse();
+};
 
 const deleteGo=(item:PikaTask)=>{
-    mlog('deleteGo',item )
+    mlog('deleteGo',item );
     if( csuno.delete( item)){ 
-        ms.success( t('common.deleteSuccess'))
-        initLoad()
+        ms.success( t('common.deleteSuccess'));
+        initLoad();
     }
-}
+};
 
 //pikaFeed('66e0818e-05fb-454e-b246-a6f253e9ffbf')
 //pikaFeed('e90a4fa4-009a-4ca8-9002-57d2f2cbb6c3')
 //PikaFeed
 watch(()=>homeStore.myData.act, (n)=>{
-    if(n=='PikaFeed')  initLoad()
-})
+    if(n=='PikaFeed')  {
+        initLoad();
+    }
+});
 onMounted(() => {
     initLoad();
     homeStore.setMyData({ms:ms });
-})
+});
 </script>
 <template>
  

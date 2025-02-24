@@ -1,4 +1,4 @@
-import { ss } from '@/utils/storage'
+import { ss } from '@/utils/storage';
  
 export type SunoMedia = {
     id: string;
@@ -38,33 +38,44 @@ export type SunoMedia = {
     is_public: boolean;
 };
 export class sunoStore{
-  //private id: string;
-  private localKey='suno-store';
-  public save(obj:SunoMedia ){
-    if(!obj.id ) throw "id must";
-    const arr=  this.getObjs();
-    const i= arr.findIndex( v=>v.id==obj.id );
-    if(i>-1) arr[i]= obj;
-    else arr.push(obj);
-     ss.set(this.localKey, arr );
-    return this;
-  } 
-  public findIndex(id:string){ 
-    return this.getObjs().findIndex( v=>v.id== id )
-  }
+    //private id: string;
+    private localKey='suno-store';
+    public save(obj:SunoMedia ){
+        if(!obj.id ) {
+            throw 'id must';
+        }
+        const arr=  this.getObjs();
+        const i= arr.findIndex( v=>v.id==obj.id );
+        if(i>-1) {
+            arr[i]= obj;
+        } else {
+            arr.push(obj);
+        }
+        ss.set(this.localKey, arr );
+        return this;
+    } 
+    public findIndex(id:string){ 
+        return this.getObjs().findIndex( v=>v.id== id );
+    }
 
-  public getObjs():SunoMedia[]{
-     const obj = ss.get( this.localKey ) as  undefined| SunoMedia[];
-     if(!obj) return [];
-     return obj;
-  }
-  public delete( obj:SunoMedia ){
-    if(!obj.id ) throw "id must";
-    const arr=  this.getObjs();
-    const i= arr.findIndex( v=>v.id==obj.id );
-    if(i<0) return false
-    arr.splice(i, 1);
-    ss.set(this.localKey, arr );
-    return true;
-  }
+    public getObjs():SunoMedia[]{
+        const obj = ss.get( this.localKey ) as  undefined| SunoMedia[];
+        if(!obj) {
+            return [];
+        }
+        return obj;
+    }
+    public delete( obj:SunoMedia ){
+        if(!obj.id ) {
+            throw 'id must';
+        }
+        const arr=  this.getObjs();
+        const i= arr.findIndex( v=>v.id==obj.id );
+        if(i<0) {
+            return false;
+        }
+        arr.splice(i, 1);
+        ss.set(this.localKey, arr );
+        return true;
+    }
 }

@@ -1,19 +1,22 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import {useMessage, NButton} from 'naive-ui';
-import {upImg} from '@/api'
+import {upImg} from '@/api';
 import { homeStore } from '@/store';
 const ms = useMessage();
 const fsRef= ref() ;
-const st= ref({status:'',isGo:false})
+const st= ref({status:'',isGo:false});
 const f= ref({sourceBase64:'',targetBase64:''});
 function selectFile(input:any){
      
     upImg(input.target.files[0]).then(d=>{
-        if(st.value.status=='target') f.value.targetBase64=d;
-        else f.value.sourceBase64= d ; 
-         st.value.isGo=true;
-        //if(st)
+        if(st.value.status=='target') {
+            f.value.targetBase64=d;
+        } else {
+            f.value.sourceBase64= d ;
+        } 
+        st.value.isGo=true;
+    //if(st)
     }).catch(e=>ms.error(e));
     
 }
@@ -23,11 +26,11 @@ const send=()=>{
             action:'face',
             version:1, 
             data:f.value
-        }
+        };
         homeStore.setMyData({act:'draw',actData:obj});
         st.value.isGo=false;
     }
-}
+};
 </script>
 <template>
 <input ref="fsRef"  type="file"  style="display: none" accept="image/jpeg, image/jpg, image/png, image/gif" @change="selectFile"/>

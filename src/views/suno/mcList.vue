@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, watch } from 'vue'
+import { ref, watch } from 'vue';
 import { SvgIcon } from '@/components/common';
 //import {   FeedTask} from '@/api/suno';
 import {   sunoStore, SunoMedia} from '@/api/sunoStore';  
@@ -7,82 +7,84 @@ import {   sunoStore, SunoMedia} from '@/api/sunoStore';
 import playui from './playui.vue';
 import { homeStore } from '@/store';
 import { mlog } from '@/api';
-import {NEmpty, NImage ,useMessage,NPopconfirm} from "naive-ui"
+import {NEmpty, NImage ,useMessage,NPopconfirm} from 'naive-ui';
 import { FeedTask } from '@/api/suno';
 import { t } from '@/locales';
 
 const list= ref<SunoMedia[]>([]);
-const csuno= new sunoStore()
+const csuno= new sunoStore();
 const st= ref({playid:''});
 
 const ms = useMessage();
 const initLoad=()=>{
     let arr = csuno.getObjs();
-    list.value= arr.reverse()
-}
+    list.value= arr.reverse();
+};
 
 const getNowCls=(v:any)=>{
     if(v.id==st.value.playid ){
-        return ['bg-gray-200','dark:bg-black']
+        return ['bg-gray-200','dark:bg-black'];
     }
     return [];
-}
+};
 const goPlay=(v:SunoMedia)=>{
     if(v.status=='error'){
-        ms.info( t('mj.ud_fail'))
+        ms.info( t('mj.ud_fail'));
         return ;
     }
-    st.value.playid=v.id
-    homeStore.setMyData({act:'goPlay',actData:v})
+    st.value.playid=v.id;
+    homeStore.setMyData({act:'goPlay',actData:v});
     
     if(v.status!='complete'){
-        FeedTask([v.id ])
+        FeedTask([v.id ]);
     }
-}
+};
 
 const extend=(v:SunoMedia)=>{
-    mlog("extend", extend )
+    mlog('extend', extend );
     //homeStore.myData.actData
-    homeStore.setMyData({act:"suno.extend", actData: v  })
-}
+    homeStore.setMyData({act:'suno.extend', actData: v  });
+};
 
 const sp= ref({v:10, max:0 ,status:'',idDrop:false });
  
 watch(()=>homeStore.myData.act, (n)=>{
-     if(n=='FeedTask'){
-         initLoad()
-     }
-     if(n=='playEned'){
-        //
-        let  i= list.value.findIndex((v)=>v.id==st.value.playid)
+    if(n=='FeedTask'){
+        initLoad();
+    }
+    if(n=='playEned'){
+    //
+        let  i= list.value.findIndex((v)=>v.id==st.value.playid);
         i++;
-        mlog('playEned,',i, list.value.length )
-        if(i<list.value.length) setTimeout(()=>goPlay(list.value[i]),1000)  
-     }
+        mlog('playEned,',i, list.value.length );
+        if(i<list.value.length) {
+            setTimeout(()=>goPlay(list.value[i]),1000);
+        }  
+    }
 });
 
 const getExSuno=(id:string)=>{
-    id= id.replace("m_",'');
+    id= id.replace('m_','');
     let index= list.value.findIndex(v=>v.id==id);
      
     if (index<0){
-      return null ;
+        return null ;
     }
     return list.value[index];
-}
+};
 const update = (v:any )=>{
-     sp.value=v
+    sp.value=v;
       
-}
+};
 const deleteGo=(v:SunoMedia)=>{
-    mlog('deleteGo', v)
+    mlog('deleteGo', v);
    
     if(csuno.delete(v)) {
-        ms.success( t('common.deleteSuccess'))
+        ms.success( t('common.deleteSuccess'));
         initLoad();
     }
 
-}
+};
 initLoad();
 </script>
 <template>

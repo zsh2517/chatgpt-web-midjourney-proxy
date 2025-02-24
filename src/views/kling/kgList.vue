@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import { LazyImg, Waterfall } from 'vue-waterfall-plugin-next'
-import 'vue-waterfall-plugin-next/dist/style.css'
+import { LazyImg, Waterfall } from 'vue-waterfall-plugin-next';
+import 'vue-waterfall-plugin-next/dist/style.css';
 
 import { KlingTask, klingStore } from '@/api/klingStore';
 import { nextTick, ref, watch } from 'vue';
-import {NEmpty ,NButton,NPopover, NButtonGroup,NSpin, NImage,NPopconfirm,useMessage} from "naive-ui"
+import {NEmpty ,NButton,NPopover, NButtonGroup,NSpin, NImage,NPopconfirm,useMessage} from 'naive-ui';
 import { ViewCard } from 'vue-waterfall-plugin-next/dist/types/types/waterfall';
 import { useBasicLayout } from '@/hooks/useBasicLayout';
 import { homeStore } from '@/store';
@@ -18,80 +18,84 @@ const list= ref<KlingTask[]>([]);
 const list2= ref<ViewCard[]>([]);
  
 const st =ref({show:true ,showImg:'' ,isLoad:false,pIndex:-1,isStart:true });
-const csuno= new klingStore()
-const ms= useMessage()
+const csuno= new klingStore();
+const ms= useMessage();
 const initLoad=()=>{
     let arr = csuno.getObjs();
-    list.value= arr.reverse()
+    list.value= arr.reverse();
 
     toList2();
-}
+};
 const toList2=()=>{
     list2.value= list.value.map((v,k )=>{
-        let url= v.data.task_result?.images?.[0]?.url||v.data.task_result?.videos?.[0]?.url||''
-        return { url , id: v.request_id,  index: k, src: url ,isLoad:0,task:v } 
-    })
-}
+        let url= v.data.task_result?.images?.[0]?.url||v.data.task_result?.videos?.[0]?.url||'';
+        return { url , id: v.request_id,  index: k, src: url ,isLoad:0,task:v }; 
+    });
+};
 
 const breakpoints= {
-  2000: { //当屏幕宽度小于等于1200
-    rowPerView: 6,
-  },
-  1600: { //当屏幕宽度小于等于1200
-    rowPerView: 5,
-  },
-  1200: { //当屏幕宽度小于等于1200
-    rowPerView: 4,
-  },
-  800: { //当屏幕宽度小于等于800
-    rowPerView: 3,
-  },
-  500: { //当屏幕宽度小于等于500
-    rowPerView: 2,
-  }
-}
+    2000: { //当屏幕宽度小于等于1200
+        rowPerView: 6,
+    },
+    1600: { //当屏幕宽度小于等于1200
+        rowPerView: 5,
+    },
+    1200: { //当屏幕宽度小于等于1200
+        rowPerView: 4,
+    },
+    800: { //当屏幕宽度小于等于800
+        rowPerView: 3,
+    },
+    500: { //当屏幕宽度小于等于500
+        rowPerView: 2,
+    }
+};
 
-const { isMobile } = useBasicLayout()
+const { isMobile } = useBasicLayout();
 
 const showImg= ref<typeof NImage>();
 
 
 const goShow=( item:any)=>{
     //console.log('goShow', isMobile );
-    if( isMobile.value)   return ; 
+    if( isMobile.value)   {
+        return ;
+    } 
     st.value.show= true;
     st.value.showImg= item.url ;
     //console.log('goShow', item);
     nextTick(() => showImg.value?.click());
-}
+};
 const goShow2=( item:any)=>{
     //console.log('goShow', isMobile );
-    if( isMobile.value)   return ; 
+    if( isMobile.value)   {
+        return ;
+    } 
     st.value.show= true;
     st.value.showImg= (item.base64?item.base64: item.src) as string ;
     //console.log('goShow', item);
     nextTick(() => showImg.value?.click());
-}
+};
 
 initLoad();
 watch(()=>homeStore.myData.act, (n)=>{
-     if(n=='KlingFeed') {
+    if(n=='KlingFeed') {
         st.value.isStart= false;
-        initLoad() 
-     }
+        initLoad(); 
+    }
 });
 const getFeed=( item:any)=>{
-    mlog('item', item )
-    klingFeed( item.task.data.task_id, item.task.cat, item.task.prompt )
-}
+    mlog('item', item );
+    klingFeed( item.task.data.task_id, item.task.cat, item.task.prompt );
+};
 
 const deleteGo=(item:any)=>{
-    mlog('deleteGo',item )
+    mlog('deleteGo',item );
     if( csuno.delete( item.id)){ 
-        ms.success( t('common.deleteSuccess'))
-        initLoad()
+        ms.success( t('common.deleteSuccess'));
+        initLoad();
     }
-}
+};
 </script>
 <template>
 <div v-if="list.length>0" class="p-4">

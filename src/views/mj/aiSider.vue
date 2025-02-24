@@ -1,31 +1,31 @@
 <script setup lang="ts">
-import { computed,defineAsyncComponent ,ref} from "vue";
-import { SvgIcon ,HoverButton} from '@/components/common'
-import { useBasicLayout } from '@/hooks/useBasicLayout'
-const { isMobile } = useBasicLayout()
-import { NAvatar,NTooltip } from 'naive-ui'
-import { homeStore, useUserStore,useChatStore } from '@/store'
-import defaultAvatar from '@/assets/avatar.jpg'
-import { router } from '@/router'
-import { isDisableMenu } from "@/api";
-import { useRouter } from "vue-router";
+import { computed,defineAsyncComponent ,ref} from 'vue';
+import { SvgIcon ,HoverButton} from '@/components/common';
+import { useBasicLayout } from '@/hooks/useBasicLayout';
+const { isMobile } = useBasicLayout();
+import { NAvatar,NTooltip } from 'naive-ui';
+import { homeStore, useUserStore,useChatStore } from '@/store';
+import defaultAvatar from '@/assets/avatar.jpg';
+import { router } from '@/router';
+import { isDisableMenu } from '@/api';
+import { useRouter } from 'vue-router';
 
 //import gallery from '@/views/gallery/index.vue'
 
-const chatStore = useChatStore()
-const Setting = defineAsyncComponent(() => import('@/components/common/Setting/index.vue'))
-const userStore = useUserStore()
+const chatStore = useChatStore();
+const Setting = defineAsyncComponent(() => import('@/components/common/Setting/index.vue'));
+const userStore = useUserStore();
 
-const st= ref({'show':false,showImg:false, menu:[],active:'chat'})
+const st= ref({'show':false,showImg:false, menu:[],active:'chat'});
 
 
-const userInfo = computed(() => userStore.userInfo)
+const userInfo = computed(() => userStore.userInfo);
 
-const urouter = useRouter() //
+const urouter = useRouter(); //
  
 const goHome =computed(  () => {
-  //router.push('/')
-  return router.currentRoute.value.name
+    //router.push('/')
+    return router.currentRoute.value.name;
 });
 // const go=(n:string)=>{
 //   if('chat'==n){

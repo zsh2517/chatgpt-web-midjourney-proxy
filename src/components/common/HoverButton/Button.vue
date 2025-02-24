@@ -3,10 +3,10 @@ interface Emit {
   (e: 'click'): void
 }
 
-const emit = defineEmits<Emit>()
+const emit = defineEmits<Emit>();
 
 function handleClick() {
-  emit('click')
+    emit('click');
 }
 </script>
 

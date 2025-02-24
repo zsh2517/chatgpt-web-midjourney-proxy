@@ -1,4 +1,4 @@
-import { ss } from '@/utils/storage'
+import { ss } from '@/utils/storage';
  
  type LumaVideo = {
     url: string;
@@ -20,35 +20,46 @@ export type LumaMedia = {
     last_feed?:number
 };
 export class lumaStore{
-  //private id: string;
-  private localKey='luma-store';
-  public save(obj:LumaMedia ){
-    if(!obj.id ) throw "id must";
-    const arr=  this.getObjs();
-    const i= arr.findIndex( v=>v.id==obj.id );
-    if(i>-1) arr[i]= obj;
-    else arr.push(obj);
-     ss.set(this.localKey, arr );
-    return this;
-  } 
-  public findIndex(id:string){ 
-    return this.getObjs().findIndex( v=>v.id== id )
-  }
+    //private id: string;
+    private localKey='luma-store';
+    public save(obj:LumaMedia ){
+        if(!obj.id ) {
+            throw 'id must';
+        }
+        const arr=  this.getObjs();
+        const i= arr.findIndex( v=>v.id==obj.id );
+        if(i>-1) {
+            arr[i]= obj;
+        } else {
+            arr.push(obj);
+        }
+        ss.set(this.localKey, arr );
+        return this;
+    } 
+    public findIndex(id:string){ 
+        return this.getObjs().findIndex( v=>v.id== id );
+    }
 
-  public getObjs():LumaMedia[]{
-     const obj = ss.get( this.localKey ) as  undefined| LumaMedia[];
-     if(!obj) return [];
-     return obj;
-  }
-  public delete( obj:LumaMedia ){
-    if(!obj.id ) throw "id must";
-    const arr=  this.getObjs();
-    const i= arr.findIndex( v=>v.id==obj.id );
-    if(i<0) return false
-    arr.splice(i, 1);
-    ss.set(this.localKey, arr );
-    return true;
-  }
+    public getObjs():LumaMedia[]{
+        const obj = ss.get( this.localKey ) as  undefined| LumaMedia[];
+        if(!obj) {
+            return [];
+        }
+        return obj;
+    }
+    public delete( obj:LumaMedia ){
+        if(!obj.id ) {
+            throw 'id must';
+        }
+        const arr=  this.getObjs();
+        const i= arr.findIndex( v=>v.id==obj.id );
+        if(i<0) {
+            return false;
+        }
+        arr.splice(i, 1);
+        ss.set(this.localKey, arr );
+        return true;
+    }
 }
 
 export type LumaHk={
@@ -57,30 +68,39 @@ export type LumaHk={
 }
 
 export class lumaHkStore{
-  //private id: string;
-  private localKey='luma-HK';
-  public save(obj:LumaHk ){
-    if(!obj.id ) throw "id must";
-    const arr=  this.getObjs();
-    const i= arr.findIndex( v=>v.id==obj.id );
-    if(i>-1) arr[i]= obj;
-    else arr.push(obj);
-     ss.set(this.localKey, arr );
-    return this;
-  } 
-  public findIndex(id:string){ 
-    return this.getObjs().findIndex( v=>v.id== id )
-  }
+    //private id: string;
+    private localKey='luma-HK';
+    public save(obj:LumaHk ){
+        if(!obj.id ) {
+            throw 'id must';
+        }
+        const arr=  this.getObjs();
+        const i= arr.findIndex( v=>v.id==obj.id );
+        if(i>-1) {
+            arr[i]= obj;
+        } else {
+            arr.push(obj);
+        }
+        ss.set(this.localKey, arr );
+        return this;
+    } 
+    public findIndex(id:string){ 
+        return this.getObjs().findIndex( v=>v.id== id );
+    }
 
-  public getObjs():LumaHk[]{
-     const obj = ss.get( this.localKey ) as  undefined| LumaHk[];
-     if(!obj) return [];
-     return obj;
-  }
-  public getOneById(id:string):LumaHk|null{
-    const i= this.findIndex(id)
-    if(i<0) return null;
-    const arr=  this.getObjs();
-    return arr[i]
-  }
+    public getObjs():LumaHk[]{
+        const obj = ss.get( this.localKey ) as  undefined| LumaHk[];
+        if(!obj) {
+            return [];
+        }
+        return obj;
+    }
+    public getOneById(id:string):LumaHk|null{
+        const i= this.findIndex(id);
+        if(i<0) {
+            return null;
+        }
+        const arr=  this.getObjs();
+        return arr[i];
+    }
 }

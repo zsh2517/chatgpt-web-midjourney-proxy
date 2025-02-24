@@ -2,39 +2,41 @@
 import { pixverseStore,pixverseTask } from '@/api/pixverseStore';
 import { homeStore } from '@/store';
 import { ref, watch } from 'vue';
-import {NEmpty ,NButton,NPopover, NButtonGroup, useMessage,NPopconfirm} from "naive-ui"
+import {NEmpty ,NButton,NPopover, NButtonGroup, useMessage,NPopconfirm} from 'naive-ui';
 import { pixFeed } from '@/api/pixverse';
 import { t } from '@/locales';
-import {SvgIcon} from '@/components/common'
+import {SvgIcon} from '@/components/common';
 import { mlog } from '@/api';
 
 
 
-const ms= useMessage()
+const ms= useMessage();
 const st= ref({pIndex:-1});
 const list= ref<pixverseTask[]>([]);
-const csuno= new pixverseStore()
+const csuno= new pixverseStore();
 const initLoad=()=>{
     let arr = csuno.getObjs();
-    list.value= arr.reverse()
-}
+    list.value= arr.reverse();
+};
 
 const deleteGo=(item:pixverseTask)=>{
     //..mlog('deleteGo',item )
     if( csuno.delete( item.video_id)){ 
-        ms.success( t('common.deleteSuccess'))
-        initLoad()
+        ms.success( t('common.deleteSuccess'));
+        initLoad();
     }
-}
+};
 const extend2=  (item:pixverseTask )=>{ 
     
-    mlog("extend ", item )  
-    homeStore.setMyData({act:"pix.extend", actData: item  })
-}
+    mlog('extend ', item );  
+    homeStore.setMyData({act:'pix.extend', actData: item  });
+};
 watch(()=>homeStore.myData.act, (n)=>{
-     if(n=='PixFeed')  initLoad() 
+    if(n=='PixFeed')  {
+        initLoad();
+    } 
 });
-initLoad()
+initLoad();
 </script>
 
 <template>

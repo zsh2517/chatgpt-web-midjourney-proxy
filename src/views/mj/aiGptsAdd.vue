@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { ref, watch } from 'vue'
-import { SvgIcon } from "@/components/common";
+import { ref, watch } from 'vue';
+import { SvgIcon } from '@/components/common';
 import { NInput,useMessage } from 'naive-ui';
 import { t } from '@/locales';
 import { mlog, myFetch } from '@/api';
@@ -12,16 +12,18 @@ const doAdd=async ()=>{
     mlog('q=',st.value.q,  st.value.gid );
     if( !st.value.gid ){
         ms.error( t('mjchat.gidError')); //
-        return 
+        return; 
     }
     const gptUrl= `https://gpts.ddaiai.com/open/gptsapi/add/${ st.value.gid }`; 
     const d = await myFetch(gptUrl );
-    if(d.error!=0) return ms.error( d.error_des);
+    if(d.error!=0) {
+        return ms.error( d.error_des);
+    }
     //data.gpts
-    let msg= t('mjchat.success3') +' '+ d.data?.gpts?.name
+    let msg= t('mjchat.success3') +' '+ d.data?.gpts?.name;
     ms.success( msg );
     mlog('rz=',d);
-}
+};
 function extractGStrings(input: string): string[] { 
     const pattern = /g-[^/]+/g; 
     const matches = input.match(pattern); 
@@ -38,7 +40,7 @@ watch(()=>st.value.q, (n)=>{
     if(n) {
         st.value.gid= extractGStrings(n)[0]??'';
     }
-})
+});
 </script>
 <template>
 

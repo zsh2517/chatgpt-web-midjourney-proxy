@@ -1,78 +1,82 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, watch } from 'vue';
 import { NInput,NButton, useMessage,NTag ,NPopover,NSelect,NSwitch} from 'naive-ui';
-import {SvgIcon} from '@/components/common'
+import {SvgIcon} from '@/components/common';
 import { FeedLumaTask, lumaFetch, mlog, upImg } from '@/api';
 import { gptServerStore, homeStore } from '@/store';
 import { t } from '@/locales';
 import { LumaMedia, lumaHkStore } from '@/api/lumaStore';
 import { sleep } from '@/api/suno';
 
-const luma= ref({ "aspect_ratio": "16:9",loop:false, "expand_prompt": true,  "image_url": "",  "user_prompt": "","image_end_url": "", });
-const st= ref({isDo:false,version:'relax'})
+const luma= ref({ 'aspect_ratio': '16:9',loop:false, 'expand_prompt': true,  'image_url': '',  'user_prompt': '','image_end_url': '', });
+const st= ref({isDo:false,version:'relax'});
 const ms = useMessage();
 const fsRef= ref() ;
 const fsRef2 = ref() ;
-const exLuma= ref<LumaMedia>()
+const exLuma= ref<LumaMedia>();
 
 const vf=[{s:'width: 100%; height: 100%;',label:'1:1'}
-,{s:'width: 100%; height: 75%;',label:'4:3'}
-,{s:'width: 75%; height: 100%;',label:'3:4'}
-,{s:'width: 100%; height: 50%;',label:'16:9'}
-,{s:'width: 50%; height: 100%;',label:'9:16'}
- ];
+    ,{s:'width: 100%; height: 75%;',label:'4:3'}
+    ,{s:'width: 75%; height: 100%;',label:'3:4'}
+    ,{s:'width: 100%; height: 50%;',label:'16:9'}
+    ,{s:'width: 50%; height: 100%;',label:'9:16'}
+];
 
 onMounted(() => {
-    homeStore.setMyData({ms:ms})
-    st.value.version= gptServerStore.myData.IS_LUMA_PRO?'pro':'relax'
+    homeStore.setMyData({ms:ms});
+    st.value.version= gptServerStore.myData.IS_LUMA_PRO?'pro':'relax';
 });
 
 
 
 const canPost = computed(() => {
-    return luma.value.user_prompt!='' && !st.value.isDo
-})
+    return luma.value.user_prompt!='' && !st.value.isDo;
+});
 const generate= async ()=>{
-    mlog("generate", luma.value )
-    st.value.isDo= true
+    mlog('generate', luma.value );
+    st.value.isDo= true;
     if(!canPost.value){
-        ms.error( t('video.plsInput') )
+        ms.error( t('video.plsInput') );
         return ;
     }
     try{
         let url= '/generations/';
-        if(exLuma.value) url= `/generations/${exLuma.value.id}/extend`
+        if(exLuma.value) {
+            url= `/generations/${exLuma.value.id}/extend`;
+        }
         //homeStore.myData.is_luma_pro?'/pro':''
         //if(homeStore)
-        const is_luma_pro=homeStore.myData.is_luma_pro
-        if (is_luma_pro) url= '/pro'+url
+        const is_luma_pro=homeStore.myData.is_luma_pro;
+        if (is_luma_pro) {
+            url= '/pro'+url;
+        }
         const d:any=  await lumaFetch(url, luma.value);
-        mlog("d", d )
+        mlog('d', d );
         // if(d.id ) FeedLumaTask(d.id )
         // else FeedLumaTask(d[0].id )
         
-        const taskID= d.id??d[0].id
+        const taskID= d.id??d[0].id;
         if( is_luma_pro ){
             const hk= new lumaHkStore();
-            hk.save({id:taskID,isHK:true})
+            hk.save({id:taskID,isHK:true});
         }
        
         
-        ms.success( t('video.submitSuccess'))
-         await sleep(500)
-        FeedLumaTask(taskID)
+        ms.success( t('video.submitSuccess'));
+        await sleep(500);
+        FeedLumaTask(taskID);
     }catch(e){
         
     }
-    st.value.isDo= false
+    st.value.isDo= false;
     //FeedLumaTask('33ace512-9a46-40ab-9d08-a05eff989831')
-}
+};
 
 function selectFile(input:any){
      
     upImg(input.target.files[0]).then(d=>{
         luma.value.image_url= d;
-        fsRef.value=''
+        fsRef.value='';
     }).catch(e=>ms.error(e));
     
 }
@@ -80,50 +84,50 @@ function selectFile(input:any){
 function selectFile2(input:any){
     upImg(input.target.files[0]).then(d=>{
         luma.value.image_end_url= d;
-        fsRef2.value=''
+        fsRef2.value='';
     }).catch(e=>ms.error(e));
     
 }
 
 const clearInput = ()=>{
-    luma.value.user_prompt= ''
-    luma.value.image_url= ''
-    luma.value.image_end_url= ''
-    exLuma.value= undefined
-}
+    luma.value.user_prompt= '';
+    luma.value.image_url= '';
+    luma.value.image_end_url= '';
+    exLuma.value= undefined;
+};
 
 //luma.extend
 watch(()=>homeStore.myData.act, (n)=>{
     if(n=='luma.extend'){
-        mlog("luma.extend", homeStore.myData.actData )
-        const s= homeStore.myData.actData as LumaMedia
-        exLuma.value= s 
-        // cs.value.continue_clip_id= s.id
-        // cs.value.continue_at= Math.ceil(s.metadata.duration/2) 
+        mlog('luma.extend', homeStore.myData.actData );
+        const s= homeStore.myData.actData as LumaMedia;
+        exLuma.value= s; 
+    // cs.value.continue_clip_id= s.id
+    // cs.value.continue_at= Math.ceil(s.metadata.duration/2) 
     }
 });
 
 const isHK= computed(()=> {
     const url= gptServerStore.myData.LUMA_SERVER.toLocaleLowerCase();
     if(url!=''){
-     return (url.indexOf('hk')>-1 &&  url.indexOf('pro')==-1 ) ;
+        return (url.indexOf('hk')>-1 &&  url.indexOf('pro')==-1 ) ;
     }
    
     return (homeStore.myData.session && homeStore.myData.session.isHk) ;
     
 } );
 const saveMyDate=(is_pro:boolean)=>{
-    homeStore.setMyData({is_luma_pro: is_pro})
-    gptServerStore.setMyData({IS_LUMA_PRO: is_pro})
-}
+    homeStore.setMyData({is_luma_pro: is_pro});
+    gptServerStore.setMyData({IS_LUMA_PRO: is_pro});
+};
 
 watch(()=>isHK.value , (n)=>    saveMyDate( n && st.value.version=='pro' ) ); 
 watch(()=>st.value.version , ()=>  saveMyDate(isHK.value && st.value.version=='pro' ) );
 
 const mvOption= [
-{label: '版本: relax, 价格实惠',value: 'relax'}
-,{label:'版本: pro, 快且无水印',value: 'pro'}
- ]
+    {label: '版本: relax, 价格实惠',value: 'relax'}
+    ,{label:'版本: pro, 快且无水印',value: 'pro'}
+];
 
 </script>
 

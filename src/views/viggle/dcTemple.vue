@@ -6,48 +6,50 @@ import { NButton } from 'naive-ui';
 import { homeStore } from '@/store';
  
 
-const st= ref({qindex:0}) 
+const st= ref({qindex:0}); 
 const emit = defineEmits(['close','toq']);
 const pp= defineProps<{q:string}>( );
 
 
 
-const tagOption= ref<tagInfo[]>([])
-const myList = ref<ViggleTemplate[]>([])
+const tagOption= ref<tagInfo[]>([]);
+const myList = ref<ViggleTemplate[]>([]);
 
 const loadTag= async ()=>{
-    let d= await viggleFetch('/template2/tag')
+    let d= await viggleFetch('/template2/tag');
     mlog('tags', d );
     if (d.data ) {
         tagOption.value= d.data;
-        if( tagOption.value.length>0 ) goSearch( tagOption.value[0] )
+        if( tagOption.value.length>0 ) {
+            goSearch( tagOption.value[0] );
+        }
     }
-}
+};
 const initLoad=()=>{
-   loadTag()
-}
+    loadTag();
+};
 const goSearch= (v:tagInfo)=>{
-     emit('toq',{q:v.name});
-     searchQ('',v.id)
-}
+    emit('toq',{q:v.name});
+    searchQ('',v.id);
+};
 
 const searchQ= async (q:string,tagID:string)=>{
-    let url=`/template2?page=1&pageSize=48&searchKeyword=${ encodeURIComponent(q) }&tagID=${ tagID }&type=0`
-    let d= await viggleFetch( url)
+    let url=`/template2?page=1&pageSize=48&searchKeyword=${ encodeURIComponent(q) }&tagID=${ tagID }&type=0`;
+    let d= await viggleFetch( url);
     mlog('searchQ', d );
-    myList.value=[]
+    myList.value=[];
     if (d.data && d.data.length>0 ) {
-         myList.value= d.data as ViggleTemplate[]
+        myList.value= d.data as ViggleTemplate[];
     }
     
-}
+};
 
 const useVideo= (v:ViggleTemplate )=>{
     mlog('useVideo', v );
-    homeStore.setMyData({act:'viggle.useVideo', actData: v })
-}
+    homeStore.setMyData({act:'viggle.useVideo', actData: v });
+};
 
-initLoad()
+initLoad();
 </script>
 
 <template>

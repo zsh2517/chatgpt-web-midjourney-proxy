@@ -54,16 +54,16 @@ export default [
       }
     },
     rules: {
-      // // 1. 强制 2 缩进
-      // indent: ['error', 2],
-      // // 2. 强制使用单引号
-      // quotes: ['error', 'single'],
-      // // 3. 强制分号
-      // semi: ['error', 'always'],
-      // // 4. 强制使用大括号（如 if 语句）
-      // curly: ['error', 'all'],
-      // // 5. 大括号不换行
-      // 'brace-style': ['error', '1tbs'],
+      // 1. 强制 2 缩进
+      indent: ['error', 4],
+      // 2. 强制使用单引号
+      quotes: ['error', 'single'],
+      // 3. 强制分号
+      semi: ['error', 'always'],
+      // 4. 强制使用大括号（如 if 语句）
+      curly: ['error', 'all'],
+      // 5. 大括号不换行
+      'brace-style': ['error', '1tbs'],
     }
   }
 ];

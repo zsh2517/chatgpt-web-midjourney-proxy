@@ -1,13 +1,13 @@
 <script setup lang='ts'>
-import { computed, ref } from 'vue'
-import { NModal, NTabPane, NTabs } from 'naive-ui'
-import General from './General.vue'
-import Advanced from './Advanced.vue'
-import aiModel from '@/views/mj/aiModel.vue'
-import aiSetServer from '@/views/mj/aiSetServer.vue'
-import About from './About.vue'
-import { homeStore, useAuthStore } from '@/store'
-import { SvgIcon } from '@/components/common'
+import { computed, ref } from 'vue';
+import { NModal, NTabPane, NTabs } from 'naive-ui';
+import General from './General.vue';
+import Advanced from './Advanced.vue';
+import aiModel from '@/views/mj/aiModel.vue';
+import aiSetServer from '@/views/mj/aiSetServer.vue';
+import About from './About.vue';
+import { homeStore, useAuthStore } from '@/store';
+import { SvgIcon } from '@/components/common';
 
 interface Props {
   visible: boolean
@@ -17,24 +17,24 @@ interface Emit {
   (e: 'update:visible', visible: boolean): void
 }
 
-const props = defineProps<Props>()
+const props = defineProps<Props>();
 
-const emit = defineEmits<Emit>()
+const emit = defineEmits<Emit>();
 
-const authStore = useAuthStore()
+const authStore = useAuthStore();
 
-const isChatGPTAPI = computed<boolean>(() => !!authStore.isChatGPTAPI)
+const isChatGPTAPI = computed<boolean>(() => !!authStore.isChatGPTAPI);
 
-const active = ref('General')
+const active = ref('General');
 
 const show = computed({
-  get() {
-    return props.visible
-  },
-  set(visible: boolean) {
-    emit('update:visible', visible)
-  },
-})
+    get() {
+        return props.visible;
+    },
+    set(visible: boolean) {
+        emit('update:visible', visible);
+    },
+});
 </script>
 
 <template>

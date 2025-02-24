@@ -1,58 +1,60 @@
 <script setup lang="ts">
 import {computed, ref} from 'vue';
 import {useMessage, NButton,NImage,NSelect} from 'naive-ui';
-import {upImg} from '@/api'
+import {upImg} from '@/api';
 import { homeStore } from '@/store';
 import { SvgIcon } from '@/components/common';
-import config from "./draw.json";
-import { t } from "@/locales";
+import config from './draw.json';
+import { t } from '@/locales';
 
 const ms = useMessage();
 const fsRef= ref() ;
-const st= ref({status:'',isGo:false,dimensions:'SQUARE'})
+const st= ref({status:'',isGo:false,dimensions:'SQUARE'});
 const base64Array= ref<string[]>([]);
 const selectFile=(input:any)=>{
     upImg(input.target.files[0]).then(d=>{
         fsRef.value.value='';
         const index = base64Array.value.findIndex(item => item == d);
         if(index>-1){
-            ms.error(t('mjchat.no2add') )
+            ms.error(t('mjchat.no2add') );
             return ;
         }
         base64Array.value.push(d);
-        if(base64Array.value.length>1) st.value.isGo=true;
-        //if(st)
+        if(base64Array.value.length>1) {
+            st.value.isGo=true;
+        }
+    //if(st)
     }).catch(e=>ms.error(e));
-}
+};
 const send= ()=>{
     if(base64Array.value.length<2){
-        ms.error( t('mjchat.add2more') )
+        ms.error( t('mjchat.add2more') );
         return ;
     }
     let obj={
-            action:'blend',
-            data:{
-                base64Array:base64Array.value
-                ,"botType": "MID_JOURNEY",
-                dimensions:st.value.dimensions?st.value.dimensions:'SQUARE'
-            }
+        action:'blend',
+        data:{
+            base64Array:base64Array.value
+            ,'botType': 'MID_JOURNEY',
+            dimensions:st.value.dimensions?st.value.dimensions:'SQUARE'
         }
-        homeStore.setMyData({act:'draw',actData:obj});
-        st.value.isGo=false;
-}
+    };
+    homeStore.setMyData({act:'draw',actData:obj});
+    st.value.isGo=false;
+};
 const drawlocalized = computed(() => {
-	let localizedConfig = {};
-	Object.keys(config).forEach((key) => {
-		localizedConfig[key] = config[key].map((option) => {
-			// 假设 labelKey 如 "draw.qualityList.general"
-			let path = option.labelKey; // 直接使用 labelKey 作为路径
-			return {
-				...option,
-				label: t(path), // 从 i18n 中获取本地化的标签
-			};
-		});
-	});
-	return localizedConfig;
+    let localizedConfig = {};
+    Object.keys(config).forEach((key) => {
+        localizedConfig[key] = config[key].map((option) => {
+            // 假设 labelKey 如 "draw.qualityList.general"
+            let path = option.labelKey; // 直接使用 labelKey 作为路径
+            return {
+                ...option,
+                label: t(path), // 从 i18n 中获取本地化的标签
+            };
+        });
+    });
+    return localizedConfig;
 });
 </script>
 <template>

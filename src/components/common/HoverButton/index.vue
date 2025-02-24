@@ -1,8 +1,8 @@
 <script setup lang='ts'>
-import { computed } from 'vue'
-import type { PopoverPlacement } from 'naive-ui'
-import { NTooltip } from 'naive-ui'
-import Button from './Button.vue'
+import { computed } from 'vue';
+import type { PopoverPlacement } from 'naive-ui';
+import { NTooltip } from 'naive-ui';
+import Button from './Button.vue';
 
 interface Props {
   tooltip?: string
@@ -14,16 +14,16 @@ interface Emit {
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  tooltip: '',
-  placement: 'bottom',
-})
+    tooltip: '',
+    placement: 'bottom',
+});
 
-const emit = defineEmits<Emit>()
+const emit = defineEmits<Emit>();
 
-const showTooltip = computed(() => Boolean(props.tooltip))
+const showTooltip = computed(() => Boolean(props.tooltip));
 
 function handleClick() {
-  emit('click')
+    emit('click');
 }
 </script>
 

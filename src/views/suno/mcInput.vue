@@ -1,66 +1,68 @@
 <script setup lang="ts">
 import { ref,computed ,onMounted, watch} from 'vue';
-import { NTabs ,NTabPane ,NInput,NSwitch ,NTooltip, NTag ,NButton, useMessage,NSelect, NImage, NSlider} from "naive-ui";
+import { NTabs ,NTabPane ,NInput,NSwitch ,NTooltip, NTag ,NButton, useMessage,NSelect, NImage, NSlider} from 'naive-ui';
 import { SvgIcon } from '@/components/common';
 import { mlog } from '@/api';
 import { sunoFetch ,lyricsFetch, randStyle, FeedTask} from '@/api/suno';
 import { t } from '@/locales';
 import { homeStore } from '@/store';
 import { SunoMedia } from '@/api/sunoStore';
-import mcUploaderMp3 from './mcUploadMp3.vue'
+import mcUploaderMp3 from './mcUploadMp3.vue';
 
-const st = ref({type:'custom',isLoading:false})
-const exSuno= ref<SunoMedia>()
+const st = ref({type:'custom',isLoading:false});
+const exSuno= ref<SunoMedia>();
 const des= ref( {
-  "gpt_description_prompt": "",
-  "make_instrumental": false,
-  "mv": "chirp-v4",
-  "prompt": ""
+    'gpt_description_prompt': '',
+    'make_instrumental': false,
+    'mv': 'chirp-v4',
+    'prompt': ''
 });
 const cs= ref({
-  "prompt": "",
-  "mv": "chirp-v4",
-  "title": "",
-  "tags": "",
-  "continue_at": 120,
-  "continue_clip_id": "",
-  "task":''
+    'prompt': '',
+    'mv': 'chirp-v4',
+    'title': '',
+    'tags': '',
+    'continue_at': 120,
+    'continue_clip_id': '',
+    'task':''
 
 });
 
 const mvOption= [
-{label: 'verion: v3.5',value: 'chirp-v3-5'}
-,{label:'verion: v3',value: 'chirp-v3-0'}
-,{label:'verion: v4',value: 'chirp-v4'}
- ]
+    {label: 'verion: v3.5',value: 'chirp-v3-5'}
+    ,{label:'verion: v3',value: 'chirp-v3-0'}
+    ,{label:'verion: v4',value: 'chirp-v4'}
+];
 
 const canPost = computed(() => {
-   // return true; 
-    if( st.value.isLoading ) return false;
+    // return true; 
+    if( st.value.isLoading ) {
+        return false;
+    }
     if( st.value.type=='custom'){
-        return cs.value.tags && cs.value.title
+        return cs.value.tags && cs.value.title;
     }
     if( st.value.type=='description' ){
-        mlog('des: ', des.value.gpt_description_prompt , des.value.make_instrumental )
-        return cs.value.title &&( des.value.gpt_description_prompt || des.value.make_instrumental)
+        mlog('des: ', des.value.gpt_description_prompt , des.value.make_instrumental );
+        return cs.value.title &&( des.value.gpt_description_prompt || des.value.make_instrumental);
     }
-    return true
-})
+    return true;
+});
 
 const ms = useMessage();
 onMounted(() => {
-    homeStore.setMyData({ms:ms})
+    homeStore.setMyData({ms:ms});
 });
 //生成歌词
 const generateLyrics= ()=>{
     //generate/lyrics
     let prompt = cs.value.prompt || cs.value.title;
     if (!prompt){
-        ms.error(   t('suno.inputly') )
-        return 
+        ms.error(   t('suno.inputly') );
+        return; 
     }
     if(st.value.isLoading) {
-         ms.info( t('suno.doingly'));
+        ms.info( t('suno.doingly'));
         return;
     }
     st.value.isLoading =true;
@@ -69,7 +71,7 @@ const generateLyrics= ()=>{
         mlog('lyrics', r);
         let dz:any = await lyricsFetch( r.id );
         
-         mlog('lyrics rz =>', dz );
+        mlog('lyrics rz =>', dz );
         if(dz!=null){  
 
             cs.value.prompt= dz.text;
@@ -81,8 +83,10 @@ const generateLyrics= ()=>{
         st.value.isLoading =false;
 
     }).catch(()=>  st.value.isLoading =false );
-    if( !cs.value.tags ) cs.value.tags= randStyle()
-}
+    if( !cs.value.tags ) {
+        cs.value.tags= randStyle();
+    }
+};
 
 const generate= async ()=>{
     st.value.isLoading =false;
@@ -90,28 +94,35 @@ const generate= async ()=>{
      
 
     if(st.value.type=='custom'){ 
-        if(des.value.make_instrumental) cs.value.prompt='';
+        if(des.value.make_instrumental) {
+            cs.value.prompt='';
+        }
         if( cs.value.continue_clip_id!=''  ){
             //chirp-v3-5-upload
-           // cs.value.mv='chirp-v3-5-upload'
-           if( exSuno.value?.metadata?.type=='upload') cs.value.task='upload_extend'
-           else cs.value.task='extend'
+            // cs.value.mv='chirp-v3-5-upload'
+            if( exSuno.value?.metadata?.type=='upload') {
+                cs.value.task='upload_extend';
+            } else {
+                cs.value.task='extend';
+            }
         }
-        let r:any= await sunoFetch(  '/generate' ,  cs.value ) 
+        let r:any= await sunoFetch(  '/generate' ,  cs.value ); 
         st.value.isLoading =false;
 
-       ids=r.clips.map((r:any)=>r.id);
-       mlog('ids ', ids );
-       if( cs.value.mv='chirp-v3-5-upload' ) cs.value.mv='chirp-v4'
+        ids=r.clips.map((r:any)=>r.id);
+        mlog('ids ', ids );
+        if( cs.value.mv='chirp-v3-5-upload' ) {
+            cs.value.mv='chirp-v4';
+        }
     }else{
         des.value.prompt=cs.value.title;
-        let r:any= await sunoFetch(  '/generate/description-mode' ,  des.value )  
+        let r:any= await sunoFetch(  '/generate/description-mode' ,  des.value );  
         st.value.isLoading =false; 
         ids=r.clips.map((r:any)=>r.id);
     }
     cs.value.task='';
-    FeedTask(ids)
-}
+    FeedTask(ids);
+};
 
 
 
@@ -119,11 +130,11 @@ const generate= async ()=>{
 
 watch(()=>homeStore.myData.act, (n)=>{
     if(n=='suno.extend'){
-        mlog("suno.extend", homeStore.myData.actData )
-        const s= homeStore.myData.actData as SunoMedia
-        exSuno.value= s 
-        cs.value.continue_clip_id= s.id
-        cs.value.continue_at= Math.ceil(s.metadata.duration/2) 
+        mlog('suno.extend', homeStore.myData.actData );
+        const s= homeStore.myData.actData as SunoMedia;
+        exSuno.value= s; 
+        cs.value.continue_clip_id= s.id;
+        cs.value.continue_at= Math.ceil(s.metadata.duration/2); 
     }
 });
 

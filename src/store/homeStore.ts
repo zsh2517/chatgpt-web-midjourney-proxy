@@ -1,6 +1,6 @@
 import { gptsType, mlog } from '@/api';
-import { reactive } from 'vue'
-import { ss } from '@/utils/storage'
+import { reactive } from 'vue';
+import { ss } from '@/utils/storage';
 
 export const homeStore = reactive({
     myData:{
@@ -23,19 +23,19 @@ export const homeStore = reactive({
         this.myData={...this.myData,...v}; 
         if( Object.keys(v).indexOf('act')>-1){ 
             setTimeout(()=> {
-                this.myData.act=''
-                this.myData.actData=''
+                this.myData.act='';
+                this.myData.actData='';
             }, 2000 );
         }
         if( Object.keys(v).indexOf('act2')>-1){ 
             setTimeout(()=> {
-                this.myData.act2=''
-                this.myData.actData=''
+                this.myData.act2='';
+                this.myData.actData='';
             }, 500 );
         }
     }
  
-})
+});
 
 export interface gptConfigType{
     model:string
@@ -56,14 +56,16 @@ const getGptInt= ():gptConfigType =>{
     const str = localStorage.getItem('gptConfigStore');
     if(str){
         const old = JSON.parse(str);
-        if(old) v={...v,...old};
+        if(old) {
+            v={...v,...old};
+        }
     }
     return v;
-}
+};
 
 const  getDefault=()=>{
-const amodel = homeStore.myData.session.amodel??'gpt-3.5-turbo'
-const v:gptConfigType={
+    const amodel = homeStore.myData.session.amodel??'gpt-3.5-turbo';
+    const v:gptConfigType={
         model: amodel,
         max_tokens:1024,
         userModel:'',
@@ -73,24 +75,26 @@ const v:gptConfigType={
         top_p:1,
         presence_penalty:0,
         frequency_penalty:0,
-        tts_voice:"alloy"
-    }
+        tts_voice:'alloy'
+    };
     return v ;
-}
+};
 export const gptConfigStore= reactive({
     myData:getGptInt(),
     setMyData(v: Partial<gptConfigType>){
 
-         this.myData={...this.myData,...v}; 
-         //mlog('gptConfigStore', v )
-         if(v.model && !v.gpts) this.myData.gpts=undefined;
+        this.myData={...this.myData,...v}; 
+        //mlog('gptConfigStore', v )
+        if(v.model && !v.gpts) {
+            this.myData.gpts=undefined;
+        }
 
-         localStorage.setItem('gptConfigStore', JSON.stringify( this.myData));
+        localStorage.setItem('gptConfigStore', JSON.stringify( this.myData));
     }
     ,setInit(){
         this.setMyData(getDefault());
     }
-})
+});
 
 
 export interface gptServerType{
@@ -134,7 +138,7 @@ export interface gptServerType{
 }
 
 const  getServerDefault=()=>{
-const v:gptServerType={
+    const v:gptServerType={
         OPENAI_API_KEY:'',
         OPENAI_API_BASE_URL:'',
         MJ_SERVER:'',
@@ -162,36 +166,40 @@ const v:gptServerType={
         UDIO_KEY:'',
         PIXVERSE_SERVER:'',
         PIXVERSE_KEY:''
-    }
+    };
     return v ;
-}
+};
 const getServerInit= ():gptServerType =>{
     let v:gptServerType=getServerDefault();
     const str = localStorage.getItem('gptServerStore');
     if(str){
         const old = JSON.parse(str);
-        if(old) v={...v,...old};
+        if(old) {
+            v={...v,...old};
+        }
     }
     return v;
-}
+};
 
 export const gptServerStore= reactive({
     myData:getServerInit(),
     setMyData(v: Partial<gptServerType>){
-         this.myData={...this.myData,...v}; 
-         localStorage.setItem('gptServerStore', JSON.stringify( this.myData));
+        this.myData={...this.myData,...v}; 
+        localStorage.setItem('gptServerStore', JSON.stringify( this.myData));
     }
     ,setInit(){
         this.setMyData(getServerDefault());
     }
-})
+});
 
 
 const gptsUlistInit= ():gptsType[]=>{
     const lk= ss.get('gpts-use-list');
-    if( !lk) return [];
+    if( !lk) {
+        return [];
+    }
     return lk as gptsType[]; 
-}
+};
 
 //使用gtps列表
 export const gptsUlistStore= reactive({

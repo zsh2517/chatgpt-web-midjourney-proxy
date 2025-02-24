@@ -1,38 +1,38 @@
 <script setup lang="ts">
 import { SvgIcon } from '@/components/common';
-import { homeStore } from '@/store'
-import { computed,watch ,ref  } from 'vue'
-import { router } from '@/router'
+import { homeStore } from '@/store';
+import { computed,watch ,ref  } from 'vue';
+import { router } from '@/router';
 import { useRouter } from 'vue-router';
 
 import aiDrawInput from './aiDrawInput.vue'; 
-import {NDrawerContent,NDrawer} from "naive-ui";
+import {NDrawerContent,NDrawer} from 'naive-ui';
 import { isDisableMenu } from '@/api';
-const st= ref({show:true})
+const st= ref({show:true});
 
 const goHome =computed(  () => {
-  //router.push('/')
-  return router.currentRoute.value.name
+    //router.push('/')
+    return router.currentRoute.value.name;
 });
 function drawSent(e:any){
-  st.value.show=false;
-  //$emit('drawSent', e)
-  homeStore.setMyData({act:'draw',actData:e});
+    st.value.show=false;
+    //$emit('drawSent', e)
+    homeStore.setMyData({act:'draw',actData:e});
 }
 
 watch(()=>homeStore.myData.act, (n:string)=>{
     if('showChat'==n){
-        router.push('/chat')
+        router.push('/chat');
     }
     if('showDraw'==n){
-        router.push('/draw')
+        router.push('/draw');
         st.value.show=true;
     }
     if(n=='draw'){
-       st.value.show=false;
+        st.value.show=false;
     }
 });
-const urouter = useRouter() //
+const urouter = useRouter(); //
 </script>
 <template>
   <div class=" bg-gray-100 dark:bg-[#282832] h-[55px] flex  justify-around  items-center dark:text-white/70 " >

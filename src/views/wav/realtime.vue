@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { SvgIcon } from '@/components/common';
-import an_main from './an_main.vue'
+import an_main from './an_main.vue';
 import aiTextSetting from '../mj/aiTextSetting.vue';
 import wavSetting from './wavSetting.vue';
 import { WavRecorder, WavStreamPlayer } from '@openai/realtime-wavtools';
@@ -12,90 +12,90 @@ import { ItemType } from '@openai/realtime-api-beta/dist/lib/client.js';
 import { useMessage ,NModal,NButton} from 'naive-ui';
 import { gptServerStore } from '@/store';
 import { t } from '@/locales';
-const wavRecorderRef=  ref<WavRecorder>( new  WavRecorder({ sampleRate: 24000 })) 
-const wavStreamPlayerRef=  ref<WavStreamPlayer>( new WavStreamPlayer({ sampleRate: 24000 })) 
+const wavRecorderRef=  ref<WavRecorder>( new  WavRecorder({ sampleRate: 24000 })); 
+const wavStreamPlayerRef=  ref<WavStreamPlayer>( new WavStreamPlayer({ sampleRate: 24000 })); 
 const clientCanvasRef = ref<HTMLCanvasElement|null>(null);
 const serverCanvasRef = ref<HTMLCanvasElement|null>(null);
 const items= ref<ItemType[]>([]); 
 const realtimeEvents= ref<RealtimeEvent[]>([]);
 const clientRef= ref<RealtimeClient>();
 const ms= useMessage();
-const st= ref({apikey:'', isConnect:false,baseUrl:'',isRealtime:true,msg:'Waiting',isClosed:false,showSetting:false })
-const edmit= defineEmits(['close'])
+const st= ref({apikey:'', isConnect:false,baseUrl:'',isRealtime:true,msg:'Waiting',isClosed:false,showSetting:false });
+const edmit= defineEmits(['close']);
 
 watch( ()=> wavRecorderRef.value,() => {
     const wavRecorder= wavRecorderRef.value;  
     
-        const clientCanvas = clientCanvasRef.value;
-        const wavStreamPlayer = wavStreamPlayerRef.value;
-        let clientCtx: CanvasRenderingContext2D | null = null;
-        if (clientCanvas) {
-          if (!clientCanvas.width || !clientCanvas.height) {
+    const clientCanvas = clientCanvasRef.value;
+    const wavStreamPlayer = wavStreamPlayerRef.value;
+    let clientCtx: CanvasRenderingContext2D | null = null;
+    if (clientCanvas) {
+        if (!clientCanvas.width || !clientCanvas.height) {
             clientCanvas.width = clientCanvas.offsetWidth;
             clientCanvas.height = clientCanvas.offsetHeight;
-          }
-          clientCtx = clientCtx || clientCanvas.getContext('2d');
-          if (clientCtx) {
+        }
+        clientCtx = clientCtx || clientCanvas.getContext('2d');
+        if (clientCtx) {
             clientCtx.clearRect(0, 0, clientCanvas.width, clientCanvas.height);
             const result = wavRecorder.recording
-              ? wavRecorder.getFrequencies('voice')
-              : { values: new Float32Array([0]) };
+                ? wavRecorder.getFrequencies('voice')
+                : { values: new Float32Array([0]) };
             WavRenderer.drawBars(
-              clientCanvas,
-              clientCtx,
-              result.values,
-              '#0099ff',
-              20,
-              0,
-              2
+                clientCanvas,
+                clientCtx,
+                result.values,
+                '#0099ff',
+                20,
+                0,
+                2
             );
-          }
         }
+    }
 
-        const serverCanvas = serverCanvasRef.value;
-        let serverCtx: CanvasRenderingContext2D | null = null;
-        if (serverCanvas) {
-          if (!serverCanvas.width || !serverCanvas.height) {
+    const serverCanvas = serverCanvasRef.value;
+    let serverCtx: CanvasRenderingContext2D | null = null;
+    if (serverCanvas) {
+        if (!serverCanvas.width || !serverCanvas.height) {
             serverCanvas.width = serverCanvas.offsetWidth;
             serverCanvas.height = serverCanvas.offsetHeight;
-          }
-          serverCtx = serverCtx || serverCanvas.getContext('2d');
-          if (serverCtx) {
+        }
+        serverCtx = serverCtx || serverCanvas.getContext('2d');
+        if (serverCtx) {
             serverCtx.clearRect(0, 0, serverCanvas.width, serverCanvas.height);
             const result = wavStreamPlayer.analyser
-              ? wavStreamPlayer.getFrequencies('voice')
-              : { values: new Float32Array([0]) };
+                ? wavStreamPlayer.getFrequencies('voice')
+                : { values: new Float32Array([0]) };
              
             WavRenderer.drawBars(
-              serverCanvas,
-              serverCtx,
-              result.values,
-              '#009900',
-              20,
-              0,
-              2
+                serverCanvas,
+                serverCtx,
+                result.values,
+                '#009900',
+                20,
+                0,
+                2
             );
-          }
         }
+    }
 
 },{deep:true,immediate:true});
 
 const go= async()=>{
-    st.value.msg=  t('mj.rtconecting')
+    st.value.msg=  t('mj.rtconecting');
     if(st.value.isConnect){
-        //mlog("isConnect yes!"  )
-        ms.info("isConnect yes!");
+    //mlog("isConnect yes!"  )
+        ms.info('isConnect yes!');
         return;
     }
     
     if(!clientRef.value || !st.value.isConnect ){
         if(!st.value.apikey){
             
-            ms.error("api key is null");
+            ms.error('api key is null');
             return;
         }
         if(!st.value.baseUrl){ 
-            ms.error("baseUrl is null");
+            ms.error('baseUrl is null');
             return;
         }
         //ms.info("go");
@@ -106,79 +106,79 @@ const go= async()=>{
             dangerouslyAllowAPIKeyInBrowser: true,
             baseUrl: st.value.baseUrl,
             model: gptServerStore.myData.REALTIME_MODEL?gptServerStore.myData.REALTIME_MODEL: 'gpt-4o-realtime-preview-2024-10-01' 
-          }
-        )
+        }
+        );
     }
     //mlog("go", st.value.apikey )
-    const client= clientRef.value
-    const wavRecorder= wavRecorderRef.value
-    const wavStreamPlayer= wavStreamPlayerRef.value
+    const client= clientRef.value;
+    const wavRecorder= wavRecorderRef.value;
+    const wavStreamPlayer= wavStreamPlayerRef.value;
    
     try{
     // Connect to microphone
         await wavRecorder.begin();
     }catch(e){
-        st.value.msg=t('mj.rtservererror2') 
+        st.value.msg=t('mj.rtservererror2'); 
         ms.error(st.value.msg);
-        return 
+        return; 
     }
     // Connect to realtime API
     try{
         await client.connect(); 
     }catch(e ){
-        st.value.msg= t('mj.rtservererror')
+        st.value.msg= t('mj.rtservererror');
         ms.error( st.value.msg);
 
-        return 
+        return; 
     }
 
     // Connect to audio output
     await wavStreamPlayer.connect();
 
-    st.value.isConnect=true
+    st.value.isConnect=true;
 
     client.sendUserMessageContent([
-      {
-        type: `input_text`,
-        text: `hello`,
-      },
+        {
+            type: 'input_text',
+            text: 'hello',
+        },
     ]);
     
 
     client.updateSession({
-      turn_detection:  { type: 'server_vad' },
+        turn_detection:  { type: 'server_vad' },
     });
     
 
     await wavRecorder.record((data: { mono: Int16Array | ArrayBuffer; }) => {
         try{ 
-            client.appendInputAudio(data.mono)
-            st.value.msg=  t('mj.rtsuccess')
+            client.appendInputAudio(data.mono);
+            st.value.msg=  t('mj.rtsuccess');
         }catch(e){
             disconnectConversation();
             // st.value.msg= t('mj.checkkey')
             // ms.error(st.value.msg);
             // mlog("appendInputAudio error", e )
-            return
+            return;
         }
     });
 
     myListen();
-}
+};
 
 const disconnectConversation= async()=>{
-    const wavRecorder= wavRecorderRef.value
-    const wavStreamPlayer= wavStreamPlayerRef.value
+    const wavRecorder= wavRecorderRef.value;
+    const wavStreamPlayer= wavStreamPlayerRef.value;
     //clientRef.value?.disconnect();
-    st.value.isConnect=false
+    st.value.isConnect=false;
     const client= clientRef.value;
     //client?.reset();
     client?.disconnect();
     await wavRecorder.end();
     await wavStreamPlayer.interrupt();
-    st.value.msg=t('mj.rjcloded')
+    st.value.msg=t('mj.rjcloded');
     ms.success( st.value.msg);
-}
+};
 
 /**
  * Type for all event logs
@@ -187,98 +187,100 @@ const disconnectConversation= async()=>{
 
 const myListen=()=>{
     const client= clientRef.value;
-    const wavRecorder= wavRecorderRef.value
-    const wavStreamPlayer= wavStreamPlayerRef.value
+    const wavRecorder= wavRecorderRef.value;
+    const wavStreamPlayer= wavStreamPlayerRef.value;
 
     if( !client){
-        return
+        return;
     }
     // Set instructions
     client.updateSession({ 
         instructions:  gptServerStore.myData.REALTIME_SYSMSG?  gptServerStore.myData.REALTIME_SYSMSG: instructions,
-     });
+    });
 
     if( gptServerStore.myData.TTS_VOICE && ['alloy','shimmer','echo'].indexOf( gptServerStore.myData.TTS_VOICE)>-1) {
         client.updateSession({ voice: gptServerStore.myData.TTS_VOICE });
-        mlog('log','voice', gptServerStore.myData.TTS_VOICE)
+        mlog('log','voice', gptServerStore.myData.TTS_VOICE);
 
     }
     // Set transcription, otherwise we don't get user transcriptions back
 
-    if(gptServerStore.myData.REALTIME_IS_WHISPER) client.updateSession({ input_audio_transcription: { model: 'whisper-1' } });
+    if(gptServerStore.myData.REALTIME_IS_WHISPER) {
+        client.updateSession({ input_audio_transcription: { model: 'whisper-1' } });
+    }
 
     // Add tools
     client.addTool(
-      {
-        name: 'set_memory',
-        description: 'Saves important data about the user into memory.',
-        parameters: {
-          type: 'object',
-          properties: {
-            key: {
-              type: 'string',
-              description:
+        {
+            name: 'set_memory',
+            description: 'Saves important data about the user into memory.',
+            parameters: {
+                type: 'object',
+                properties: {
+                    key: {
+                        type: 'string',
+                        description:
                 'The key of the memory value. Always use lowercase and underscores, no other characters.',
+                    },
+                    value: {
+                        type: 'string',
+                        description: 'Value can be anything represented as a string',
+                    },
+                },
+                required: ['key', 'value'],
             },
-            value: {
-              type: 'string',
-              description: 'Value can be anything represented as a string',
-            },
-          },
-          required: ['key', 'value'],
         },
-      },
-      async ({ key, value }: { [key: string]: any }) => {
-        // setMemoryKv((memoryKv) => {
-        //   const newKv = { ...memoryKv };
-        //   newKv[key] = value;
-        //   return newKv;
-        // });
-        return { ok: true };
-      }
+        async ({ key, value }: { [key: string]: any }) => {
+            // setMemoryKv((memoryKv) => {
+            //   const newKv = { ...memoryKv };
+            //   newKv[key] = value;
+            //   return newKv;
+            // });
+            return { ok: true };
+        }
     );
     client.addTool(
-      {
-        name: 'get_weather',
-        description:
+        {
+            name: 'get_weather',
+            description:
           'Retrieves the weather for a given lat, lng coordinate pair. Specify a label for the location.',
-        parameters: {
-          type: 'object',
-          properties: {
-            lat: {
-              type: 'number',
-              description: 'Latitude',
+            parameters: {
+                type: 'object',
+                properties: {
+                    lat: {
+                        type: 'number',
+                        description: 'Latitude',
+                    },
+                    lng: {
+                        type: 'number',
+                        description: 'Longitude',
+                    },
+                    location: {
+                        type: 'string',
+                        description: 'Name of the location',
+                    },
+                },
+                required: ['lat', 'lng', 'location'],
             },
-            lng: {
-              type: 'number',
-              description: 'Longitude',
-            },
-            location: {
-              type: 'string',
-              description: 'Name of the location',
-            },
-          },
-          required: ['lat', 'lng', 'location'],
         },
-      },
-      async ({ lat, lng, location }: { [key: string]: any }) => {
-        // setMarker({ lat, lng, location });
-        // setCoords({ lat, lng, location });
-        const result = await fetch(
-          `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lng}&current=temperature_2m,wind_speed_10m`
-        );
-        const json = await result.json();
-        // const temperature = {
-        //   value: json.current.temperature_2m as number,
-        //   units: json.current_units.temperature_2m as string,
-        // };
-        // const wind_speed = {
-        //   value: json.current.wind_speed_10m as number,
-        //   units: json.current_units.wind_speed_10m as string,
-        // };
-        // setMarker({ lat, lng, location, temperature, wind_speed });
-        return json;
-      }
+        async ({ lat, lng, location }: { [key: string]: any }) => {
+            // setMarker({ lat, lng, location });
+            // setCoords({ lat, lng, location });
+            const result = await fetch(
+                `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lng}&current=temperature_2m,wind_speed_10m`
+            );
+            const json = await result.json();
+            // const temperature = {
+            //   value: json.current.temperature_2m as number,
+            //   units: json.current_units.temperature_2m as string,
+            // };
+            // const wind_speed = {
+            //   value: json.current.wind_speed_10m as number,
+            //   units: json.current_units.wind_speed_10m as string,
+            // };
+            // setMarker({ lat, lng, location, temperature, wind_speed });
+            return json;
+        }
     );
 
 
@@ -287,88 +289,88 @@ const myListen=()=>{
         setRealtimeEvents(realtimeEvent);
     });
     client.on('error', (event: any) =>{
-         ms.error('发生错误：'+event);
-         console.error('error.event>>',event);
+        ms.error('发生错误：'+event);
+        console.error('error.event>>',event);
     });
     client.on('conversation.interrupted', async () => {
-      const trackSampleOffset = await wavStreamPlayer.interrupt();
-      if (trackSampleOffset?.trackId) {
-        const { trackId, offset } = trackSampleOffset;
-        await client.cancelResponse(trackId, offset);
-      }
+        const trackSampleOffset = await wavStreamPlayer.interrupt();
+        if (trackSampleOffset?.trackId) {
+            const { trackId, offset } = trackSampleOffset;
+            await client.cancelResponse(trackId, offset);
+        }
     });
     client.on('conversation.updated', async ({ item, delta }: any) => {
-      const items = client.conversation.getItems();
-      if (delta?.audio) {
-        wavStreamPlayer.add16BitPCM(delta.audio, item.id);
-      }
-      if (item.status === 'completed' && item.formatted.audio?.length) {
-        const wavFile = await WavRecorder.decode(
-          item.formatted.audio,
-          24000,
-          24000
-        );
-        item.formatted.file = wavFile;
-      }
-      setItems(items);
+        const items = client.conversation.getItems();
+        if (delta?.audio) {
+            wavStreamPlayer.add16BitPCM(delta.audio, item.id);
+        }
+        if (item.status === 'completed' && item.formatted.audio?.length) {
+            const wavFile = await WavRecorder.decode(
+                item.formatted.audio,
+                24000,
+                24000
+            );
+            item.formatted.file = wavFile;
+        }
+        setItems(items);
     });
-}
+};
 const setItems=(iitems: ItemType[])=>{
     //mlog("setItems", iitems.length, iitems  )
-    items.value=iitems
-}
+    items.value=iitems;
+};
 const setMemoryKv=(kv: { [key: string]: any }) => {
     
-}
+};
 const setRealtimeEvents=(realtimeEvent: RealtimeEvent )=>{
-     //mlog("setRealtimeEvents", realtimeEvent.event ,  realtimeEvent  )
-     let ev= {...realtimeEvent.event}
-     if(ev.type=="error" && ev.error && ev.error.message){
-        ms.error(ev.error.message)
-     }
+    //mlog("setRealtimeEvents", realtimeEvent.event ,  realtimeEvent  )
+    let ev= {...realtimeEvent.event};
+    if(ev.type=='error' && ev.error && ev.error.message){
+        ms.error(ev.error.message);
+    }
     
-      const lastEvent =  realtimeEvents.value[ realtimeEvents.value.length - 1];
-        if (lastEvent?.event.type === realtimeEvent.event.type) {
-          // if we receive multiple events in a row, aggregate them for display purposes
-          lastEvent.count = (lastEvent.count || 0) + 1;
-          return  realtimeEvents.value.slice(0, -1).concat(lastEvent);
-        } else {
-          return  realtimeEvents.value.concat(realtimeEvent);
-        }
-}
+    const lastEvent =  realtimeEvents.value[ realtimeEvents.value.length - 1];
+    if (lastEvent?.event.type === realtimeEvent.event.type) {
+    // if we receive multiple events in a row, aggregate them for display purposes
+        lastEvent.count = (lastEvent.count || 0) + 1;
+        return  realtimeEvents.value.slice(0, -1).concat(lastEvent);
+    } else {
+        return  realtimeEvents.value.concat(realtimeEvent);
+    }
+};
 const loadConfig=()=>{
     let base=gptServerStore.myData.OPENAI_API_BASE_URL;
     const key=gptServerStore.myData.OPENAI_API_KEY;
-    st.value.apikey=key
+    st.value.apikey=key;
     if(base){
-        base= base.replaceAll('https://','wss://').replaceAll('http://','ws://')
-        st.value.baseUrl= base+'/v1/realtime'
+        base= base.replaceAll('https://','wss://').replaceAll('http://','ws://');
+        st.value.baseUrl= base+'/v1/realtime';
     }
     //mlog('baseUrl', st.value.baseUrl, key )
     if( st.value.baseUrl && st.value.apikey){
-        go()
+        go();
     }
-}
+};
    
  
 onMounted(()=>{ 
     loadConfig();
-})
+});
 const close=()=>{
-    st.value.isClosed=true
+    st.value.isClosed=true;
     try {
-      disconnectConversation();
+        disconnectConversation();
     } catch (error) {
         
     }
 
     //edmit('close')
     setTimeout(() => {
-        edmit('close')
+        edmit('close');
     }, 1000);
     
    
-}
+};
 </script>
 <template>
 <div

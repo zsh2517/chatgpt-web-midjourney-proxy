@@ -1,80 +1,82 @@
 <script setup lang="ts"> 
-import { ref,computed,watch,onMounted } from "vue"; 
-import config from "./draw.json";
+import { ref,computed,watch,onMounted } from 'vue'; 
+import config from './draw.json';
 import {  NSelect,NInput,NButton,NTag,NPopover, useMessage,NInputNumber} from 'naive-ui';
-import {  SvgIcon } from '@/components/common'
-import { useBasicLayout } from '@/hooks/useBasicLayout'
-const { isMobile } = useBasicLayout()
-import AiMsg from './aiMsg.vue'
+import {  SvgIcon } from '@/components/common';
+import { useBasicLayout } from '@/hooks/useBasicLayout';
+const { isMobile } = useBasicLayout();
+import AiMsg from './aiMsg.vue';
 //import aiFace from './aiFace.vue'
-import { mlog, train, upImg ,getMjAll, mjFetch } from '@/api'
+import { mlog, train, upImg ,getMjAll, mjFetch } from '@/api';
 //import {copyText3} from "@/utils/format";
-import { homeStore ,useChatStore} from "@/store";
-const chatStore = useChatStore()
-import {t} from "@/locales"
+import { homeStore ,useChatStore} from '@/store';
+const chatStore = useChatStore();
+import {t} from '@/locales';
 //import { upImg } from "./mj";
 
 const vf=[{s:'width: 100%; height: 100%;',label:'1:1'}
-,{s:'width: 100%; height: 75%;',label:'4:3'}
-,{s:'width: 75%; height: 100%;',label:'3:4'}
-,{s:'width: 100%; height: 50%;',label:'16:9'}
-,{s:'width: 50%; height: 100%;',label:'9:16'}
- ];
+    ,{s:'width: 100%; height: 75%;',label:'4:3'}
+    ,{s:'width: 75%; height: 100%;',label:'3:4'}
+    ,{s:'width: 100%; height: 50%;',label:'16:9'}
+    ,{s:'width: 50%; height: 100%;',label:'9:16'}
+];
 
 const f=ref({bili:-1, quality:'',view:'',light:'',shot:'',style:'', styles:'',version:'--v 6.1',sref:'',cref:'',cw:'',});
 const st =ref({text:'',isDisabled:false,isLoad:false
     ,fileBase64:[],bot:'',showFace:false,upType:''
 });
 const farr= [
-{ k:'style',v:t('mjchat.tStyle') }
-,{ k:'view',v: t('mjchat.tView') }
-,{ k:'shot',v: t('mjchat.tShot') }
-,{ k:'light',v: t('mjchat.tLight') }
-,{ k:'quality',v: t('mjchat.tQuality') }
-,{ k:'styles',v:t('mjchat.tStyles') }
-,{ k:'version',v:t('mjchat.tVersion') }
- ];
+    { k:'style',v:t('mjchat.tStyle') }
+    ,{ k:'view',v: t('mjchat.tView') }
+    ,{ k:'shot',v: t('mjchat.tShot') }
+    ,{ k:'light',v: t('mjchat.tLight') }
+    ,{ k:'quality',v: t('mjchat.tQuality') }
+    ,{ k:'styles',v:t('mjchat.tStyles') }
+    ,{ k:'version',v:t('mjchat.tVersion') }
+];
 
 const drawlocalized = computed(() => {
-	let localizedConfig = {};
-	Object.keys(config).forEach((key) => {
-		localizedConfig[key] = config[key].map((option) => {
-			// 假设 labelKey 如 "draw.qualityList.general"
-			let path = option.labelKey; // 直接使用 labelKey 作为路径
-			return {
-				...option,
-				label: t(path), // 从 i18n 中获取本地化的标签
-			};
-		});
-	});
-	return localizedConfig;
+    let localizedConfig = {};
+    Object.keys(config).forEach((key) => {
+        localizedConfig[key] = config[key].map((option) => {
+            // 假设 labelKey 如 "draw.qualityList.general"
+            let path = option.labelKey; // 直接使用 labelKey 作为路径
+            return {
+                ...option,
+                label: t(path), // 从 i18n 中获取本地化的标签
+            };
+        });
+    });
+    return localizedConfig;
 });
 
 
-const msgRef = ref()
-const fsRef= ref()
-const fsRef2 = ref()
-const fsRef3 = ref()
+const msgRef = ref();
+const fsRef= ref();
+const fsRef2 = ref();
+const fsRef3 = ref();
 const $emit=defineEmits(['drawSent','close']);
 const props = defineProps({buttonDisabled:Boolean});
 
 const isDisabled = computed(() => {
-    return props.buttonDisabled || st.value.isLoad || st.value.text.trim()==''
-})
+    return props.buttonDisabled || st.value.isLoad || st.value.text.trim()=='';
+});
 const ms=   useMessage();
 function create( ){
 
 
-    st.value.isLoad=true
+    st.value.isLoad=true;
     train( st.value.text.trim()).then(ps=>{
-        const rz={ prompt: st.value.text.trim() , drawText: createPrompt( ps) }
-        if( ps  ) drawSent(rz)
+        const rz={ prompt: st.value.text.trim() , drawText: createPrompt( ps) };
+        if( ps  ) {
+            drawSent(rz);
+        }
         //st.value.text=''
-        st.value.isLoad=false
+        st.value.isLoad=false;
     }).catch(err=>{
-        msgRef.value.showError(err)
-        st.value.isLoad=false
-    })
+        msgRef.value.showError(err);
+        st.value.isLoad=false;
+    });
 
 
 }
@@ -88,20 +90,20 @@ const shorten= ()=>{
     }
 
     let obj={
-            action:'shorten',
-            data:{prompt: st.value.text.trim(),botType: st.value.bot=='NIJI_JOURNEY'? 'NIJI_JOURNEY': 'MID_JOURNEY'}
-        }
+        action:'shorten',
+        data:{prompt: st.value.text.trim(),botType: st.value.bot=='NIJI_JOURNEY'? 'NIJI_JOURNEY': 'MID_JOURNEY'}
+    };
     homeStore.setMyData({act:'draw',actData:obj});
-}
+};
 function drawSent(rz:any){
     let rz2= rz;
     if(st.value.fileBase64) {
-        rz2.fileBase64=st.value.fileBase64
+        rz2.fileBase64=st.value.fileBase64;
     }
     if( st.value.bot=='NIJI_JOURNEY' ){
         rz2.bot='NIJI_JOURNEY';
     }
-    $emit('drawSent', rz2 )
+    $emit('drawSent', rz2 );
     st.value.fileBase64= [];
 }
 function createPrompt(rz:string){
@@ -126,27 +128,44 @@ function createPrompt(rz:string){
     // }
     // mlog('createPrompt ', rz,  f.value  );
     // if(f.value.bili>-1) rz +=` --ar ${vf[f.value.bili].label}`;
-    let rzp='' //参数组合字符串
+    let rzp=''; //参数组合字符串
     let rzk=''; //描述词组合字符串
     for(let v of farr){
-        if( ! f.value[v.k] || f.value[v.k]==null || f.value[v.k]=='' ) continue;
-        mlog('k ', rz,  f.value  );
-        if(v.k=='quality') rzp +=`  --q ${f.value.quality}`;
-        else if(v.k=='styles') { if( f.value.styles ) rzp +=` ${f.value.styles} `;}
-        else if(v.k=='version') {
-            st.value.bot= '';
-        if(['MID_JOURNEY','NIJI_JOURNEY'].indexOf(f.value.version)>-1 ){
-                st.value.bot= f.value.version ;
-        } else   rzp +=` ${f.value.version}`;
+        if( ! f.value[v.k] || f.value[v.k]==null || f.value[v.k]=='' ) {
+            continue;
         }
-        else if( f.value[v.k] ) rzk +=`${f.value[v.k]},`;
+        mlog('k ', rz,  f.value  );
+        if(v.k=='quality') {
+            rzp +=`  --q ${f.value.quality}`;
+        } else if(v.k=='styles') {
+            if( f.value.styles ) {
+                rzp +=` ${f.value.styles} `;
+            }
+        } else if(v.k=='version') {
+            st.value.bot= '';
+            if(['MID_JOURNEY','NIJI_JOURNEY'].indexOf(f.value.version)>-1 ){
+                st.value.bot= f.value.version ;
+            } else   {
+                rzp +=` ${f.value.version}`;
+            }
+        } else if( f.value[v.k] ) {
+            rzk +=`${f.value[v.k]},`;
+        }
     }
 
     mlog('createPrompt ', rz,  f.value  );
-    if( f.value.sref.trim() != '' ) rzp += ` --sref ${f.value.sref}`
-    if( f.value.cref.trim() != '' ) rzp += ` --cref ${f.value.cref}`
-    if( f.value.cw && f.value.cw!='' ) rzp += ` --cw ${f.value.cw}`
-    if (f.value.bili > -1) rzp += ` --ar ${vf[f.value.bili].label}` 
+    if( f.value.sref.trim() != '' ) {
+        rzp += ` --sref ${f.value.sref}`;
+    }
+    if( f.value.cref.trim() != '' ) {
+        rzp += ` --cref ${f.value.cref}`;
+    }
+    if( f.value.cw && f.value.cw!='' ) {
+        rzp += ` --cw ${f.value.cw}`;
+    }
+    if (f.value.bili > -1) {
+        rzp += ` --ar ${vf[f.value.bili].label}`;
+    } 
     rz = rzk + rz +rzp;
     return rz ;
 }
@@ -182,42 +201,42 @@ function selectFile2(input:any){
         let obj={
             action:'img2txt',
             data:{
-                "base64":d
-                ,"botType": "MID_JOURNEY"
+                'base64':d
+                ,'botType': 'MID_JOURNEY'
             }
-        }
+        };
         homeStore.setMyData({act:'draw',actData:obj});
         //input.value.value='';
         fsRef2.value.value='';
 
     })
-    .catch(e=>msgRef.value.showError(e))
+        .catch(e=>msgRef.value.showError(e));
 }
 
 const same2=()=>{
-     st.value.text= homeStore.myData.actData.prompt;
+    st.value.text= homeStore.myData.actData.prompt;
     f.value.version='';
     f.value.quality='';
-}
+};
 watch(()=>homeStore.myData.act,(n)=>{
-   // n=='copy' && copy2();
+    // n=='copy' && copy2();
     n=='same2' && same2();
 });
 watch(()=>f.value,(n)=>{
-    mlog("变化", n )
-    localStorage.setItem("mjinput",  JSON.stringify(n))
+    mlog('变化', n );
+    localStorage.setItem('mjinput',  JSON.stringify(n));
 },{deep:true} );
 onMounted(()=>{
     homeStore.myData.act=='same2' && same2();
 
-    let minput=  localStorage.getItem('mjinput')
+    let minput=  localStorage.getItem('mjinput');
     if(minput ){
-      try {
-        const a=JSON.parse(minput)
-        f.value=a
-      } catch (error) {
-        mlog("错误", error )
-      }
+        try {
+            const a=JSON.parse(minput);
+            f.value=a;
+        } catch (error) {
+            mlog('错误', error );
+        }
     }
 });
 
@@ -229,47 +248,47 @@ const exportToTxt= async ()=>{
 
     let d = await getMjAll( chatStore.$state);
     if(d.length==0) {
-        //ms.info('暂时没作品');
+    //ms.info('暂时没作品');
         ms.info( t('mjchat.noproducet'));
         return;
     }
     d.forEach((v:Chat.Chat,i:number)=>{
         if( v.opt&& v.opt?.status=='SUCCESS' && v.opt?.imageUrl ) {
-                txtContent += v.opt?.imageUrl+ "\n\n";
+            txtContent += v.opt?.imageUrl+ '\n\n';
         }
-    })
+    });
     if(txtContent=='') {
-         ms.info( t('mjchat.noproducet'));
+        ms.info( t('mjchat.noproducet'));
         return;
     }
-    let blob = new Blob([txtContent], { type: "text/plain" });
-    let a = document.createElement("a");
+    let blob = new Blob([txtContent], { type: 'text/plain' });
+    let a = document.createElement('a');
     a.href = URL.createObjectURL(blob);
     a.download = t('mjchat.downloadSave') ;
     a.click();
     ms.success( t('mjchat.exSuccess'));
-}
+};
 
 const clearAll=()=>{
-  st.value.fileBase64=[];
-  st.value.text='';
-  f.value.bili=-1;
-  f.value.version='';
-  f.value.quality='';
-  f.value.shot='';
-  f.value.light='';
-  f.value.style='';
-  f.value.styles='';
-  f.value.view='';
-  f.value.cref='';
-  f.value.cw='';
-  f.value.sref='';
-}
+    st.value.fileBase64=[];
+    st.value.text='';
+    f.value.bili=-1;
+    f.value.version='';
+    f.value.quality='';
+    f.value.shot='';
+    f.value.light='';
+    f.value.style='';
+    f.value.styles='';
+    f.value.view='';
+    f.value.cref='';
+    f.value.cw='';
+    f.value.sref='';
+};
 
 const uploader=(type:string)=>{
     st.value.upType= type;
     fsRef3.value.click();
-}
+};
 const selectFile3=  (input:any)=>{
     ms.loading('上传中...');
     upImg(input.target.files[0]).then( async(d)=>{
@@ -277,9 +296,9 @@ const selectFile3=  (input:any)=>{
         let data={
             action:'img2txt',
             data:{
-                "base64Array":[d]
+                'base64Array':[d]
             }
-        }
+        };
         //homeStore.setMyData({act:'draw',actData:obj});
         //input.value.value='';
         try{
@@ -295,12 +314,12 @@ const selectFile3=  (input:any)=>{
                 ms.success( t('mj.uploadSuccess'));
             }
         }catch(e ){
-            msgRef.value.showError(e)
+            msgRef.value.showError(e);
         }
 
     })
-    .catch(e=>msgRef.value.showError(e))
-}
+        .catch(e=>msgRef.value.showError(e));
+};
 </script>
 <template>
 <AiMsg ref="msgRef" />

@@ -80,10 +80,10 @@ export interface ChatMessage {
 }
 
 export class ChatGPTError extends Error {
-  statusCode?: number
-  statusText?: string
-  isFinal?: boolean
-  accountId?: string
+    statusCode?: number;
+    statusText?: string;
+    isFinal?: boolean;
+    accountId?: string;
   
 }
 
@@ -237,7 +237,7 @@ export namespace openai {
     readonly System: 'system'
     readonly User: 'user'
     readonly Assistant: 'assistant'
-  }
+  };
   export declare type ChatCompletionRequestMessageRoleEnum =
     (typeof ChatCompletionRequestMessageRoleEnum)[keyof typeof ChatCompletionRequestMessageRoleEnum]
   /**
@@ -263,7 +263,7 @@ export namespace openai {
     readonly System: 'system'
     readonly User: 'user'
     readonly Assistant: 'assistant'
-  }
+  };
   export declare type ChatCompletionResponseMessageRoleEnum =
     (typeof ChatCompletionResponseMessageRoleEnum)[keyof typeof ChatCompletionResponseMessageRoleEnum]
   /**

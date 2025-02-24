@@ -1,8 +1,8 @@
- <script setup lang="ts">
- import DcInput from './dcInput.vue';
- import DcList from './dcList.vue';
+<script setup lang="ts">
+import DcInput from './dcInput.vue';
+import DcList from './dcList.vue';
 
- </script>
+</script>
 <template>
 
 <div class="flex w-full h-full   ">

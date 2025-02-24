@@ -1,5 +1,5 @@
-import { ss } from "@/utils/storage";
-import { mlog } from "./mjapi";
+import { ss } from '@/utils/storage';
+import { mlog } from './mjapi';
 
 
 export interface udioTask {
@@ -57,40 +57,51 @@ export interface udioTask {
 }
 
 export class udioStore{
-  //private id: string;
-  private localKey='udio-store';
-  public save(obj:udioTask ){
-    if(!obj.id ) throw "taskID must";
-    const arr=  this.getObjs();
-    const i= arr.findIndex( v=>v.id==obj.id );
-    if(i>-1) arr[i]= obj;
-    else arr.push(obj);
-     ss.set(this.localKey, arr );
-    return this;
-  } 
-  public findIndex(id:string){ 
-    return this.getObjs().findIndex( v=>v.id == id )
-  }
+    //private id: string;
+    private localKey='udio-store';
+    public save(obj:udioTask ){
+        if(!obj.id ) {
+            throw 'taskID must';
+        }
+        const arr=  this.getObjs();
+        const i= arr.findIndex( v=>v.id==obj.id );
+        if(i>-1) {
+            arr[i]= obj;
+        } else {
+            arr.push(obj);
+        }
+        ss.set(this.localKey, arr );
+        return this;
+    } 
+    public findIndex(id:string){ 
+        return this.getObjs().findIndex( v=>v.id == id );
+    }
 
-  public getObjs():udioTask[]{
-     const obj = ss.get( this.localKey ) as  undefined| udioTask[];
-     if(!obj) return [];
-     return obj;
-  }
-  public getOneById(id:string):udioTask|null{
-    const i= this.findIndex(id)
-    if(i<0) return null;
-    const arr=  this.getObjs();
-    return arr[i]
-  }
-  public delete( id:string ){ 
-    const arr=  this.getObjs();
+    public getObjs():udioTask[]{
+        const obj = ss.get( this.localKey ) as  undefined| udioTask[];
+        if(!obj) {
+            return [];
+        }
+        return obj;
+    }
+    public getOneById(id:string):udioTask|null{
+        const i= this.findIndex(id);
+        if(i<0) {
+            return null;
+        }
+        const arr=  this.getObjs();
+        return arr[i];
+    }
+    public delete( id:string ){ 
+        const arr=  this.getObjs();
     
-    const i= arr.findIndex( v=>v.id==id );
-    //mlog('ddd',i , arr)
-    if(i<0) return false
-    arr.splice(i, 1);
-    ss.set(this.localKey, arr );
-    return true;
-  }
+        const i= arr.findIndex( v=>v.id==id );
+        //mlog('ddd',i , arr)
+        if(i<0) {
+            return false;
+        }
+        arr.splice(i, 1);
+        ss.set(this.localKey, arr );
+        return true;
+    }
 }

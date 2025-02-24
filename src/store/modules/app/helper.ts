@@ -1,7 +1,7 @@
-import { homeStore } from '@/store/homeStore'
-import { ss } from '@/utils/storage'
+import { homeStore } from '@/store/homeStore';
+import { ss } from '@/utils/storage';
 
-const LOCAL_NAME = 'appSetting'
+const LOCAL_NAME = 'appSetting';
 
 export type Theme = 'light' | 'dark' | 'auto'
 
@@ -14,7 +14,7 @@ export interface AppState {
 }
 
 export function defaultSetting(): AppState {
-   const userLang = navigator.language || navigator.userLanguage;
+    const userLang = navigator.language || navigator.userLanguage;
     let content:Language= 'en-US';
     if (userLang.startsWith('zh-HK') || userLang.startsWith('zh-TW')) {
         content =  'zh-TW'; // 繁体中文
@@ -33,14 +33,14 @@ export function defaultSetting(): AppState {
     } else {
         content = 'en-US'; // 英语
     }
-  return { siderCollapsed: false, theme: homeStore.myData.session.theme=='light'?'light': 'auto', language:  content }
+    return { siderCollapsed: false, theme: homeStore.myData.session.theme=='light'?'light': 'auto', language:  content };
 }
 
 export function getLocalSetting(): AppState {
-  const localSetting: AppState | undefined = ss.get(LOCAL_NAME)
-  return { ...defaultSetting(), ...localSetting }
+    const localSetting: AppState | undefined = ss.get(LOCAL_NAME);
+    return { ...defaultSetting(), ...localSetting };
 }
 
 export function setLocalSetting(setting: AppState): void {
-  ss.set(LOCAL_NAME, setting)
+    ss.set(LOCAL_NAME, setting);
 }

@@ -6,13 +6,13 @@ import { useMessage ,NButton,NImage,NTag,NPopover} from 'naive-ui';
 import { SvgIcon } from '@/components/common';
 import { useRouter } from 'vue-router';
 import { t } from '@/locales'; 
-import aiGptsAdd  from "./aiGptsAdd.vue"
+import aiGptsAdd  from './aiGptsAdd.vue';
 import { time } from 'console';
 import { sleep } from '@/api/suno';
 
-const router = useRouter()
+const router = useRouter();
 const ms = useMessage();
-const chatStore = useChatStore()
+const chatStore = useChatStore();
 const emit = defineEmits(['close','toq']);
 const pp= defineProps<{q:string}>( );
 //const gptsList= ref<gptsType[]>([]);
@@ -25,28 +25,28 @@ const load= async ()=>{
     
     // const gptUrl= homeStore.myData.session.gptUrl?  homeStore.myData.session.gptUrl :'';
     // mlog('load',gptUrl );
-     let d;
+    let d;
     if( homeStore.myData.session.gptUrl ){
-       d = await my2Fetch( homeStore.myData.session.gptUrl  );
+        d = await my2Fetch( homeStore.myData.session.gptUrl  );
     }else {
         d = await myFetch('https://gpts.ddaiai.com/open/gpts');
     }
     gptsInitList.value = d.gpts as gptsType[];
     tag.value= d.tag as string[];
-}
+};
 const go= async ( item: gptsType)=>{
     
-    let uuid=  chatStore.active
+    let uuid=  chatStore.active;
     if( uuid ){
-       const chat= chatStore.getChatByUuid( uuid );
-       if( chat.length>0){
-            uuid=  Date.now()
-            chatStore.addHistory({ title: 'New Chat', uuid, isEdit: false })
+        const chat= chatStore.getChatByUuid( uuid );
+        if( chat.length>0){
+            uuid=  Date.now();
+            chatStore.addHistory({ title: 'New Chat', uuid, isEdit: false });
             await sleep(500);
-       }
+        }
     }
 
-    const saveObj= {model:  `${ item.gid }`   ,gpts:item}
+    const saveObj= {model:  `${ item.gid }`   ,gpts:item};
     gptConfigStore.setMyData(saveObj); 
     if( uuid ){ //保存到对话框
         const  chatSet = new chatSetting(uuid );
@@ -55,18 +55,20 @@ const go= async ( item: gptsType)=>{
           
         // }
         //全保存
-        chatSet.save( saveObj )
+        chatSet.save( saveObj );
     }
     ms.success(t('mjchat.success2'));
-    const gptUrl= `https://gpts.ddaiai.com/open/gptsapi/use`; 
+    const gptUrl= 'https://gpts.ddaiai.com/open/gptsapi/use'; 
     myFetch(gptUrl,item );
     emit('close');
     mlog('go local ', homeStore.myData.local );
-    if(homeStore.myData.local!=='Chat') router.replace({name:'Chat',params:{uuid: uuid }});
+    if(homeStore.myData.local!=='Chat') {
+        router.replace({name:'Chat',params:{uuid: uuid }});
+    }
 
     gptsUlistStore.setMyData( item );
 
-}
+};
 const pageLoad= async ()=>{
     st.value.loadPage= true;
     const gptUrl= `https://gpts.ddaiai.com/open/gptsapi/list/${ gptsPageList.value.length}`; 
@@ -74,43 +76,45 @@ const pageLoad= async ()=>{
     st.value.loadPage= false;
 
     let rz = d.data.list  as gptsType[];
-    gptsPageList.value = gptsPageList.value.concat(rz) //rz.concat( gptsPageList.value  )
-}
+    gptsPageList.value = gptsPageList.value.concat(rz); //rz.concat( gptsPageList.value  )
+};
 const gptsList = computed(()=>{
     let rz:gptsType[]=[];
     if(st.value.tab=='search'){
         return gptsSearchList.value;
-        //mlog('search', st.value.tab );
+    //mlog('search', st.value.tab );
     }
     return rz.concat( gptsInitList.value,gptsPageList.value );
-})
+});
 const searchQ= async (q:string)=>{
     st.value.q= q;
     st.value.tab= 'search';
     st.value.search= true;
     const gptUrl= `https://gpts.ddaiai.com/open/gptsapi/search?q=${ st.value.q }`; 
     let d = await myFetch(gptUrl);
-      st.value.search= false;
+    st.value.search= false;
     gptsSearchList.value = d.data.list  as gptsType[];
-}
+};
 const goSearch =(q:string)=>{
     emit('toq',{q});
     searchQ(q);
-}
+};
 
 const badgo=(item:gptsType ,e:Event )=>{
     e.stopPropagation();
     mlog('badgo', item );
-    const gptUrl= `https://gpts.ddaiai.com/open/gptsapi/bad`; 
+    const gptUrl= 'https://gpts.ddaiai.com/open/gptsapi/bad'; 
     myFetch(gptUrl,item );
     item.bad= item.bad?(+item.bad+1):1;
-}
+};
 
 watch(()=>pp.q,(n)=>{
-    if(n=='') st.value.tab= '';
-})
+    if(n=='') {
+        st.value.tab= '';
+    }
+});
 load();
-defineExpose({ searchQ })
+defineExpose({ searchQ });
 </script>
 <template>
 

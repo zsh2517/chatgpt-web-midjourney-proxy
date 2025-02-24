@@ -3,109 +3,109 @@ import { ref } from 'vue';
 import { mlog, upImg } from '@/api'; 
 import { useMessage,NButton,NInput,NTag,NSelect,NPopover,NSwitch } from 'naive-ui';
  
-import { t } from "@/locales"; 
+import { t } from '@/locales'; 
 import { pikaFeed, pikaFetch } from '@/api/pika';
 
 let txt2v={
- 	"pikaffect": "",
-	"promptText": "",
-	"model": "1.5",
-	"options": {"aspectRatio":1.7777777777777777,"frameRate":24,"camera":{},"parameters":{"guidanceScale":12,"motion":1,"negativePrompt":""},"extend":false}
+ 	'pikaffect': '',
+    'promptText': '',
+    'model': '1.5',
+    'options': {'aspectRatio':1.7777777777777777,'frameRate':24,'camera':{},'parameters':{'guidanceScale':12,'motion':1,'negativePrompt':''},'extend':false}
    
-}
+};
 let img2v={
- 	"pikaffect": "",
-	"promptText": "",
-	"model": "1.5",
-	"options": {"frameRate":24,"camera":{},"parameters":{"guidanceScale":12,"motion":1,"negativePrompt":""},"extend":false}
-   ,"image":"https://www.openai-hk.com/res/img/open.png"
-}
+ 	'pikaffect': '',
+    'promptText': '',
+    'model': '1.5',
+    'options': {'frameRate':24,'camera':{},'parameters':{'guidanceScale':12,'motion':1,'negativePrompt':''},'extend':false}
+    ,'image':'https://www.openai-hk.com/res/img/open.png'
+};
 
 const vf=[{s:'width: 100%; height: 100%;',label:'1:1',value:1}
-,{s:'width: 100%; height: 75%;',label:'4:3',value:1.3333333333333333}
-,{s:'width: 75%; height: 100%;',label:'3:4',value:0.75}
-,{s:'width: 100%; height: 50%;',label:'16:9',value:1.7777777777777777}
-,{s:'width: 50%; height: 100%;',label:'9:16',value:0.5625}
- ];
+    ,{s:'width: 100%; height: 75%;',label:'4:3',value:1.3333333333333333}
+    ,{s:'width: 75%; height: 100%;',label:'3:4',value:0.75}
+    ,{s:'width: 100%; height: 50%;',label:'16:9',value:1.7777777777777777}
+    ,{s:'width: 50%; height: 100%;',label:'9:16',value:0.5625}
+];
 const mvOption= [
-{label:'verion: v2.0',value: '2.0'}
-,{label:'verion: v1.5',value: '1.5'}
- ]
+    {label:'verion: v2.0',value: '2.0'}
+    ,{label:'verion: v1.5',value: '1.5'}
+];
 
 let ezOption = [
-        {
-            video: "https://cdn.pika.art/feature/v1.5/pikaffect/peel.webm",
-            poster: "https://cdn.pika.art/feature/v1.5/pikaffect/peel.jpg",
-            title: "Peel"
+    {
+        video: 'https://cdn.pika.art/feature/v1.5/pikaffect/peel.webm',
+        poster: 'https://cdn.pika.art/feature/v1.5/pikaffect/peel.jpg',
+        title: 'Peel'
             
-        },  {
-            video: "https://cdn.pika.art/feature/v1.5/pikaffect/poke.webm",
-            poster: "https://cdn.pika.art/feature/v1.5/pikaffect/poke.jpg",
-            title: "Poke"
+    },  {
+        video: 'https://cdn.pika.art/feature/v1.5/pikaffect/poke.webm',
+        poster: 'https://cdn.pika.art/feature/v1.5/pikaffect/poke.jpg',
+        title: 'Poke'
             
-        },  {
-            video: "https://cdn.pika.art/feature/v1.5/pikaffect/tear.webm",
-            poster: "https://cdn.pika.art/feature/v1.5/pikaffect/tear.jpg",
-            title: "Tear"
+    },  {
+        video: 'https://cdn.pika.art/feature/v1.5/pikaffect/tear.webm',
+        poster: 'https://cdn.pika.art/feature/v1.5/pikaffect/tear.jpg',
+        title: 'Tear'
             
-        }, {
-            video: "https://cdn.pika.art/feature/v1.5/pikaffect/levitate.webm",
-            poster: "https://cdn.pika.art/feature/v1.5/pikaffect/levitate.jpg",
-            title: "Levitate"
+    }, {
+        video: 'https://cdn.pika.art/feature/v1.5/pikaffect/levitate.webm',
+        poster: 'https://cdn.pika.art/feature/v1.5/pikaffect/levitate.jpg',
+        title: 'Levitate'
             
-        }, {
-            video: "https://cdn.pika.art/feature/v1.5/pikaffect/decapitate.webm",
-            poster: "https://cdn.pika.art/feature/v1.5/pikaffect/decapitate.jpg",
-            title: "Decapitate"
+    }, {
+        video: 'https://cdn.pika.art/feature/v1.5/pikaffect/decapitate.webm',
+        poster: 'https://cdn.pika.art/feature/v1.5/pikaffect/decapitate.jpg',
+        title: 'Decapitate'
             
-        },{
-            video: "https://cdn.pika.art/feature/v1.5/pikaffect/eye-pop.webm",
-            poster: "https://cdn.pika.art/feature/v1.5/pikaffect/eye-pop.jpg",
-            title: "Eye-pop"
+    },{
+        video: 'https://cdn.pika.art/feature/v1.5/pikaffect/eye-pop.webm',
+        poster: 'https://cdn.pika.art/feature/v1.5/pikaffect/eye-pop.jpg',
+        title: 'Eye-pop'
             
-        }, {
-            video: "https://cdn.pika.art/feature/v1.5/pikaffect/tada.webm",
-            poster: "https://cdn.pika.art/feature/v1.5/pikaffect/tada.jpg",
-            title: "Ta-da"
+    }, {
+        video: 'https://cdn.pika.art/feature/v1.5/pikaffect/tada.webm',
+        poster: 'https://cdn.pika.art/feature/v1.5/pikaffect/tada.jpg',
+        title: 'Ta-da'
             
-        }, {
-            video: "https://cdn.pika.art/feature/v1.5/pikaffect/deflate.webm",
-            poster: "https://cdn.pika.art/feature/v1.5/pikaffect/deflate.jpg",
-            title: 'Deflate'
-        }, {
-            video: "https://cdn.pika.art/feature/v1.5/pikaffect/crumble.webm",
-            poster: "https://cdn.pika.art/feature/v1.5/pikaffect/crumble.jpg",
-            title: 'Crumble'
-        }, {
-            video: "https://cdn.pika.art/feature/v1.5/pikaffect/dissolve.webm",
-            poster: "https://cdn.pika.art/feature/v1.5/pikaffect/dissolve.jpg",
-            title: 'Dissolve'
-        }, {
-            video: "https://cdn.pika.art/feature/v1.5/pikaffect/squish.webm",
-            poster: "https://cdn.pika.art/feature/v1.5/pikaffect/squish.jpg",
-            title: 'Squish'
-        }, {
-            video: "https://cdn.pika.art/feature/v1.5/pikaffect/inflate.webm",
-            poster: "https://cdn.pika.art/feature/v1.5/pikaffect/inflate.jpg",
-            title: 'Inflate'
-        }, {
-            video: "https://cdn.pika.art/feature/v1.5/pikaffect/melt.webm",
-            poster: "https://cdn.pika.art/feature/v1.5/pikaffect/melt.jpg",
-            title: 'Melt',
-        }, {
-            video: "https://cdn.pika.art/feature/v1.5/pikaffect/crush.webm",
-            poster: "https://cdn.pika.art/feature/v1.5/pikaffect/crush.jpg",
-            title: 'Crush'
-        }, {
-            video: "https://cdn.pika.art/feature/v1.5/pikaffect/cake-ify.webm",
-            poster: "https://cdn.pika.art/feature/v1.5/pikaffect/cake-ify.jpg",
-            title:'Cake-ify'
-        }, {
-            video: "https://cdn.pika.art/feature/v1.5/pikaffect/explode.webm",
-            poster: "https://cdn.pika.art/feature/v1.5/pikaffect/explode.jpg",
-            title: 'Explode',
-            //text:'Explode it'
-        }];
+    }, {
+        video: 'https://cdn.pika.art/feature/v1.5/pikaffect/deflate.webm',
+        poster: 'https://cdn.pika.art/feature/v1.5/pikaffect/deflate.jpg',
+        title: 'Deflate'
+    }, {
+        video: 'https://cdn.pika.art/feature/v1.5/pikaffect/crumble.webm',
+        poster: 'https://cdn.pika.art/feature/v1.5/pikaffect/crumble.jpg',
+        title: 'Crumble'
+    }, {
+        video: 'https://cdn.pika.art/feature/v1.5/pikaffect/dissolve.webm',
+        poster: 'https://cdn.pika.art/feature/v1.5/pikaffect/dissolve.jpg',
+        title: 'Dissolve'
+    }, {
+        video: 'https://cdn.pika.art/feature/v1.5/pikaffect/squish.webm',
+        poster: 'https://cdn.pika.art/feature/v1.5/pikaffect/squish.jpg',
+        title: 'Squish'
+    }, {
+        video: 'https://cdn.pika.art/feature/v1.5/pikaffect/inflate.webm',
+        poster: 'https://cdn.pika.art/feature/v1.5/pikaffect/inflate.jpg',
+        title: 'Inflate'
+    }, {
+        video: 'https://cdn.pika.art/feature/v1.5/pikaffect/melt.webm',
+        poster: 'https://cdn.pika.art/feature/v1.5/pikaffect/melt.jpg',
+        title: 'Melt',
+    }, {
+        video: 'https://cdn.pika.art/feature/v1.5/pikaffect/crush.webm',
+        poster: 'https://cdn.pika.art/feature/v1.5/pikaffect/crush.jpg',
+        title: 'Crush'
+    }, {
+        video: 'https://cdn.pika.art/feature/v1.5/pikaffect/cake-ify.webm',
+        poster: 'https://cdn.pika.art/feature/v1.5/pikaffect/cake-ify.jpg',
+        title:'Cake-ify'
+    }, {
+        video: 'https://cdn.pika.art/feature/v1.5/pikaffect/explode.webm',
+        poster: 'https://cdn.pika.art/feature/v1.5/pikaffect/explode.jpg',
+        title: 'Explode',
+    //text:'Explode it'
+    }];
 
 const pika= ref({image:'',prompt:'',aspectRatio:1.7777777777777777,negativePrompt:'',pe_index:-1,mv:'2.0'});
 const fsRef= ref() ; 
@@ -113,18 +113,18 @@ const ms = useMessage();
 const st= ref({ isLoading:false});
 
 function selectFile(input:any){
-   // fsFile.value= input.target.files[0];
+    // fsFile.value= input.target.files[0];
     upImg(input.target.files[0]).then(d=>{
         pika.value.image= d;
-        fsRef.value=''
+        fsRef.value='';
     }).catch(e=>ms.error(e));
 }
 const clearInput = ()=>{
     pika.value.prompt='';
     pika.value.image= ''; 
-    fsRef.value='' 
+    fsRef.value=''; 
     pika.value.pe_index= -1;
-}
+};
 const createVideo = async()=>{
     let sb= pika.value.image ? {...img2v} : {...txt2v};
     sb.promptText= pika.value.prompt; 
@@ -135,28 +135,28 @@ const createVideo = async()=>{
         sb.options.aspectRatio= pika.value.aspectRatio;
     }
     if(pika.value.pe_index>=0){
-        sb.pikaffect= ezOption[pika.value.pe_index].title
+        sb.pikaffect= ezOption[pika.value.pe_index].title;
     }
     sb.model= pika.value.mv;
     mlog('sb>> '  ,  sb  );
-    st.value.isLoading= true
+    st.value.isLoading= true;
     try {
-        const a:any= await pikaFetch('/generate' , sb  )
-        st.value.isLoading= false
+        const a:any= await pikaFetch('/generate' , sb  );
+        st.value.isLoading= false;
         if(a.id){
-            pikaFeed( a.id)
+            pikaFeed( a.id);
         }else{
             ms.error( t('mj.createFail') );//createFail
         }
     } catch (error) {
-        st.value.isLoading= false
+        st.value.isLoading= false;
     } 
-}
+};
 
 const selecteffect = (i:number)=>{
     pika.value.pe_index= i ;
     pika.value.prompt= ezOption[i].title+' it';
-}
+};
 </script>
 <template>
 <div class="p-2"> 

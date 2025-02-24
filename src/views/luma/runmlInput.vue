@@ -10,27 +10,27 @@ import { t } from '@/locales';
  
 const ms = useMessage();
 const f= ref({
-    "promptImage": [
-       {"uri":"","position":"last"}
+    'promptImage': [
+        {'uri':'','position':'last'}
     ],
-    "seed": 4294967295,
-    "model": "gen3a_turbo",
-    "promptText": "",
-    "watermark": false,
-    "duration": 5,
-    "ratio": "1280:768"
-  }
+    'seed': 4294967295,
+    'model': 'gen3a_turbo',
+    'promptText': '',
+    'watermark': false,
+    'duration': 5,
+    'ratio': '1280:768'
+}
 );
 const luma=ref({image_url:'',image_end_url:''});
-const st= ref({isLoading:false })
+const st= ref({isLoading:false });
 const vf=[ 
-{s:'width: 100%; height: 50%;',label: t('mj.rml_heng'),value:'1280:768'}
-,{s:'width: 50%; height: 100%;',label:t('mj.rml_shu'),value:'768:1280'}
- ];
- const duanConfig=[
-{key:5,value: '5s'},
-{key:10,value:'10s'}
-]
+    {s:'width: 100%; height: 50%;',label: t('mj.rml_heng'),value:'1280:768'}
+    ,{s:'width: 50%; height: 100%;',label:t('mj.rml_shu'),value:'768:1280'}
+];
+const duanConfig=[
+    {key:5,value: '5s'},
+    {key:10,value:'10s'}
+];
 
 const fsRef= ref() ;
 const fsRef2 = ref() ;
@@ -39,7 +39,7 @@ function selectFile(input:any){
      
     upImg(input.target.files[0]).then(d=>{
         luma.value.image_url= d;
-        fsRef.value=''
+        fsRef.value='';
     }).catch(e=>ms.error(e));
     
 }
@@ -47,12 +47,12 @@ function selectFile(input:any){
 function selectFile2(input:any){
     upImg(input.target.files[0]).then(d=>{
         luma.value.image_end_url= d;
-        fsRef2.value=''
+        fsRef2.value='';
     }).catch(e=>ms.error(e));
     
 }
 onMounted(() => {
-    homeStore.setMyData({ms:ms})
+    homeStore.setMyData({ms:ms});
     
 });
 const clearInput = ()=>{
@@ -60,28 +60,30 @@ const clearInput = ()=>{
     f.value.promptText= '';
     luma.value.image_end_url= '';
     luma.value.image_url= '';
-    fsRef.value=''
-    fsRef2.value=''
-}
+    fsRef.value='';
+    fsRef2.value='';
+};
 const canPost= computed(()=>{
-    return f.value.promptText && luma.value.image_url
+    return f.value.promptText && luma.value.image_url;
 });
 
 const create= async ()=>{ 
     f.value.promptImage=[];
-    f.value.promptImage.push({uri:luma.value.image_url,"position":"first"});
-    if(luma.value.image_end_url ) f.value.promptImage.push({uri:luma.value.image_end_url,"position":"last"});
+    f.value.promptImage.push({uri:luma.value.image_url,'position':'first'});
+    if(luma.value.image_end_url ) {
+        f.value.promptImage.push({uri:luma.value.image_end_url,'position':'last'});
+    }
     f.value.seed= getRandomInt(1375247627, 3975247627);
-    st.value.isLoading=true
+    st.value.isLoading=true;
     //mlog('create', f.value  )
     try {
-         let d:any= await runwayMlFetch('/v1/image_to_video', f.value)
-         runwayMlFeed(d.id ,{model:'gen3a_turbo',promptText:f.value.promptText })
+        let d:any= await runwayMlFetch('/v1/image_to_video', f.value);
+        runwayMlFeed(d.id ,{model:'gen3a_turbo',promptText:f.value.promptText });
     } catch (error) {
         
     }
-    st.value.isLoading=false 
-}
+    st.value.isLoading=false; 
+};
 </script>
 <template> 
 <div>

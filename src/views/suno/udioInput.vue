@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, onMounted, ref, watch } from 'vue';
-import { NTabs ,NTabPane,NButtonGroup,NRadioButton,NRadioGroup ,NInput,NSwitch ,NTooltip, NTag ,NButton, useMessage,NSelect, NImage, NSlider} from "naive-ui";
+import { NTabs ,NTabPane,NButtonGroup,NRadioButton,NRadioGroup ,NInput,NSwitch ,NTooltip, NTag ,NButton, useMessage,NSelect, NImage, NSlider} from 'naive-ui';
 import { t } from '@/locales';
 import { udioFeedTask, udioFetch } from '@/api/udio';
 import { mlog } from '@/api';
@@ -10,95 +10,95 @@ import { udioTask } from '@/api/udioStore';
 
 
 
-const f= ref({lyrics_type:'generate',prompt:'',lyrice:'',model:'udio32-v1.5',continue_clip_id:'',continue_at:0,mode:'continuation' })
+const f= ref({lyrics_type:'generate',prompt:'',lyrice:'',model:'udio32-v1.5',continue_clip_id:'',continue_at:0,mode:'continuation' });
 const st = ref({loading:false});
-const exSuno= ref<udioTask>()
+const exSuno= ref<udioTask>();
 
 const lyriceConfig=[
-{key:'user',value: t('mj.ud_ly_write')},
-{key:'generate',value:t('mj.ud_ly_auto') },
-{key:'instrumental',value:t('mj.ud_ly_null')},
+    {key:'user',value: t('mj.ud_ly_write')},
+    {key:'generate',value:t('mj.ud_ly_auto') },
+    {key:'instrumental',value:t('mj.ud_ly_null')},
 
 // {key:'user',value:'Write Lyrics'},
 // {key:'generate',value:'Auto'},
 // {key:'instrumental',value:'Instrumental'},
-]
+];
 
 const modelConfig=[
-{label: 'Model: udio-32 '+t('mj.ud_v32'),value: 'udio32-v1.5'}
-,{label:'Model: udio-130 '+t('mj.ud_v130'),value: 'udio130-v1.5'}
+    {label: 'Model: udio-32 '+t('mj.ud_v32'),value: 'udio32-v1.5'}
+    ,{label:'Model: udio-130 '+t('mj.ud_v130'),value: 'udio130-v1.5'}
 ];
 const modeConfig=[
-{label:  t('mj.ud_precede'),value: 'precede'}
-,{label: t('mj.ud_continuation'),value: 'continuation'}
+    {label:  t('mj.ud_precede'),value: 'precede'}
+    ,{label: t('mj.ud_continuation'),value: 'continuation'}
 ];
 
 const input= {
-  "gen_params": {
-    "prompt": "",
-    "lyrics": "",
-    "lyrics_type": "generate",
-    "bypass_prompt_optimization": false,
-    "seed": -1,
-    "song_section_start": 0.4,
-    "prompt_strength": 0.5,
-    "clarity_strength": 0.25,
-    "lyrics_strength": 0.5,
-    "generation_quality": 0.75,
-    "negative_prompt": "",
-    "model_type": "",
-    "config": {
-      "mode": "regular"
+    'gen_params': {
+        'prompt': '',
+        'lyrics': '',
+        'lyrics_type': 'generate',
+        'bypass_prompt_optimization': false,
+        'seed': -1,
+        'song_section_start': 0.4,
+        'prompt_strength': 0.5,
+        'clarity_strength': 0.25,
+        'lyrics_strength': 0.5,
+        'generation_quality': 0.75,
+        'negative_prompt': '',
+        'model_type': '',
+        'config': {
+            'mode': 'regular'
+        }
     }
-  }
-}
+};
 
 const generate=async ()=>{
-    st.value.loading= true
-    let data= {...input}
-    data.gen_params.prompt=f.value.prompt
-    data.gen_params.model_type=f.value.model
-    data.gen_params.lyrics_type=f.value.lyrics_type
+    st.value.loading= true;
+    let data= {...input};
+    data.gen_params.prompt=f.value.prompt;
+    data.gen_params.model_type=f.value.model;
+    data.gen_params.lyrics_type=f.value.lyrics_type;
     if(f.value.lyrics_type=='user'){
-        data.gen_params.lyrics= f.value.lyrice 
+        data.gen_params.lyrics= f.value.lyrice; 
     }
     if(f.value.continue_clip_id){
-        data.gen_params.song_section_start= f.value.continue_at
+        data.gen_params.song_section_start= f.value.continue_at;
         data.gen_params.config= {
-            "mode": f.value.mode,
-            "context_length": 130,
-            "source": {
-                "source_type": "song",
-                "song_id": f.value.continue_clip_id
+            'mode': f.value.mode,
+            'context_length': 130,
+            'source': {
+                'source_type': 'song',
+                'song_id': f.value.continue_clip_id
             }
-        }
+        };
     }
     try {
         const d = await udioFetch('/udio/submit/music',data );
-        mlog('generate', d )
+        mlog('generate', d );
         if( d.data ){
-            udioFeedTask( d.data )
+            udioFeedTask( d.data );
         }
     } catch (error) {
         
     } 
-    st.value.loading= false
-}
+    st.value.loading= false;
+};
 
-const canPost= computed(()=>f.value.prompt!=''  ) 
+const canPost= computed(()=>f.value.prompt!=''  ); 
 
 watch(()=>homeStore.myData.act, (n)=>{
     if(n=='udio.extend'){
-        mlog("udio.extend", homeStore.myData.actData )
-        const s= homeStore.myData.actData as udioTask
-        exSuno.value= s 
-        f.value.continue_clip_id= s.id
-        f.value.continue_at= 0.4 
+        mlog('udio.extend', homeStore.myData.actData );
+        const s= homeStore.myData.actData as udioTask;
+        exSuno.value= s; 
+        f.value.continue_clip_id= s.id;
+        f.value.continue_at= 0.4; 
     }
 });
 const ms = useMessage();
 onMounted(() => {
-    homeStore.setMyData({ms:ms})
+    homeStore.setMyData({ms:ms});
 });
 </script>
 

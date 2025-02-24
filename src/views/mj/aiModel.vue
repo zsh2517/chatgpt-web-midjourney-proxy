@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import {NSelect, NInput,NSlider, NButton, useMessage,NTag} from "naive-ui"
-import { ref ,computed,watch, onMounted} from "vue";
-import {gptConfigStore, homeStore,useChatStore} from '@/store'
-import { mlog,chatSetting } from "@/api";
-import { t } from "@/locales";
+import {NSelect, NInput,NSlider, NButton, useMessage,NTag} from 'naive-ui';
+import { ref ,computed,watch, onMounted} from 'vue';
+import {gptConfigStore, homeStore,useChatStore} from '@/store';
+import { mlog,chatSetting } from '@/api';
+import { t } from '@/locales';
 
 const emit = defineEmits(['close']);
 const chatStore = useChatStore();
@@ -14,25 +14,27 @@ const chatSet = new chatSetting( uuid==null?1002:uuid);
 const nGptStore = ref(  chatSet.getGptConfig() );
 
 const config = ref({
-model:[ 'o1','o1-2024-12-17', 'gpt-4-turbo-2024-04-09','o1-preview','o1-mini','o1-preview-2024-09-12','o1-mini-2024-09-12','chatgpt-4o-latest','gpt-4o-2024-11-20','gpt-4o-2024-08-06','gpt-4o-2024-05-13','gpt-4o-mini-2024-07-18','gpt-4o-mini','gpt-4o','gpt-4-turbo','gpt-4-0125-preview','gpt-3.5-turbo',`gpt-4-1106-preview`,`gpt-3.5-turbo-16k`,'gpt-4','gpt-4-0613','gpt-4-32k-0613' ,'gpt-4-32k','gpt-4-32k-0314',`gpt-3.5-turbo-16k-0613`
-,`gpt-4-vision-preview`,`gpt-3.5-turbo-1106` ,'gpt-3.5-turbo-0125'
-,'gpt-3.5-turbo-0301','gpt-3.5-turbo-0613','gpt-4-all','gpt-3.5-net'
-,'gemini-pro',"gemini-pro-vision",'gemini-pro-1.5',"gemini-1.5-pro-exp-0801"
-,'claude-3-5-sonnet-20241022','claude-3-sonnet-20240229','claude-3-opus-20240229','claude-3-haiku-20240307','claude-3-5-sonnet-20240620','suno-v3'
-,'deepseek-r1','deepseek-v3'
-]
-,maxToken:4096
+    model:[ 'o1','o1-2024-12-17', 'gpt-4-turbo-2024-04-09','o1-preview','o1-mini','o1-preview-2024-09-12','o1-mini-2024-09-12','chatgpt-4o-latest','gpt-4o-2024-11-20','gpt-4o-2024-08-06','gpt-4o-2024-05-13','gpt-4o-mini-2024-07-18','gpt-4o-mini','gpt-4o','gpt-4-turbo','gpt-4-0125-preview','gpt-3.5-turbo','gpt-4-1106-preview','gpt-3.5-turbo-16k','gpt-4','gpt-4-0613','gpt-4-32k-0613' ,'gpt-4-32k','gpt-4-32k-0314','gpt-3.5-turbo-16k-0613'
+        ,'gpt-4-vision-preview','gpt-3.5-turbo-1106' ,'gpt-3.5-turbo-0125'
+        ,'gpt-3.5-turbo-0301','gpt-3.5-turbo-0613','gpt-4-all','gpt-3.5-net'
+        ,'gemini-pro','gemini-pro-vision','gemini-pro-1.5','gemini-1.5-pro-exp-0801'
+        ,'claude-3-5-sonnet-20241022','claude-3-sonnet-20240229','claude-3-opus-20240229','claude-3-haiku-20240307','claude-3-5-sonnet-20240620','suno-v3'
+        ,'deepseek-r1','deepseek-v3'
+    ]
+    ,maxToken:4096
 }); 
 const st= ref({openMore:false });
 const voiceList= computed(()=>{
     let rz=[];
-    for(let o of "alloy,echo,fable,onyx,nova,shimmer".split(/[ ,]+/ig))rz.push({label:o,value:o}) 
+    for(let o of 'alloy,echo,fable,onyx,nova,shimmer'.split(/[ ,]+/ig)){
+        rz.push({label:o,value:o});
+    } 
     return rz;
 });
 const modellist = computed(() => { //
     let rz =[ ];
     for(let o of config.value.model){
-        rz.push({label:o,value:o})
+        rz.push({label:o,value:o});
     }
     if(gptConfigStore.myData.userModel){
         let arr = gptConfigStore.myData.userModel.split(/[ ,]+/ig);
@@ -40,34 +42,38 @@ const modellist = computed(() => { //
         //     return self.indexOf(value) === index;
         // });
         for(let o of arr ){
-            o && rz.push({label:o,value:o})
+            o && rz.push({label:o,value:o});
         }
     }
     //服务端的 CUSTOM_MODELS 设置
     if( homeStore.myData.session.cmodels ){
         let delModel:string[] = [];
         let addModel:string[]=[];
-        let isDelAll= false
+        let isDelAll= false;
         homeStore.myData.session.cmodels.split(/[ ,]+/ig).map( (v:string)=>{
             if(v.indexOf('-')==0){
-                delModel.push(v.substring(1))
-                if( v=='-all') isDelAll=true;
+                delModel.push(v.substring(1));
+                if( v=='-all') {
+                    isDelAll=true;
+                }
             }else{
                 addModel.push(v);
             }
         });
         mlog('cmodels',delModel,addModel);
-        if( isDelAll  )rz=[];
+        if( isDelAll  ){
+            rz=[];
+        }
         rz= rz.filter(v=> delModel.indexOf(v.value)==-1 );
-        addModel.map(o=>rz.push({label:o,value:o}) )
+        addModel.map(o=>rz.push({label:o,value:o}) );
         if (rz.length==0){
-            rz.push({label:'gpt-3.5-turbo',value:'gpt-3.5-turbo'}) 
+            rz.push({label:'gpt-3.5-turbo',value:'gpt-3.5-turbo'}); 
         }
     }
 
     let uniqueArray: { label: string, value: string }[] = Array.from(
         new Map(rz.map(item => [JSON.stringify(item), item]))
-        .values()
+            .values()
     );
     return uniqueArray ;
 });
@@ -78,12 +84,14 @@ const ms= useMessage();
 //     emit('close');
 // }
 const saveChat=(type:string)=>{
-     chatSet.save(  nGptStore.value );
-     gptConfigStore.setMyData( nGptStore.value );
-     homeStore.setMyData({act:'saveChat'}); 
-     if(type!='hide')ms.success( t('common.saveSuccess'));
-     emit('close');
-}
+    chatSet.save(  nGptStore.value );
+    gptConfigStore.setMyData( nGptStore.value );
+    homeStore.setMyData({act:'saveChat'}); 
+    if(type!='hide'){
+        ms.success( t('common.saveSuccess'));
+    }
+    emit('close');
+};
  
 watch(()=>nGptStore.value.model,(n)=>{
     nGptStore.value.gpts=undefined;
@@ -101,17 +109,19 @@ watch(()=>nGptStore.value.model,(n)=>{
     }else if( n.toLowerCase().includes('claude-3-5') ||  n.toLowerCase().includes('deepseek') ){ //deepseek
         max=4096*2*2;
     }else if( n.toLowerCase().includes('claude-3') ){
-         max=4096*2;
+        max=4096*2;
     }
 
     config.value.maxToken=max/2;
-    if(nGptStore.value.max_tokens> config.value.maxToken ) nGptStore.value.max_tokens= config.value.maxToken;
-})
+    if(nGptStore.value.max_tokens> config.value.maxToken ) {
+        nGptStore.value.max_tokens= config.value.maxToken;
+    }
+});
 
 const reSet=()=>{
     gptConfigStore.setInit();
     nGptStore.value= gptConfigStore.myData;
-}
+};
 
 onMounted(() => {
     //gptConfigStore.myData= chatSet.getGptConfig();

@@ -2,9 +2,9 @@
 import { mlog } from '@/api';
 import { SvgIcon } from '@/components/common';
 import Recorder from 'js-audio-recorder';
-import  { NButton,useMessage,NButtonGroup } from "naive-ui"
-import { useBasicLayout } from '@/hooks/useBasicLayout'
-import { ref,watch,onUnmounted } from 'vue'
+import  { NButton,useMessage,NButtonGroup } from 'naive-ui';
+import { useBasicLayout } from '@/hooks/useBasicLayout';
+import { ref,watch,onUnmounted } from 'vue';
 import { t } from '@/locales';
 
 const emit = defineEmits(['process' ,'send','cancel']);
@@ -18,12 +18,12 @@ const stat = ref<statType>({duration:0,fileSize:0,vol:0});
 const st =ref({start:0,isGo:false});
 
 const ms = useMessage();
-const { isMobile } = useBasicLayout()
+const { isMobile } = useBasicLayout();
 
 recorder.onprogress =  (params) => {
-    stat.value = {duration: params.duration , fileSize: params.fileSize, vol: params.vol }
+    stat.value = {duration: params.duration , fileSize: params.fileSize, vol: params.vol };
     //emit('process', stat.value);
-}
+};
 const start = ()=>{
     recorder.start().then(()=>{
         st.value.start=1;
@@ -34,41 +34,41 @@ const start = ()=>{
         ms.error( t('mj.fail')+':'+e );
         emit('cancel');
     });
-}
+};
 const pause=()=>{
-    recorder.pause() 
+    recorder.pause(); 
     st.value.start=2;
 
-}
+};
 const pauseGoon=()=>{
     recorder.resume();
     st.value.start=1;
     recorder.stopPlay();
-}
+};
 const send=()=>{
     stop();
     emit('send',{blob: recorder.getWAVBlob() , stat:stat.value });
     stat.value= {duration:0,fileSize:0,vol:0} ;
-}
+};
 const play=()=>{
     //if(st.value.start==1) pause();
     recorder.play();
     stop();
-}
+};
 const stopAdnRecord= ()=>{
     stop();
     start();
     st.value.start=1;
-}
+};
 const stop=()=>{
     st.value.start=0;
     recorder.stop();
     recorder.stopPlay();
-}
+};
 const cancal=()=>{
     stop();
     emit('cancel');
-}
+};
 onUnmounted(() => {
     recorder.stop();
     recorder.destroy();

@@ -1,29 +1,29 @@
 <script lang="ts" setup>
-import { ref } from 'vue'
-import { NButton, NInput, NSlider, useMessage } from 'naive-ui'
-import { useSettingStore } from '@/store'
-import type { SettingsState } from '@/store/modules/settings/helper'
-import { t } from '@/locales'
+import { ref } from 'vue';
+import { NButton, NInput, NSlider, useMessage } from 'naive-ui';
+import { useSettingStore } from '@/store';
+import type { SettingsState } from '@/store/modules/settings/helper';
+import { t } from '@/locales';
 
-const settingStore = useSettingStore()
+const settingStore = useSettingStore();
 
-const ms = useMessage()
+const ms = useMessage();
 
-const systemMessage = ref(settingStore.systemMessage ?? '')
+const systemMessage = ref(settingStore.systemMessage ?? '');
 
-const temperature = ref(settingStore.temperature ?? 0.5)
+const temperature = ref(settingStore.temperature ?? 0.5);
 
-const top_p = ref(settingStore.top_p ?? 1)
+const top_p = ref(settingStore.top_p ?? 1);
 
 function updateSettings(options: Partial<SettingsState>) {
-  settingStore.updateSetting(options)
-  ms.success(t('common.success'))
+    settingStore.updateSetting(options);
+    ms.success(t('common.success'));
 }
 
 function handleReset() {
-  settingStore.resetSetting()
-  ms.success(t('common.success'))
-  window.location.reload()
+    settingStore.resetSetting();
+    ms.success(t('common.success'));
+    window.location.reload();
 }
 </script>
 

@@ -2,18 +2,18 @@
 import aiSiderInput from './aiSiderInput.vue'; 
 //import { useAppStore, useChatStore } from '@/store';
 
-import { useBasicLayout } from '@/hooks/useBasicLayout'
+import { useBasicLayout } from '@/hooks/useBasicLayout';
 import { mlog } from '@/api';
 import chatIndex from '@/views/chat/index.vue';
 
-const { isMobile } = useBasicLayout()
+const { isMobile } = useBasicLayout();
 // const appStore = useAppStore()
 // const chatStore = useChatStore()
 const drawSent=( obj:any )=>{
-    mlog('drawSent' , obj )
-}
+    mlog('drawSent' , obj );
+};
 const mjClose=()=>{
-}
+};
 
 // function handleAdd() {
 //   chatStore.addHistory({ title: 'New Chat', uuid: Date.now(), isEdit: false })

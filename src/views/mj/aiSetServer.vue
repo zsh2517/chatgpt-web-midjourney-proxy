@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import { NInput, NButton, useMessage,NSwitch } from "naive-ui" //NInfiniteScroll
+import { NInput, NButton, useMessage,NSwitch } from 'naive-ui'; //NInfiniteScroll
  
-import {gptServerStore} from '@/store'
-import { mlog, myTrim,blurClean} from "@/api";
-import { t } from '@/locales'
-import {  watch } from "vue";
+import {gptServerStore} from '@/store';
+import { mlog, myTrim,blurClean} from '@/api';
+import { t } from '@/locales';
+import {  watch } from 'vue';
 
 const emit= defineEmits(['close']);
 const ms= useMessage();
@@ -12,7 +12,7 @@ const save = ()=>{
     gptServerStore.setMyData( gptServerStore.myData );
     ms.success( t('mjchat.success'));
     emit('close');
-}
+};
 // const blurClean= ()=>{
 //   mlog('blurClean');
 //   gptServerStore.myData.OPENAI_API_BASE_URL =myTrim( myTrim(gptServerStore.myData.OPENAI_API_BASE_URL.trim(),'/'), '\\' );
@@ -24,8 +24,10 @@ const save = ()=>{
 
 //const isSync= computed(()=>gptServerStore.myData.IS_SET_SYNC )
 watch(() => gptServerStore.myData.OPENAI_API_BASE_URL , (n)=>{
-   if(!gptServerStore.myData.IS_SET_SYNC) return  ;
-    gptServerStore.myData.MJ_SERVER= n
+    if(!gptServerStore.myData.IS_SET_SYNC) {
+        return  ;
+    }
+    gptServerStore.myData.MJ_SERVER= n;
     gptServerStore.myData.SUNO_SERVER=n;
     gptServerStore.myData.LUMA_SERVER=n;
     gptServerStore.myData.VIGGLE_SERVER=n;
@@ -37,8 +39,10 @@ watch(() => gptServerStore.myData.OPENAI_API_BASE_URL , (n)=>{
     gptServerStore.myData.UDIO_SERVER=n;
 });
 watch(() => gptServerStore.myData.OPENAI_API_KEY , (n)=>{
-    if(!gptServerStore.myData.IS_SET_SYNC) return  ;
-    gptServerStore.myData.MJ_API_SECRET= n
+    if(!gptServerStore.myData.IS_SET_SYNC) {
+        return  ;
+    }
+    gptServerStore.myData.MJ_API_SECRET= n;
     gptServerStore.myData.SUNO_KEY=n;
     gptServerStore.myData.LUMA_KEY=n;
     gptServerStore.myData.VIGGLE_KEY=n;

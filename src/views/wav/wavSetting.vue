@@ -41,7 +41,7 @@ const modelList= computed(()=>{
                 </div>
 
             <section class="mb-4 flex justify-between items-center"  >
-                <n-input @blur="blurClean"  :placeholder="$t('mj.setOpenPlaceholder') " v-model:value="gptServerStore.myData.OPENAI_API_BASE_URL" clearable>
+                <n-input v-model:value="gptServerStore.myData.OPENAI_API_BASE_URL"  :placeholder="$t('mj.setOpenPlaceholder') " clearable @blur="blurClean">
                     <template #prefix>
                     <span class="text-[var(--n-tab-text-color-active)]">{{ $t('mj.setOpenUrl') }}:</span>
                     </template>
@@ -49,7 +49,7 @@ const modelList= computed(()=>{
             </section>
 
             <section class="mb-4 flex justify-between items-center"  >
-                <n-input  @blur="blurClean" type="password"  :placeholder="$t('mj.setOpenKeyPlaceholder')" show-password-on="click" v-model:value="gptServerStore.myData.OPENAI_API_KEY" clearable>
+                <n-input  v-model:value="gptServerStore.myData.OPENAI_API_KEY" type="password"  :placeholder="$t('mj.setOpenKeyPlaceholder')" show-password-on="click" clearable @blur="blurClean">
                     <template #prefix>
                     <span class="text-[var(--n-tab-text-color-active)]">OpenAI Api Key:</span>
                     </template>
@@ -67,8 +67,9 @@ const modelList= computed(()=>{
             <section class="mb-4"  >
                 <div>{{ $t('mjchat.role') }}</div>
                 <div>
-                    <n-input  type="textarea"  :placeholder="instructions"   
-                    v-model:value="gptServerStore.myData.REALTIME_SYSMSG" :autosize="{ minRows: 3 }"
+                    <n-input
+v-model:value="gptServerStore.myData.REALTIME_SYSMSG"  type="textarea"   
+                    :placeholder="instructions" :autosize="{ minRows: 3 }"
                     />
                 </div>
             </section>

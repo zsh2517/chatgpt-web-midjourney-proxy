@@ -117,21 +117,21 @@ defineExpose({ searchQ })
 <div class="w-full h-full p-4">
     <template v-if="gptsList.length>0">
         <div class="flex items-center justify-start line-clamp-1 pb-4"  >
-            <div class="m-1 cursor-pointer" v-for="v in tag" @click="goSearch(v)">
-            <n-button strong   round size="small" type="success" v-if="v==pp.q">{{ v }}</n-button>
-            <n-button strong secondary round size="small" type="success" v-else>{{ v }}</n-button>
+            <div v-for="v in tag" class="m-1 cursor-pointer" @click="goSearch(v)">
+            <n-button v-if="v==pp.q"   strong round size="small" type="success">{{ v }}</n-button>
+            <n-button v-else strong secondary round size="small" type="success">{{ v }}</n-button>
             </div>
             <div  class="m-1 cursor-pointer">
                  <n-button strong secondary round size="small" type="success" @click="st.showAdd=!st.showAdd"> {{ $t('mjchat.addGPTS') }}</n-button>
             </div>
         </div>
-        <div class="pb-4" v-if="st.showAdd">
+        <div v-if="st.showAdd" class="pb-4">
             <div class="w-[400px]"><aiGptsAdd/></div> 
         </div>
 
         <div class="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3"  >
             
-            <div @click="go(v)" v-for="v in gptsList" class="group relative flex gap-3 rounded-2xl bg-[#e8eaf1] p-5 dark:bg-neutral-600 cursor-pointer ">
+            <div v-for="v in gptsList" class="group relative flex gap-3 rounded-2xl bg-[#e8eaf1] p-5 dark:bg-neutral-600 cursor-pointer " @click="go(v)">
             
                 <div class="min-w-0 flex-1 mt-[-10px]">
                     <div class="flex justify-between items-center">
@@ -142,7 +142,8 @@ defineExpose({ searchQ })
                     <div class="mt-0.5 text-zinc-400 text-md line-clamp-2">{{ v.info }}</div>
                      
                 </div>
-                <NImage :src="v.logo" :preview-disabled="true" lazy
+                <NImage
+:src="v.logo" :preview-disabled="true" lazy
                 class="group-hover:scale-[130%] duration-300 shrink-0 overflow-hidden bg-base object-cover rounded-full bc-avatar w-[80px] h-[80px]">
                     <template #placeholder>
                       <div class="w-full h-full justify-center items-center flex"  >
@@ -174,21 +175,21 @@ defineExpose({ searchQ })
             </div>
             
         </div>
-        <div class="flex items-center justify-center py-10" v-if="st.tab=='' ">
-            <div @click="pageLoad()" v-if="st.loadPage">{{ $t('mjchat.loading2') }}</div>
-            <NButton @click="pageLoad()" v-else>{{ $t('mjchat.loadmore') }}</NButton>
+        <div v-if="st.tab=='' " class="flex items-center justify-center py-10">
+            <div v-if="st.loadPage" @click="pageLoad()">{{ $t('mjchat.loading2') }}</div>
+            <NButton v-else @click="pageLoad()">{{ $t('mjchat.loadmore') }}</NButton>
         </div>
     </template>
-    <div class="h-full flex items-center justify-center flex-col"  v-else-if="st.tab=='search' && !st.search">
+    <div v-else-if="st.tab=='search' && !st.search"  class="h-full flex items-center justify-center flex-col">
         <div>{{ $t('mjchat.nofind') }}<b class=" text-green-400">{{st.q}}</b> {{$t('mjchat.nofind2')}}</div>
         <div class="flex items-center justify-center flex-wrap">
-            <div class="m-1 cursor-pointer" v-for="v in tag" @click="goSearch(v)"><n-button strong secondary round size="small" type="success" >{{ v }}</n-button></div>
+            <div v-for="v in tag" class="m-1 cursor-pointer" @click="goSearch(v)"><n-button strong secondary round size="small" type="success" >{{ v }}</n-button></div>
         </div>
         <div class="p-10" >
             <div class="w-[400px]"><aiGptsAdd/></div> 
         </div>
     </div>
-    <div class="h-full flex items-center justify-center"  v-else>
+    <div v-else  class="h-full flex items-center justify-center">
         {{ $t('mjchat.loading2') }}
     </div>
 </div>

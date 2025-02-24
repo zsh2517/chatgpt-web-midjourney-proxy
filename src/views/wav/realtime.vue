@@ -371,7 +371,8 @@ const close=()=>{
 }
 </script>
 <template>
-<div class="w-full h-full fixed top-0 left-0 bottom-0 right-0 z-[1001]  bg-pan-bottom opacity-98 scale-in-tr text-white/80"
+<div
+class="w-full h-full fixed top-0 left-0 bottom-0 right-0 z-[1001]  bg-pan-bottom opacity-98 scale-in-tr text-white/80"
 :class="st.isClosed?['scale-out-tr']:[]">
     <div class="w-full h-full relative" style="--vh:80px;--vw:400px">
         <div class="absolute top-0 left-0">
@@ -385,7 +386,7 @@ const close=()=>{
             <section>
                 <!-- <aiTextSetting @close="loadConfig"  :msgInfo="$t('mj.rtsetting')" v-if="!st.apikey||!st.baseUrl"/> -->
                 <div v-if="!st.apikey||!st.baseUrl">
-                    <div v-html="$t('mj.rtsetting')" class="p-5 text-center"> </div>
+                    <div class="p-5 text-center" v-html="$t('mj.rtsetting')"> </div>
                     <div class="text-center">
                         <NButton type="primary" @click="st.showSetting=true">{{ $t('setting.setting') }} </NButton> 
                     </div>
@@ -404,11 +405,11 @@ const close=()=>{
                         <div class="bg-red-500 rounded-full p-2"><SvgIcon icon="majesticons:phone-hangup" class="text-3xl text-white"></SvgIcon></div>
                         <div class="pt-1">{{ $t('mj.mCanel') }}</div>
                     </div>
-                    <div class="flex flex-col justify-center items-center cursor-pointer" @click="disconnectConversation()" v-if="st.isConnect">
+                    <div v-if="st.isConnect" class="flex flex-col justify-center items-center cursor-pointer" @click="disconnectConversation()">
                         <div class=" bg-white rounded-full p-2"><SvgIcon icon="ri:wechat-line" class="text-3xl text-orange-500/75"></SvgIcon></div>
                         <div class="pt-1">{{ $t('mj.mPause') }}</div>
                     </div>
-                     <div class="flex flex-col justify-center items-center cursor-pointer" @click="go()" v-else>
+                     <div v-else class="flex flex-col justify-center items-center cursor-pointer" @click="go()">
                         <div class=" bg-white rounded-full p-2"><SvgIcon icon="ri:wechat-line" class="text-3xl text-orange-500/75"></SvgIcon></div>
                         <div class="pt-1">{{ $t('mj.mStart') }}</div>
                     </div>

@@ -35,7 +35,7 @@ const canPost = computed(() => {
 const generate= async ()=>{
     mlog("generate", luma.value )
     st.value.isDo= true
-    if(!canPost){
+    if(!canPost.value){
         ms.error( t('video.plsInput') )
         return ;
     }
@@ -141,7 +141,8 @@ const mvOption= [
     </div>
 
     <div class="pt-1" >
-      <n-input v-model:value="luma.user_prompt" 
+      <n-input
+v-model:value="luma.user_prompt" 
                 :placeholder="$t('video.descpls')"  type="textarea"  size="small"   
                 :autosize="{ minRows: 3, maxRows: 12  }"  />
     </div>
@@ -181,29 +182,29 @@ const mvOption= [
             </div>
         </div>
         <div class="relative flex items-center justify-center bg-white bg-opacity-10 rounded-[5px] overflow-hidden aspect-[16/8.85] ">
-                <video v-if="exLuma.video?.url|| exLuma.video?.download_url" :src="exLuma.video?.download_url? exLuma.video?.download_url:exLuma.video?.url" @error="$event.target.src=exLuma.video?.url" loop  playsinline  controls class="w-full h-full object-cover"></video>    
+                <video v-if="exLuma.video?.url|| exLuma.video?.download_url" :src="exLuma.video?.download_url? exLuma.video?.download_url:exLuma.video?.url" loop playsinline  controls  class="w-full h-full object-cover" @error="$event.target.src=exLuma.video?.url"></video>    
         </div>
             
     </div>
 
-    <div  class="pt-1" v-if="isHK">
+    <div  v-if="isHK" class="pt-1">
         <n-select v-model:value="st.version" :options="mvOption" size="small" />
     </div>
     
     <div class="pt-1">
         <div class="flex justify-start  items-end">
             <div> 
-                <input type="file"  @change="selectFile"  ref="fsRef" style="display: none" accept="image/jpeg, image/jpg, image/png, image/gif"/>
+                <input ref="fsRef"  type="file"  style="display: none" accept="image/jpeg, image/jpg, image/png, image/gif" @change="selectFile"/>
                 <div class="h-[80px] w-[80px] overflow-hidden rounded-sm border border-gray-400/20 flex justify-center items-center cursor-pointer" @click=" fsRef.click()">
-                    <img :src="luma.image_url" v-if="luma.image_url" />
-                    <div class="text-center" v-else>{{ $t('video.selectimg') }}</div> 
+                    <img v-if="luma.image_url" :src="luma.image_url" />
+                    <div v-else class="text-center">{{ $t('video.selectimg') }}</div> 
                 </div>
             </div>
             <div class="pl-2"> 
-                <input type="file"  @change="selectFile2"  ref="fsRef2" style="display: none" accept="image/jpeg, image/jpg, image/png, image/gif"/>
+                <input ref="fsRef2"  type="file"  style="display: none" accept="image/jpeg, image/jpg, image/png, image/gif" @change="selectFile2"/>
                 <div class="h-[80px] w-[80px] overflow-hidden rounded-sm border border-gray-400/20 flex justify-center items-center cursor-pointer" @click=" fsRef2.click()">
-                    <img :src="luma.image_end_url" v-if="luma.image_end_url" />
-                    <div class="text-center" v-else>{{ $t('video.endImg') }}</div> 
+                    <img v-if="luma.image_end_url" :src="luma.image_end_url" />
+                    <div v-else class="text-center">{{ $t('video.endImg') }}</div> 
                 </div>
             </div>
            
@@ -220,7 +221,7 @@ const mvOption= [
         </div>  
     </div>
     
-    <div class="pt-2 text-[12px]" v-html="$t('video.lumainfo')" v-if="isHK">
+    <div v-if="isHK" class="pt-2 text-[12px]" v-html="$t('video.lumainfo')">
        
     </div>
 </div>

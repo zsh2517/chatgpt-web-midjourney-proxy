@@ -79,7 +79,7 @@ initLoad();
 <template>
 <div  v-if="list.length>0">
     <div  v-for="item in list" :class="getNowCls( item )" class="flex relative  justify-between items-start p-2 hover:dark:bg-black hover:bg-gray-200 border-b-[1px] border-gray-500/10 ">
-        <playui @update="update" v-if="st.playid==item.id"  class="absolute top-[-4px] left-0 w-full  z-10" ></playui>
+        <playui v-if="st.playid==item.id" class="absolute top-[-4px] left-0 w-full  z-10"  @update="update" ></playui>
         <div class="w-[60px] h-[60px] relative  cursor-pointer"  @click="goPlay( item )">
            <template v-if="item.status=='SUCCESS'">
                 <n-image  lazy  width="100"  :src="item.image_path" preview-disabled  >
@@ -89,9 +89,9 @@ initLoad();
                         </div>
                     </template>
                 </n-image>
-                <div class="absolute top-0 right-0 w-full h-full flex justify-center items-center" v-if="st.playid==item.id">
-                    <SvgIcon icon="mdi:pause-circle-outline" class="text-[40px] text-[#fff]" v-if="sp.status=='pause'"></SvgIcon>
-                    <SvgIcon icon="svg-spinners:bars-scale-middle" class="text-[40px] text-[#fff]" v-else></SvgIcon>
+                <div v-if="st.playid==item.id" class="absolute top-0 right-0 w-full h-full flex justify-center items-center">
+                    <SvgIcon v-if="sp.status=='pause'" icon="mdi:pause-circle-outline" class="text-[40px] text-[#fff]"></SvgIcon>
+                    <SvgIcon v-else icon="svg-spinners:bars-scale-middle" class="text-[40px] text-[#fff]"></SvgIcon>
                 </div>
             </template>
             <template v-else>
@@ -108,25 +108,25 @@ initLoad();
                     <h3 >{{item.title}}</h3>
                     <!-- <div class="text-[8px] flex items-center border-[1px] border-gray-500/30 px-1 ml-1 list-none rounded-md" v-if="item.metadata?.type=='upload'" >Uploaded</div> -->
                 </div>
-                <div class="opacity-80 line-clamp-1 max-w-[320px]" v-if="item.tags"  >{{ item.tags.join(', ') }}</div>
+                <div v-if="item.tags" class="opacity-80 line-clamp-1 max-w-[320px]"  >{{ item.tags.join(', ') }}</div>
             </div>
-            <div class="opacity-60 line-clamp-1 w-full text-[12px] cursor-pointer"  @click="goPlay( item )" v-if="item.lyrics || item.prompt">
+            <div v-if="item.lyrics || item.prompt"  class="opacity-60 line-clamp-1 w-full text-[12px] cursor-pointer" @click="goPlay( item )">
              {{item.lyrics ||item.prompt}}
             </div>
-            <div class="opacity-60 line-clamp-1 w-full text-[12px] cursor-pointer"  @click="goPlay( item )" v-else>
+            <div v-else  class="opacity-60 line-clamp-1 w-full text-[12px] cursor-pointer" @click="goPlay( item )">
              {{$t('suno.noly')}}
               </div>
             <div class="text-right text-[14px] flex justify-end items-center space-x-2  ">
-                <div class="text-[8px] flex items-center border-[1px] border-gray-500/30 px-1 list-none rounded-md" v-if="item.audio_conditioning_type">
+                <div v-if="item.audio_conditioning_type" class="text-[8px] flex items-center border-[1px] border-gray-500/30 px-1 list-none rounded-md">
                    {{ item.audio_conditioning_type=='precede'?t('mj.ud_precede') : t('mj.ud_continuation')}}
                 </div>
                 <div v-if="item.status=='ERROR'" class="text-[8px] flex items-center border-[1px] border-red-500/80 px-1 list-none rounded-md ">{{ $t('suno.fail') }}</div>
                 <template v-if="item.duration">
                     <div class="text-[8px] flex items-center border-[1px] border-gray-500/30 px-1 list-none rounded-md" > {{item.duration.toFixed(1)}}s</div>
-                    <div @click="extend(item)" class="text-[8px] flex items-center border-[1px] border-gray-500/30 px-1 list-none rounded-md cursor-pointer">{{ $t('suno.extend') }}</div>
+                    <div class="text-[8px] flex items-center border-[1px] border-gray-500/30 px-1 list-none rounded-md cursor-pointer" @click="extend(item)">{{ $t('suno.extend') }}</div>
                 </template>
                 <!-- <div class="text-[8px] flex items-center border-[1px] border-gray-500/30 px-1 list-none rounded-md" v-if="item.major_model_version"> {{item.major_model_version}}</div> -->
-                <n-popconfirm @positive-click="()=>deleteGo(item.id )" placement="bottom">
+                <n-popconfirm placement="bottom" @positive-click="()=>deleteGo(item.id )">
                     <template #trigger><SvgIcon icon="mdi:delete" class="cursor-pointer"   /></template>
                      {{ $t('mj.confirmDelete') }}
                 </n-popconfirm>
@@ -137,7 +137,7 @@ initLoad();
         </div>
     </div>
 </div>
-<div class="w-full h-full flex justify-center items-center" v-else>
+<div v-else class="w-full h-full flex justify-center items-center">
     <NEmpty :description="$t('suno.nodata')"></NEmpty>
 </div>
 </template>

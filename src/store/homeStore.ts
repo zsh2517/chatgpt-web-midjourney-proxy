@@ -53,9 +53,9 @@ export interface gptConfigType{
 }
 const getGptInt= ():gptConfigType =>{
     let v:gptConfigType=getDefault();
-    let str = localStorage.getItem('gptConfigStore');
+    const str = localStorage.getItem('gptConfigStore');
     if(str){
-        let old = JSON.parse(str);
+        const old = JSON.parse(str);
         if(old) v={...v,...old};
     }
     return v;
@@ -63,7 +63,7 @@ const getGptInt= ():gptConfigType =>{
 
 const  getDefault=()=>{
 const amodel = homeStore.myData.session.amodel??'gpt-3.5-turbo'
-let v:gptConfigType={
+const v:gptConfigType={
         model: amodel,
         max_tokens:1024,
         userModel:'',
@@ -134,7 +134,7 @@ export interface gptServerType{
 }
 
 const  getServerDefault=()=>{
-let v:gptServerType={
+const v:gptServerType={
         OPENAI_API_KEY:'',
         OPENAI_API_BASE_URL:'',
         MJ_SERVER:'',
@@ -167,9 +167,9 @@ let v:gptServerType={
 }
 const getServerInit= ():gptServerType =>{
     let v:gptServerType=getServerDefault();
-    let str = localStorage.getItem('gptServerStore');
+    const str = localStorage.getItem('gptServerStore');
     if(str){
-        let old = JSON.parse(str);
+        const old = JSON.parse(str);
         if(old) v={...v,...old};
     }
     return v;

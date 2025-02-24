@@ -193,15 +193,15 @@ onMounted(()=>{
     <div class=" pb-2"> <NInput v-model:value="st.baseUrl" placeholder="base url"/> </div>
     <div class=" pb-2"> <NInput v-model:value="st.apikey" placeholder="api key"/> </div>
     <div class="space-x-2">
-        <NButton type="primary" @click="go" v-if="!st.isConnect">连接</NButton>
-        <NButton type="primary" @click="disconnectConversation"  v-else>断开</NButton>
+        <NButton v-if="!st.isConnect" type="primary" @click="go">连接</NButton>
+        <NButton v-else type="primary"  @click="disconnectConversation">断开</NButton>
         <NButton type="primary" @click="homeStore.setMyData({act:'openRealtime'})">开始</NButton>
         
     </div>
     <NEmpty v-if="items.length<=0" description="没内容"/>
     <div v-else class="flex justify-between items-baseline">
         <section class=" w-full">
-            <div class="p-4  " v-for="conversationItem in items" :class="conversationItem.role === 'assistant'?['text-right']:[]">
+            <div v-for="conversationItem in items" class="p-4  " :class="conversationItem.role === 'assistant'?['text-right']:[]">
                 <div >{{ conversationItem.role }}</div>
                 <div v-if="conversationItem.role === 'user'">
                     {{conversationItem.formatted.transcript ||

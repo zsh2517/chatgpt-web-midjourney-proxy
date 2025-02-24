@@ -46,10 +46,11 @@ onMounted(() => {
             <div class="relative flex items-center justify-center bg-white bg-opacity-10 rounded-[16px] overflow-hidden aspect-[16/8.85] ">
                 
                 <template v-if="item.videos.length>0">
-                    <video   loop  playsinline  :controls="st.pIndex==index" v-if="  item.videos[0].resultUrl"
+                    <video
+v-if="  item.videos[0].resultUrl"  loop  playsinline :controls="st.pIndex==index"
                         referrerpolicy="no-referrer" :poster="item.videos[0].videoPoster" 
                         class="w-full h-full object-cover"   >
-                            <source  :src="item.videos[0].resultUrl" referrerpolicy="no-referrer" type="video/mp4" v-if="st.pIndex==index">
+                            <source  v-if="st.pIndex==index" :src="item.videos[0].resultUrl" referrerpolicy="no-referrer" type="video/mp4">
                     </video>
                     <div v-else-if="'error'==item.videos[0].status" >
                         <div class="w-full h-[200px] justify-center items-center flex text-center"> 
@@ -62,7 +63,7 @@ onMounted(() => {
                             <NButton  size="small" type="primary" @click="pikaFeed(item.id)"    >{{$t('video.repeat')}}</NButton>  
                         </div>
                     </template>
-                    <div class="pt-2 " v-else>
+                    <div v-else class="pt-2 ">
                         <div>
                         {{$t('video.process')}}{{ new Date(item.last_feed).toLocaleString() }}
                         </div>
@@ -78,13 +79,13 @@ onMounted(() => {
                 </section>
                 <section class="flex justify-end items-center pt-1" > 
                      <n-button-group size="tiny" >
-                        <n-button  size="tiny" round ghost    v-if="item.videos[0].resultUrl" >
+                        <n-button  v-if="item.videos[0].resultUrl" size="tiny" round    ghost >
                             <a :href="item.videos[0].resultUrl" download  target="_blank" class="flex justify-center items-center"  >
                                 <SvgIcon icon="mdi:download" /> {{ $t('video.download') }}
                             </a>
                         </n-button>
                         <n-button   size="tiny"  round ghost    > 
-                            <n-popconfirm @positive-click="()=>deleteGo(item)" placement="bottom">
+                            <n-popconfirm placement="bottom" @positive-click="()=>deleteGo(item)">
                                 <template #trigger> <SvgIcon icon="mdi:delete"  /></template>
                                 {{ $t('mj.confirmDelete') }}
                             </n-popconfirm> 
@@ -99,7 +100,7 @@ onMounted(() => {
         </div>
     </div>
 </div>
-<div class="w-full h-full flex justify-center items-center" v-else>
+<div v-else class="w-full h-full flex justify-center items-center">
     <NEmpty :description="$t('video.nodata')"></NEmpty>
 </div>
  

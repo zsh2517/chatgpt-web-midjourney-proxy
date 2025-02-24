@@ -49,7 +49,7 @@ export const klingFetch=(url:string,data?:any,opt2?:any )=>{
     headers={...headers,...getHeaderAuthorization()}
    
     return new Promise<any>((resolve, reject) => {
-        let opt:RequestInit ={method:'GET'};
+        const opt:RequestInit ={method:'GET'};
        
         opt.headers= headers ;
         if(opt2?.upFile ){
@@ -65,7 +65,7 @@ export const klingFetch=(url:string,data?:any,opt2?:any )=>{
             if (!d.ok) { 
                 let msg = '发生错误: '+ d.status
                 try{ 
-                  let bjson:any  = await d.json();
+                  const bjson:any  = await d.json();
                   msg = '('+ d.status+')发生错误: '+(bjson?.error?.message??'' ) 
                 }catch( e ){ 
                 }
@@ -104,8 +104,8 @@ export const klingFeed= async(id:string,cat:string,prompt:string)=>{
     for(let i=0; i<200;i++){
         try{
             
-            let a= await klingFetch( url )
-            let task= a  as KlingTask;
+            const a= await klingFetch( url )
+            const task= a  as KlingTask;
             task.last_feed=new Date().getTime()
             task.cat= cat
             if(prompt){

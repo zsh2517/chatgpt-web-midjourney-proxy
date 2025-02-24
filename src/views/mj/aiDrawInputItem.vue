@@ -304,9 +304,9 @@ const selectFile3=  (input:any)=>{
 </script>
 <template>
 <AiMsg ref="msgRef" />
-<input type="file"  @change="selectFile"  ref="fsRef" style="display: none" accept="image/jpeg, image/jpg, image/png, image/gif"/>
-<input type="file"  @change="selectFile2" ref="fsRef2" style="display: none" accept="image/jpeg, image/jpg, image/png, image/gif"/>
-<input type="file"  @change="selectFile3" ref="fsRef3" style="display: none" accept="image/jpeg, image/jpg, image/png, image/gif"/>
+<input ref="fsRef"  type="file"  style="display: none" accept="image/jpeg, image/jpg, image/png, image/gif" @change="selectFile"/>
+<input ref="fsRef2"  type="file" style="display: none" accept="image/jpeg, image/jpg, image/png, image/gif" @change="selectFile2"/>
+<input ref="fsRef3"  type="file" style="display: none" accept="image/jpeg, image/jpg, image/png, image/gif" @change="selectFile3"/>
 
 <div class="overflow-y-auto bg-[#fafbfc] px-4 dark:bg-[#18181c] h-full ">
 
@@ -334,14 +334,14 @@ const selectFile3=  (input:any)=>{
 
         </div>
     </section>
-    <section class="mb-4 flex justify-between items-center" v-for=" v in farr">
+    <section v-for=" v in farr" class="mb-4 flex justify-between items-center">
         <div>{{ v.v }}</div>
         <n-select v-model:value="f[v.k]" :options="drawlocalized[v.k+'List']" size="small"  class="!w-[60%]" :clearable="true" />
 	</section>
     <!-- <template  >  </template> -->
         <section class="mb-4 flex justify-between items-center"  >
         <div  >cw(0-100)</div>
-        <NInputNumber :min="0" :max="100" v-model:value="f.cw" class="!w-[60%]" size="small" clearable placeholder="0-100 角色参考程度" />
+        <NInputNumber v-model:value="f.cw" :min="0" :max="100" class="!w-[60%]" size="small" clearable placeholder="0-100 角色参考程度" />
         </section >
     
         <section class="mb-4 flex justify-between items-center"  >
@@ -363,7 +363,8 @@ const selectFile3=  (input:any)=>{
    
     
     <div class="mb-1">
-     <n-input    type="textarea"  v-model:value="st.text"   :placeholder="$t('mjchat.prompt')" round clearable maxlength="2000" show-count
+     <n-input
+v-model:value="st.text"  type="textarea"   :placeholder="$t('mjchat.prompt')" round clearable maxlength="2000" show-count
       :autosize="{   minRows:2, maxRows:5 }" />
     </div>
     <div class="mb-4 flex justify-between items-center">
@@ -371,10 +372,10 @@ const selectFile3=  (input:any)=>{
              <div class="pt-1 pr-1 ">
              <NPopover trigger="hover">
                 <template #trigger>
-                <n-tag type="error" round size="small" style="cursor: pointer; " :bordered="false" @click="fsRef.click()"   v-if="st.fileBase64.length">
+                <n-tag v-if="st.fileBase64.length" type="error" round size="small" style="cursor: pointer; " :bordered="false"   @click="fsRef.click()">
                 <div style="display: flex;">  <SvgIcon icon="mdi:file-chart-check-outline" /> {{ $t('mjchat.imgCYes') }} </div>
                 </n-tag>
-                <n-tag type="warning" round size="small" style="cursor: pointer; " :bordered="false" @click="fsRef.click()"   v-else="st.fileBase64">
+                <n-tag v-else="st.fileBase64" type="warning" round size="small" style="cursor: pointer; " :bordered="false"   @click="fsRef.click()">
                 <div style="display: flex;">  <SvgIcon icon="mdi:file-document-plus-outline" />  {{ $t('mjchat.imgCUpload') }} </div>
                 </n-tag>
                 </template>
@@ -383,10 +384,10 @@ const selectFile3=  (input:any)=>{
 
                 3.<a class="text-green-500 cursor-pointer"  @click="fsRef.click()" v-html="$t('mjchat.imgCadd')"></a><br/>
                 <div  v-if="st.fileBase64.length>0" class="flex justify-start items-baseline">
-                    <div class="p-1" v-for="(v ) in st.fileBase64">
+                    <div v-for="(v ) in st.fileBase64" class="p-1">
                         <img  class="w-[60px]" :src="v">
                         <br/>
-                        <NButton size="small" @click="st.fileBase64= st.fileBase64.filter((item)=>item!=v) " type="warning" >{{$t('mjchat.del')}}</NButton>
+                        <NButton size="small" type="warning" @click="st.fileBase64= st.fileBase64.filter((item)=>item!=v) " >{{$t('mjchat.del')}}</NButton>
                     </div>
 
                 </div>
@@ -457,7 +458,7 @@ const selectFile3=  (input:any)=>{
         <div @click="copy2()"  >复制2</div>
     </div> -->
 
-   <ul class="pt-4"  v-if="!isMobile" v-html="$t('mjchat.imginfo')"></ul>
+   <ul v-if="!isMobile"  class="pt-4" v-html="$t('mjchat.imginfo')"></ul>
 
 
 </div>

@@ -99,24 +99,25 @@ const clearInput = ()=>{
 
     <section class="mb-4 flex justify-between items-center" >
          
-          <n-input v-model:value="f.prompt" 
+          <n-input
+v-model:value="f.prompt" 
                 :placeholder="$t('mj.ideopls')"  type="textarea"  size="small"   
                 :autosize="{ minRows: 3, maxRows: 12  }"  />
     </section>
     
     <section class="mb-4 flex justify-between items-end" >
         <div class="relative"> 
-            <input type="file"  @change="selectFile"  ref="fsRef" style="display: none" accept="image/jpeg, image/jpg, image/png, image/gif"/>
+            <input ref="fsRef"  type="file"  style="display: none" accept="image/jpeg, image/jpg, image/png, image/gif" @change="selectFile"/>
             <div   class="h-[80px] w-[80px]   overflow-hidden rounded-sm border border-gray-400/20 flex justify-center items-center cursor-pointer" @click=" fsRef.click()">
-                <img :src="st.image_url" v-if="st.image_url" />
-                <div class="text-center" v-else>{{ $t('video.selectimg') }}</div> 
+                <img v-if="st.image_url" :src="st.image_url" />
+                <div v-else class="text-center">{{ $t('video.selectimg') }}</div> 
                 
             </div>
         </div>
         <div class="text-right">
-            <div  class=" cursor-pointer pb-2" @click="clearInput"  v-if="st.image_url|| f.prompt "><NTag type="success" size="small" :bordered="false" round  ><span class="cursor-pointer">{{$t('video.clear')}}</span></NTag></div>
+            <div  v-if="st.image_url|| f.prompt " class=" cursor-pointer pb-2"  @click="clearInput"><NTag type="success" size="small" :bordered="false" round  ><span class="cursor-pointer">{{$t('video.clear')}}</span></NTag></div>
 
-            <NButton type="primary" @click="createImg()" :disabled="!f.prompt"  >{{ $t('mjchat.imgcreate') }}</NButton>
+            <NButton type="primary" :disabled="!f.prompt" @click="createImg()"  >{{ $t('mjchat.imgcreate') }}</NButton>
         </div>
     </section>
     

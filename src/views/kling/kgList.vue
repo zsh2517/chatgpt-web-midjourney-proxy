@@ -95,7 +95,7 @@ const deleteGo=(item:any)=>{
 </script>
 <template>
 <div v-if="list.length>0" class="p-4">
-    <Waterfall :list="list2" :breakpoints="breakpoints"  class=" !bg-transparent" v-if="list2.length">
+    <Waterfall v-if="list2.length" :list="list2"  :breakpoints="breakpoints" class=" !bg-transparent">
     <template #item="{ item, url, index }">
         <div class="bg-white dark:bg-[#24272e] rounded-md   overflow-hidden cursor-pointer group/item relative">
             <div v-if="'failed'==item.task.data.task_status" >
@@ -117,12 +117,12 @@ const deleteGo=(item:any)=>{
                     </a>
                 </div>
                 <!-- <LazyImg :url="item.src"  @success="item.isLoad=1"  @click="goShow(item )" v-else-if="item.src" /> -->
-                <KgImage :item="item"  @kg-success="item.isLoad=1"  @kg-click="goShow2 " v-else-if="item.src" />
+                <KgImage v-else-if="item.src"  :item="item"  @kg-success="item.isLoad=1" @kg-click="goShow2 " />
                 <div v-else class="w-[200px] h-[200px]"></div>
     
                
 
-                <section class="absolute top-0 left-0 right-0 bottom-0" v-if="(!item.src )  || (item.isLoad==0 && st.isStart && item.task.cat=='image' )">
+                <section v-if="(!item.src )  || (item.isLoad==0 && st.isStart && item.task.cat=='image' )" class="absolute top-0 left-0 right-0 bottom-0">
                     <div class="flex justify-center items-center w-full h-full">
                         <n-spin size="large" />
                     </div>
@@ -135,7 +135,7 @@ const deleteGo=(item:any)=>{
                             <template v-if="item.task.prompt">{{ item.task.prompt }}</template>
                         </div>
                         <div>
-                            <n-popconfirm @positive-click="()=>deleteGo(item)" placement="bottom">
+                            <n-popconfirm placement="bottom" @positive-click="()=>deleteGo(item)">
                                 <template #trigger> <SvgIcon icon="mdi:delete"  /></template>
                                 {{ $t('mj.confirmDelete') }}
                             </n-popconfirm> 
@@ -147,8 +147,8 @@ const deleteGo=(item:any)=>{
     </template>
     </Waterfall>
 </div>
-<div class="w-full h-full flex justify-center items-center" v-else>
+<div v-else class="w-full h-full flex justify-center items-center">
     <NEmpty :description="$t('video.nodata')"></NEmpty>
 </div>
-<NImage   :src="st.showImg"  ref="showImg" v-if="st.showImg" :width="1" />
+<NImage   v-if="st.showImg"  ref="showImg" :src="st.showImg" :width="1" />
 </template>

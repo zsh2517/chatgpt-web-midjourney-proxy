@@ -57,10 +57,10 @@ export class chatSetting{
   }
   public save( obj : Partial<gptConfigType>){
     mlog("toMyuid8","save")
-    let  sobj ={ ...gptConfigStore.myData , ...obj };
+    const  sobj ={ ...gptConfigStore.myData , ...obj };
     sobj.uuid= this.uuid;
     const index = this.findIndex();
-    let arr = this.getObjs();
+    const arr = this.getObjs();
     if( index>-1  )arr[index]= sobj;
     else arr.push( sobj ); 
     ss.set(this.localKey, arr );

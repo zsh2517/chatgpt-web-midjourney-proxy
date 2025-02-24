@@ -50,7 +50,7 @@ export const udioFetch=(url:string,data?:any,opt2?:any )=>{
     headers={...headers,...getHeaderAuthorization()}
    
     return new Promise<any>((resolve, reject) => {
-        let opt:RequestInit ={method:'GET'};
+        const opt:RequestInit ={method:'GET'};
        
         opt.headers= headers ;
         if(opt2?.upFile ){
@@ -66,7 +66,7 @@ export const udioFetch=(url:string,data?:any,opt2?:any )=>{
             if (!d.ok) { 
                 let msg = '发生错误: '+ d.status
                 try{ 
-                  let bjson:any  = await d.json();
+                  const bjson:any  = await d.json();
                   msg = '('+ d.status+')发生错误: '+(bjson?.error?.message??'' ) 
                 }catch( e ){ 
                 }
@@ -96,7 +96,7 @@ export const udioFeedTask= async(id:string)=>{
     mlog('god >>',id ) 
     const sunoS = new udioStore();
     for(let i=0;i<50;i++ ){
-        let d= await udioFetch('/udio/fetch/'+id )
+        const d= await udioFetch('/udio/fetch/'+id )
         // .then(d=>{
         //     mlog('fetch',d , d.data.status )
         //     if(d.data && d.data.status=='SUCCESS'){
@@ -106,8 +106,8 @@ export const udioFeedTask= async(id:string)=>{
         if(d.data  ){
             //mlog('ddd> ' ,  d.data.data );
             if( d.data.data && d.data.data.songs){
-                for(let ab of d.data.data.songs ){
-                    let song= ab as udioTask
+                for(const ab of d.data.data.songs ){
+                    const song= ab as udioTask
                     song.status= d.data.status
                     song.taskId= d.data.task_id
                     song.failReason= d.data.fail_reason

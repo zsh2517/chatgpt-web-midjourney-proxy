@@ -37,7 +37,7 @@ export function sleep(time: number) {
 }
 export const lyricsFetch= async ( lid:string)=>{
     for(let i=0;i<50;i++){
-        let dt:any = await sunoFetch(`/lyrics/${lid}`);
+        const dt:any = await sunoFetch(`/lyrics/${lid}`);
         mlog("ddd",dt )
         let time= (i+1)
         if(time>20) time=20;
@@ -66,7 +66,7 @@ export const FeedTask= async (ids:string[])=>{
     const sunoS = new sunoStore();
     if(ids.length<=0) return;
     
-    let d:any[] = await sunoFetch('/feed/'+ ids.join(','));
+    const d:any[] = await sunoFetch('/feed/'+ ids.join(','));
     mlog('FeedTask',d )
     d.forEach( (item:SunoMedia) =>{
          sunoS.save( item)
@@ -89,7 +89,7 @@ export const sunoFetch=(url:string,data?:any,opt2?:any )=>{
     headers={...headers,...getHeaderAuthorization()}
    
     return new Promise<any>((resolve, reject) => {
-        let opt:RequestInit ={method:'GET'};
+        const opt:RequestInit ={method:'GET'};
        
         opt.headers= headers ;
         if(opt2?.upFile ){
@@ -105,7 +105,7 @@ export const sunoFetch=(url:string,data?:any,opt2?:any )=>{
             if (!d.ok) { 
                 let msg = '发生错误: '+ d.status
                 try{ 
-                  let bjson:any  = await d.json();
+                  const bjson:any  = await d.json();
                   msg = '('+ d.status+')发生错误: '+(bjson?.error?.message??'' ) 
                 }catch( e ){ 
                 }

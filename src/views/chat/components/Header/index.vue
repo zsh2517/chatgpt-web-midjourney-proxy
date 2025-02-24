@@ -66,15 +66,16 @@ watch(()=>homeStore.myData.act,debounce( (n)=> n=='saveChat' && (nGptStore.value
     <div class="relative flex items-center justify-between min-w-0 overflow-hidden h-14" data-tauri-drag-region>
       <div class="flex items-center">
         <button
-          class="flex items-center justify-center w-11 h-11"
-          @click="handleUpdateCollapsed" v-if="isMobile"
+          v-if="isMobile"
+          class="flex items-center justify-center w-11 h-11" @click="handleUpdateCollapsed"
         >
           <SvgIcon v-if="collapsed" class="text-2xl" icon="ri:align-justify" />
           <SvgIcon v-else class="text-2xl" icon="ri:align-right" />
         </button>
       </div>
-      <h1  class="flex-1 px-4 pr-6 overflow-hidden cursor-pointer select-none text-ellipsis whitespace-nowrap"
-        @dblclick="onScrollToTop" data-tauri-drag-region>
+      <h1
+class="flex-1 px-4 pr-6 overflow-hidden cursor-pointer select-none text-ellipsis whitespace-nowrap"
+        data-tauri-drag-region @dblclick="onScrollToTop">
         {{ currentChatHistory?.title ?? '' }}
       </h1>
       <div class="flex items-center space-x-2">
@@ -91,9 +92,9 @@ watch(()=>homeStore.myData.act,debounce( (n)=> n=='saveChat' && (nGptStore.value
       </div>
     </div>
     
-    <div @click="st.isShow=true" class="absolute left-1/2   top-full -translate-x-1/2 cursor-pointer select-none rounded-b-md border  bg-white px-2 dark:border-neutral-800 dark:bg-[#111114]">
+    <div class="absolute left-1/2   top-full -translate-x-1/2 cursor-pointer select-none rounded-b-md border  bg-white px-2 dark:border-neutral-800 dark:bg-[#111114]" @click="st.isShow=true">
     <!-- <div @click="st.isShow=true" class="absolute left-1/2   top-full -translate-x-1/2 cursor-pointer select-none rounded-b-md px-2"> -->
-        <div class="flex items-center   justify-center space-x-1 cursor-pointer hover:text-[#4b9e5f]" v-if="homeStore.myData.local!='draw'">
+        <div v-if="homeStore.myData.local!='draw'" class="flex items-center   justify-center space-x-1 cursor-pointer hover:text-[#4b9e5f]">
             <template   v-if="nGptStore.gpts">
              <SvgIcon icon="ri:apps-fill" /> 
              <span class="line-clamp-1 overflow-hidden">{{ nGptStore.gpts.name }}</span> 

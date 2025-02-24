@@ -50,7 +50,7 @@ export const pikaFetch=(url:string,data?:any,opt2?:any )=>{
     headers={...headers,...getHeaderAuthorization()}
    
     return new Promise<any>((resolve, reject) => {
-        let opt:RequestInit ={method:'GET'};
+        const opt:RequestInit ={method:'GET'};
        
         opt.headers= headers ;
         if(opt2?.upFile ){
@@ -66,7 +66,7 @@ export const pikaFetch=(url:string,data?:any,opt2?:any )=>{
             if (!d.ok) { 
                 let msg = '发生错误: '+ d.status
                 try{ 
-                  let bjson:any  = await d.json();
+                  const bjson:any  = await d.json();
                   msg = '('+ d.status+')发生错误: '+(bjson?.error?.message??'' ) 
                 }catch( e ){ 
                 }
@@ -96,8 +96,8 @@ export const pikaFeed= async(id:string)=>{
     const sunoS = new pikaStore();
     for(let i=0; i<200;i++){
         try{
-            let a= await pikaFetch('/feed/' +id )
-            let task= a  as PikaTask;
+            const a= await pikaFetch('/feed/' +id )
+            const task= a  as PikaTask;
             mlog("task",a )
             if(!task.videos || task.videos.length==0) continue;
             task.last_feed=new Date().getTime()

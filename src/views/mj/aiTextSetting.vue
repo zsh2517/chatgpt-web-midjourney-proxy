@@ -14,15 +14,15 @@ const closeed=()=>{
 }
 </script>
 <template>
-<div class="whitespace-pre-wrap pb-10" v-if="!isHideServer || pp.msgInfo"> 
+<div v-if="!isHideServer || pp.msgInfo" class="whitespace-pre-wrap pb-10"> 
 <div v-if="pp.msgInfo">
-    <div v-html="pp.msgInfo" class="p-5 text-center"> </div>
+    <div class="p-5 text-center" v-html="pp.msgInfo"> </div>
     <div class="text-center">
       <NButton type="primary" @click="st.show=true">{{ $t('setting.setting') }} </NButton> 
     </div>
 </div>
 <template v-else>
-    <span class=" text-red-400">{{ $t('mj.setTextInfo') }} </span> <NTag type="primary"  effect="dark" @click="st.show=true" size="small" round style="cursor: pointer; ">{{ $t('setting.setting') }}</NTag>
+    <span class=" text-red-400">{{ $t('mj.setTextInfo') }} </span> <NTag type="primary"  effect="dark" size="small" round style="cursor: pointer; " @click="st.show=true">{{ $t('setting.setting') }}</NTag>
 </template>
 </div>
 <NModal v-model:show="st.show" :title="$t('mjset.server')" preset="card"  style="width: 95%; max-width: 640px">

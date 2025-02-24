@@ -28,7 +28,7 @@ const mjClose=()=>{
 
 <div   class="flex h-full">
     <div class="h-full z-30">
-    <aiSiderInput  @close="mjClose" @drawSent="drawSent" :button-disabled="false"></aiSiderInput>
+    <aiSiderInput  :button-disabled="false" @close="mjClose" @draw-sent="drawSent"></aiSiderInput>
     </div>
      
     <main class="flex-1 overflow-hidden h-full">

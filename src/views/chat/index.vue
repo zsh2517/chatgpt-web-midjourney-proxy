@@ -605,7 +605,8 @@ const ychat = computed(() => {
 </script>
 
 <template>
-  <div v-if="backgroundImage" 
+  <div
+v-if="backgroundImage" 
     class=" fixed z-[200] pointer-events-none top-0 left-0 w-full h-full bg-cover bg-center bg-no-repeat"
     :style="{
       'background-image': 'url(' + backgroundImage + ')',
@@ -632,23 +633,23 @@ const ychat = computed(() => {
         >
           <template v-if="!dataSources.length">
             <div
-              class="text-center pt-10"
               v-if="
                 homeStore.myData.isClient &&
                 (!gptServerStore.myData.OPENAI_API_BASE_URL ||
                   !gptServerStore.myData.OPENAI_API_KEY)
               "
+              class="text-center pt-10"
             >
               <AiTextSetting />
             </div>
             <div
               v-else-if="homeStore.myData.session.notify"
-              v-html="homeStore.myData.session.notify"
               class="text-neutral-300 mt-4"
+              v-html="homeStore.myData.session.notify"
             ></div>
             <div
-              class="flex items-center justify-center mt-4 text-center text-neutral-300"
               v-else
+              class="flex items-center justify-center mt-4 text-center text-neutral-300"
             >
               <SvgIcon icon="ri:bubble-chart-fill" class="mr-2 text-3xl" />
               <span>Aha~</span>
@@ -664,11 +665,11 @@ const ychat = computed(() => {
                 :inversion="item.inversion"
                 :error="item.error"
                 :loading="item.loading"
+                :chat="item"
+                :index="index"
                 @regenerate="onRegenerate(index)"
                 @delete="handleDelete(index)"
                 @edit="handleEdit(index)"
-                :chat="item"
-                :index="index"
               />
               <Message
                 v-if="ychat.text"
@@ -692,7 +693,7 @@ const ychat = computed(() => {
         </div>
       </div>
     </main>
-    <footer :class="footerClass" v-if="local !== 'draw'">
+    <footer v-if="local !== 'draw'" :class="footerClass">
       <div class="w-full max-w-screen-xl m-auto">
         <aiGptInput
           v-if="
@@ -700,12 +701,12 @@ const ychat = computed(() => {
               gptConfigStore.myData.model
             ) > -1 || st.inputme
           "
-          v-model:modelValue="prompt"
+          v-model:model-value="prompt"
           :disabled="buttonDisabled"
-          :searchOptions="searchOptions"
-          :renderOption="renderOption"
+          :search-options="searchOptions"
+          :render-option="renderOption"
         />
-        <div class="flex items-center justify-between space-x-2" v-else>
+        <div v-else class="flex items-center justify-between space-x-2">
           <!-- 
           <HoverButton v-if="!isMobile" @click="handleClear">
             <span class="text-xl text-[#4f555e] dark:text-white">

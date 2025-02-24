@@ -79,34 +79,34 @@ start();
 </script>
 <template> 
 <template v-if="!st.isGo">
-    <NButton @click="start()" type="primary" block round> 
+    <NButton type="primary" block round @click="start()"> 
         <template #icon><SvgIcon icon="bi:mic"/></template>{{ $t('mj.mStart') }}
     </NButton>
 </template>
 <n-button-group v-else>
-    <NButton @click="start()" type="primary" v-if="st.start==0" > 
+    <NButton v-if="st.start==0" type="primary" @click="start()" > 
         <template #icon><SvgIcon icon="bi:mic"/></template>{{ $t('mj.mStart') }}
     </NButton>
-    <NButton type="primary" @click="pause()" v-if="st.start==1">
+    <NButton v-if="st.start==1" type="primary" @click="pause()">
         <template #icon><SvgIcon icon="bi:pause-circle"/></template>{{ $t('mj.mPause') }}
     </NButton>
-    <NButton type="primary" @click="pauseGoon()" v-if="st.start==2">
+    <NButton v-if="st.start==2" type="primary" @click="pauseGoon()">
         <template #icon><SvgIcon icon="bi:mic"/></template>{{ $t('mj.mGoon') }}
     </NButton>
  
     <template v-if="stat.duration>0 ">
-        <NButton type="info" @click="stopAdnRecord()"  v-if="!isMobile" >
+        <NButton v-if="!isMobile" type="info"  @click="stopAdnRecord()" >
         <template #icon><SvgIcon icon="bi:bootstrap-reboot"/></template>{{ $t('mj.mRecord') }}</NButton>
 
-        <NButton @click="play()" type="info">
+        <NButton type="info" @click="play()">
         <template #icon><SvgIcon icon="bi:play-circle"/></template>{{ $t('mj.mPlay') }}</NButton> 
-        <NButton @click="cancal()" type="info">
+        <NButton type="info" @click="cancal()">
         <template #icon><SvgIcon icon="ri:close-circle-line"/></template>{{ $t('mj.mCanel') }}</NButton> 
 
         <NButton type="primary" @click="send()">
         <template #icon><SvgIcon icon="ri:send-plane-fill"></SvgIcon></template>
         {{ $t('mj.mSent') }}
-        <span class="w-[30px]" v-if="stat.duration>0 ">{{ stat?.duration.toFixed(1) }}s</span>
+        <span v-if="stat.duration>0 " class="w-[30px]">{{ stat?.duration.toFixed(1) }}s</span>
         </NButton> 
     </template>
 </n-button-group> 

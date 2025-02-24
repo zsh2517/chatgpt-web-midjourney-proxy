@@ -57,24 +57,26 @@ const drawlocalized = computed(() => {
 </script>
 <template>
 
-<input type="file"  @change="selectFile"  ref="fsRef" style="display: none" accept="image/jpeg, image/jpg, image/png, image/gif"/>
+<input ref="fsRef"  type="file"  style="display: none" accept="image/jpeg, image/jpg, image/png, image/gif" @change="selectFile"/>
 <section class="mb-4 flex justify-between items-center"  >
      <div>{{ $t('mjchat.size') }}</div>
     <n-select v-model:value="st.dimensions" :options="drawlocalized.dimensionsList" size="small"  class="!w-[70%]" :clearable="true" />
 </section>
 <div class="flex justify-start items-center flex-wrap myblend">
-    <div class="w-[var(--my-blend-img-size)] h-[var(--my-blend-img-size)] mr-2 mt-2 bg-[#ddd] overflow-hidden rounded-sm relative group " v-for="item in base64Array">
+    <div v-for="item in base64Array" class="w-[var(--my-blend-img-size)] h-[var(--my-blend-img-size)] mr-2 mt-2 bg-[#ddd] overflow-hidden rounded-sm relative group ">
         <NImage :src="item" object-fit="cover"></NImage>
-        <SvgIcon icon="fluent:delete-12-filled"
+        <SvgIcon
+icon="fluent:delete-12-filled"
         class="absolute top-0 right-0 text-red-600 text-[20px] cursor-pointer hidden group-hover:block "
         @click="base64Array.splice(base64Array.indexOf(item),1)"></SvgIcon>
     </div>
-    <div class="w-[var(--my-blend-img-size)] h-[var(--my-blend-img-size)] mt-2 bg-[#999] overflow-hidden rounded-sm flex justify-center items-center cursor-pointer"
-     @click="fsRef.click()" v-if="base64Array.length<6">
+    <div
+v-if="base64Array.length<6"
+     class="w-[var(--my-blend-img-size)] h-[var(--my-blend-img-size)] mt-2 bg-[#999] overflow-hidden rounded-sm flex justify-center items-center cursor-pointer" @click="fsRef.click()">
         <SvgIcon icon="mdi:add-bold" class="text-[40px] text-[#fff]"></SvgIcon>
     </div>
 </div>
-<div   class="flex justify-end pt-5"><NButton @click="send" type="primary" :disabled="!st.isGo">{{$t('mjchat.blendStart')}}</NButton> </div>
+<div   class="flex justify-end pt-5"><NButton type="primary" :disabled="!st.isGo" @click="send">{{$t('mjchat.blendStart')}}</NButton> </div>
 
 <ul class="pt-4" v-html="$t('mjchat.blendInfo')">
 

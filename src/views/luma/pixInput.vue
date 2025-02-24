@@ -160,7 +160,8 @@ const pixEffact= computed(()=>{
         </template>
     </div>
     <div class="pt-1" >
-      <n-input v-model:value="f.prompt" 
+      <n-input
+v-model:value="f.prompt" 
                 :placeholder="$t('video.descpls')"  type="textarea"  size="small"   
                 :autosize="{ minRows: 3, maxRows: 12  }"  />
     </div>
@@ -182,18 +183,18 @@ const pixEffact= computed(()=>{
     <div class="pt-2">
         <div class="flex justify-start  items-end">
             <div> 
-                <input type="file"  @change="selectFile"  ref="fsRef" style="display: none" accept="image/jpeg, image/jpg, image/png, image/gif"/>
+                <input ref="fsRef"  type="file"  style="display: none" accept="image/jpeg, image/jpg, image/png, image/gif" @change="selectFile"/>
                 <div   class="h-[80px] w-[80px]   overflow-hidden rounded-sm border border-gray-400/20 flex justify-center items-center cursor-pointer" @click=" fsRef.click()">
-                    <img :src="f.image" v-if="f.image" />
-                    <div class="text-center" v-else>{{ $t('video.selectimg') }}</div> 
+                    <img v-if="f.image" :src="f.image" />
+                    <div v-else class="text-center">{{ $t('video.selectimg') }}</div> 
                     
                 </div>
             </div>
             <div class="pl-2"> 
-                <input type="file"  @change="selectFile2"  ref="fsRef2" style="display: none" accept="image/jpeg, image/jpg, image/png, image/gif"/>
+                <input ref="fsRef2"  type="file"  style="display: none" accept="image/jpeg, image/jpg, image/png, image/gif" @change="selectFile2"/>
                 <div class="h-[80px] w-[80px] overflow-hidden rounded-sm border border-gray-400/20 flex justify-center items-center cursor-pointer" @click=" fsRef2.click()">
-                    <img :src="f.image_tail" v-if="f.image_tail" />
-                    <div class="text-center" v-else>{{ $t('video.endImg') }}</div> 
+                    <img v-if="f.image_tail" :src="f.image_tail" />
+                    <div v-else class="text-center">{{ $t('video.endImg') }}</div> 
                 </div>
             </div>
            
@@ -209,7 +210,7 @@ const pixEffact= computed(()=>{
                             <img :src="pixEffact[f.pe_index].thumbnail_path"  />
                             <div class="absolute top-1 right-1 text-white/75 text-[14px]" >{{pixEffact[f.pe_index].display_name }}</div>
                         </template>
-                        <div class="text-center" v-else>{{ $t('mj.selecteff') }}</div> 
+                        <div v-else class="text-center">{{ $t('mj.selecteff') }}</div> 
                     </div>
                 </template>
                 <div class="w-[320px] h-[400px] overflow-y-auto overflow-hidden mx-[-4px]">
@@ -256,7 +257,8 @@ const pixEffact= computed(()=>{
             </div>
         </div>
         <div class="relative flex items-center justify-center bg-white bg-opacity-10 rounded-[5px] overflow-hidden aspect-[16/8.85] ">
-            <video   loop  playsinline  controls  
+            <video
+loop  playsinline  controls  
                 referrerpolicy="no-referrer" :poster="exItem.data.first_frame" 
                 class="w-full h-full object-cover"  >
                 <source  :src="exItem.data.url" referrerpolicy="no-referrer" type="video/mp4"  >
@@ -267,11 +269,11 @@ const pixEffact= computed(()=>{
 
      <section class="pt-2 flex justify-between items-end" >
         <div class="relative"> 
-            <div  class=" cursor-pointer pb-2" @click="clearInput"  v-if="f.image|| f.prompt || f.image_tail"><NTag type="success" size="small" :bordered="false" round  ><span class="cursor-pointer">{{$t('video.clear')}}</span></NTag></div>
+            <div  v-if="f.image|| f.prompt || f.image_tail" class=" cursor-pointer pb-2"  @click="clearInput"><NTag type="success" size="small" :bordered="false" round  ><span class="cursor-pointer">{{$t('video.clear')}}</span></NTag></div>
         </div>
         <div class="text-right">
 
-            <NButton :loading="st.isLoading" type="primary" @click="create()" :disabled="!f.prompt"  >{{$t('video.generate')}}</NButton>
+            <NButton :loading="st.isLoading" type="primary" :disabled="!f.prompt" @click="create()"  >{{$t('video.generate')}}</NButton>
         </div>
     </section>
 

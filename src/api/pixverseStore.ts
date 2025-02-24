@@ -28,8 +28,8 @@ export class pixverseStore{
   private localKey='pixverse-store';
   public save(obj:pixverseTask ){
     if(!obj.video_id) throw "video_id must";
-    let arr=  this.getObjs();
-    let i= arr.findIndex( v=>v.video_id==obj.video_id);
+    const arr=  this.getObjs();
+    const i= arr.findIndex( v=>v.video_id==obj.video_id);
     if(i>-1) arr[i]= obj;
     else arr.push(obj);
      ss.set(this.localKey, arr );
@@ -47,13 +47,13 @@ export class pixverseStore{
   public getOneById(id:number):pixverseTask|null{
     const i= this.findIndex(id)
     if(i<0) return null;
-    let arr=  this.getObjs();
+    const arr=  this.getObjs();
     return arr[i]
   }
   public delete( id:number ){
     //if(!obj.data.task_id ) throw "id must";
-    let arr=  this.getObjs();
-    let i= arr.findIndex( v=>v.video_id==id );
+    const arr=  this.getObjs();
+    const i= arr.findIndex( v=>v.video_id==id );
     if(i<0) return false
     arr.splice(i, 1);
     ss.set(this.localKey, arr );

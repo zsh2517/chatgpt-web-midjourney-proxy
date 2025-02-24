@@ -172,7 +172,8 @@ const selecteffect = (i:number)=>{
     </div>
     
     <div class="pt-1" >
-      <n-input v-model:value="pika.prompt" 
+      <n-input
+v-model:value="pika.prompt" 
                 :placeholder="$t('video.descpls')"  type="textarea"  size="small"   
                 :autosize="{ minRows: 3, maxRows: 12  }"  />
     </div>
@@ -186,10 +187,10 @@ const selecteffect = (i:number)=>{
     <div class="pt-2">
         <div class="flex justify-between  items-end">
             <div> 
-                <input type="file"  @change="selectFile"  ref="fsRef" style="display: none" accept="image/jpeg, image/jpg, image/png, image/gif"/>
+                <input ref="fsRef"  type="file"  style="display: none" accept="image/jpeg, image/jpg, image/png, image/gif" @change="selectFile"/>
                 <div   class="h-[80px] w-[80px]   overflow-hidden rounded-sm border border-gray-400/20 flex justify-center items-center cursor-pointer" @click=" fsRef.click()">
-                    <img :src="pika.image" v-if="pika.image" />
-                    <div class="text-center" v-else>{{ $t('video.selectimg') }}</div> 
+                    <img v-if="pika.image" :src="pika.image" />
+                    <div v-else class="text-center">{{ $t('video.selectimg') }}</div> 
                 </div>
             </div>
             <div>
@@ -200,14 +201,15 @@ const selecteffect = (i:number)=>{
                             <img :src="ezOption[pika.pe_index].poster"  />
                             <div class="absolute top-1 right-1 text-white/75 text-[14px]" >{{ ezOption[pika.pe_index].title }}</div>
                         </template>
-                        <div class="text-center" v-else>{{ $t('mj.selecteff') }}</div> 
+                        <div v-else class="text-center">{{ $t('mj.selecteff') }}</div> 
                     </div>
                 </template>
                 <div class="w-[320px] h-[400px] overflow-y-auto overflow-hidden mx-[-4px]">
                     <div class="grid grid-cols-2 gap-2">
                         <div v-for="(item, index) in ezOption" :key="index" >
                             <div class="relative   overflow-hidden cursor-pointer " @click="selecteffect(index)">
-                                <video class="h-[72px] w-full rounded-md object-cover"  :src="item.video"  :poster="item.poster" 
+                                <video
+class="h-[72px] w-full rounded-md object-cover"  :src="item.video"  :poster="item.poster" 
                                  autoplay  loop  playsinline ></video>
                                 <div class="absolute top-1 right-1 text-white/75 text-[14px]" >{{ item.title }}</div>
                             </div>
@@ -220,11 +222,11 @@ const selecteffect = (i:number)=>{
     </div>
     <section class="pt-2 flex justify-end items-end">
             
-            <div  class=" cursor-pointer pr-2" @click="clearInput"  v-if="pika.image|| pika.prompt"><NTag type="success" size="small" :bordered="false" round  ><span class="cursor-pointer">{{$t('video.clear')}}</span></NTag></div>
+            <div  v-if="pika.image|| pika.prompt" class=" cursor-pointer pr-2"  @click="clearInput"><NTag type="success" size="small" :bordered="false" round  ><span class="cursor-pointer">{{$t('video.clear')}}</span></NTag></div>
             
             <div class="text-right">
 
-                    <NButton :loading="st.isLoading" type="primary" @click="createVideo()" :disabled="!pika.prompt"  >{{$t('video.generate')}}</NButton>
+                    <NButton :loading="st.isLoading" type="primary" :disabled="!pika.prompt" @click="createVideo()"  >{{$t('video.generate')}}</NButton>
             </div>
     </section>
 </div>

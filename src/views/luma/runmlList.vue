@@ -40,13 +40,13 @@ initLoad();
                 <template  v-if="item.status=='SUCCEEDED' && item.output && item.output.length>0 "> 
                    <video :src="item.output[0]"  loop  playsinline  :controls="st.pIndex==index" class="w-full h-full object-cover"></video>
                 </template>
-                <div class=" text-center" v-else>
+                <div v-else class=" text-center">
                     <div v-if="item.status=='FAILED'"   >
                         {{ $t('video.failed') }}
-                        <div v-text="item.failure"  class="p-2"></div>
+                        <div class="p-2"  v-text="item.failure"></div>
                     </div> 
-                    <NButton  size="small" type="primary" @click="runwayMlFeedById( item.id )"   v-else-if="!item.last_feed|| ((new Date().getTime())-item.last_feed)>20*1000" >{{$t('video.repeat')}}</NButton>
-                    <div class="pt-2" v-else>
+                    <NButton  v-else-if="!item.last_feed|| ((new Date().getTime())-item.last_feed)>20*1000" size="small" type="primary"   @click="runwayMlFeedById( item.id )" >{{$t('video.repeat')}}</NButton>
+                    <div v-else class="pt-2">
                         <div>{{$t('video.process')}}{{ new Date(item.last_feed).toLocaleString() }}</div>
                         <div  >Status: {{ item.status }}</div> 
                         <!-- <div v-if="item.state=='processing'">{{ $t('video.processing') }}</div>  -->
@@ -70,13 +70,13 @@ initLoad();
                 </n-popover>
                 
                 </div>
-                <div class="flex justify-end items-center pt-1"   v-if="item.status=='SUCCEEDED' || item.status=='FAILED' " > 
+                <div v-if="item.status=='SUCCEEDED' || item.status=='FAILED' "   class="flex justify-end items-center pt-1" > 
                         
                         
                       <n-button-group size="tiny">
-                        <n-button  size="tiny" round ghost   v-if="item.status=='SUCCEEDED'" ><a :href="item.output[0]" target="_blank" class="flex"><SvgIcon icon="mdi:download" /> {{ $t('video.download') }} </a></n-button>
+                        <n-button  v-if="item.status=='SUCCEEDED'" size="tiny" round   ghost ><a :href="item.output[0]" target="_blank" class="flex"><SvgIcon icon="mdi:download" /> {{ $t('video.download') }} </a></n-button>
                         <n-button   size="tiny"  round ghost    > 
-                             <n-popconfirm @positive-click="()=>deleteGo(item)" placement="bottom">
+                             <n-popconfirm placement="bottom" @positive-click="()=>deleteGo(item)">
                                 <template #trigger> <div class=" cursor-pointer"><SvgIcon icon="mdi:delete"  /></div></template>
                                 {{ $t('mj.confirmDelete') }}
                             </n-popconfirm> 
@@ -89,7 +89,7 @@ initLoad();
         </div>
     </div>
 </div>
-<div class="w-full h-full flex justify-center items-center" v-else>
+<div v-else class="w-full h-full flex justify-center items-center">
     <NEmpty :description="$t('video.nodata')"></NEmpty>
 </div>
 </template>

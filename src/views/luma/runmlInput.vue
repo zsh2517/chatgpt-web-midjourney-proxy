@@ -100,24 +100,25 @@ const create= async ()=>{
     </section>
     <section class="mb-2 flex justify-between items-center" >
          
-          <n-input v-model:value="f.promptText " 
+          <n-input
+v-model:value="f.promptText " 
                 :placeholder="$t('video.descpls')"  type="textarea"  size="small"   
                 :autosize="{ minRows: 3, maxRows: 12  }"  />
     </section>
     <section class="mb-2">
         <div class="flex justify-start  items-top">
             <div> 
-                <input type="file"  @change="selectFile"  ref="fsRef" style="display: none" accept="image/jpeg, image/jpg, image/png, image/gif"/>
+                <input ref="fsRef"  type="file"  style="display: none" accept="image/jpeg, image/jpg, image/png, image/gif" @change="selectFile"/>
                 <div class="h-[80px] w-[80px] overflow-hidden rounded-sm border border-gray-400/20 flex justify-center items-center cursor-pointer" @click=" fsRef.click()">
-                    <img :src="luma.image_url" v-if="luma.image_url" />
-                    <div class="text-center" v-else>{{ $t('video.selectimg') }}</div> 
+                    <img v-if="luma.image_url" :src="luma.image_url" />
+                    <div v-else class="text-center">{{ $t('video.selectimg') }}</div> 
                 </div>
             </div>
             <div class="pl-2"> 
-                <input type="file"  @change="selectFile2"  ref="fsRef2" style="display: none" accept="image/jpeg, image/jpg, image/png, image/gif"/>
+                <input ref="fsRef2"  type="file"  style="display: none" accept="image/jpeg, image/jpg, image/png, image/gif" @change="selectFile2"/>
                 <div class="h-[80px] w-[80px] overflow-hidden rounded-sm border border-gray-400/20 flex justify-center items-center cursor-pointer" @click=" fsRef2.click()">
-                    <img :src="luma.image_end_url" v-if="luma.image_end_url" />
-                    <div class="text-center" v-else>{{ $t('video.endImg') }}</div> 
+                    <img v-if="luma.image_end_url" :src="luma.image_end_url" />
+                    <div v-else class="text-center">{{ $t('video.endImg') }}</div> 
                 </div>
             </div>
             <div class="pl-2">
@@ -130,15 +131,15 @@ const create= async ()=>{
     </section>  
     <section class="mb-4 flex justify-between items-end" >
         <div class="relative"> 
-            <div  class=" cursor-pointer pb-2" @click="clearInput"  v-if="luma.image_end_url|| luma.image_url || f.promptText"><NTag type="success" size="small" :bordered="false" round  ><span class="cursor-pointer">{{$t('video.clear')}}</span></NTag></div>
+            <div  v-if="luma.image_end_url|| luma.image_url || f.promptText" class=" cursor-pointer pb-2"  @click="clearInput"><NTag type="success" size="small" :bordered="false" round  ><span class="cursor-pointer">{{$t('video.clear')}}</span></NTag></div>
         </div>
         <div class="text-right">
 
-            <NButton :loading="st.isLoading" type="primary" @click="create()"  :disabled="!canPost"  >{{$t('video.generate')}}</NButton>
+            <NButton :loading="st.isLoading" type="primary" :disabled="!canPost"  @click="create()"  >{{$t('video.generate')}}</NButton>
         </div>
     </section>
 
-       <div v-html="t('mj.rml_info')"  class="mb-4  text-[12px]"></div>
+       <div class="mb-4  text-[12px]"  v-html="t('mj.rml_info')"></div>
 
 </div>
 </template>

@@ -27,7 +27,7 @@ const toq=( d:any )=>{
         <!-- <SvgIcon icon="uil:search" class="pr-2 text-[28px] cursor-pointer"></SvgIcon> GPT store -->
         <div class="pr-4">GPT store</div>
         <div class=" max-w-[400px]">
-            <n-input round :placeholder="$t('mjchat.searchPlaceholder')" clearable v-model:value="st.q" @keydown.enter="search()" >
+            <n-input v-model:value="st.q" round :placeholder="$t('mjchat.searchPlaceholder')" clearable @keydown.enter="search()" >
                 <template #prefix>
                     <SvgIcon icon="uil:search"/>
                 </template>
@@ -38,7 +38,7 @@ const toq=( d:any )=>{
         </div>
         </div>
       </template>
-      <AiGptsCom @close="st.showImg=false" ref="qref" :q="st.q" @toq="toq" />
+      <AiGptsCom ref="qref" :q="st.q" @close="st.showImg=false" @toq="toq" />
     </n-drawer-content>
 </n-drawer>
 </template>

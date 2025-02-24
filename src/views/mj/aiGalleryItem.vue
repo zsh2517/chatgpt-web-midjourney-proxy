@@ -159,12 +159,12 @@ loadImg();
 </script>
 <template>
  
- <Waterfall :list="list" :breakpoints="breakpoints"  class=" !bg-transparent" v-if="list.length">
+ <Waterfall v-if="list.length" :list="list"  :breakpoints="breakpoints" class=" !bg-transparent">
   <template #item="{ item, url, index }">
     <div class="bg-white dark:bg-[#24272e] rounded-md   overflow-hidden cursor-pointer group/item relative">
       <LazyImg :url="item.image_url"  @success="item.isLoad=1" @click="goShow(item )" />
       <!-- <LazyImg :url="item.image_hd_url"  @success="item.isLoad=1" /> -->
-      <div class="absolute top-0 left-0 right-0 bottom-0" v-if="item.isLoad==0">
+      <div v-if="item.isLoad==0" class="absolute top-0 left-0 right-0 bottom-0">
         <div class="flex justify-center items-center w-full h-full">
             <n-spin size="large" />
         </div>
@@ -201,7 +201,7 @@ loadImg();
 </div>
 
 
-<NImage   :src="st.showImg"  ref="showImg" v-if="st.showImg" :width="1" />
+<NImage   v-if="st.showImg"  ref="showImg" :src="st.showImg" :width="1" />
  <!-- <NButton type="primary" size="small" @click="copy2('abdd' )" >复制</NButton> -->
 
 <!-- <div @click="copy2('abdd' )">复制测试</div> -->

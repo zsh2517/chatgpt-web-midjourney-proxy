@@ -83,12 +83,12 @@ initLoad();
     
 
 
-    <n-tab-pane name="Close" v-if="isMobile" >
+    <n-tab-pane v-if="isMobile" name="Close" >
       <template #tab>
       <div class=" text-center flex justify-center items-center"   @click="$emit('close')"  ><SvgIcon icon="ri:close-circle-line"></SvgIcon></div>
       </template>
       <div class="p-4"> 
-        <div   @click="$emit('close')" class=" justify-center items-center flex">
+        <div   class=" justify-center items-center flex" @click="$emit('close')">
             <SvgIcon icon="ri:close-circle-line"></SvgIcon> Close By Click me 
         </div>
       </div>

@@ -39,7 +39,7 @@ export const useAuthStore = defineStore('auth-store', {
             appStore.setTheme(  data.theme && data.theme=='light' ?'light':'dark')
         }
 
-        let str = localStorage.getItem('gptConfigStore');
+        const str = localStorage.getItem('gptConfigStore');
         if( ! str ) setTimeout( ()=>  gptConfigStore.setInit() , 500); 
         return Promise.resolve(data)
       }

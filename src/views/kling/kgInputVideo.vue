@@ -131,7 +131,8 @@ onMounted(() => {
 
      <section class="mb-4 flex justify-between items-center" >
          
-          <n-input v-model:value="f.prompt" 
+          <n-input
+v-model:value="f.prompt" 
                 :placeholder="$t('video.descpls')"  type="textarea"  size="small"   
                 :autosize="{ minRows: 3, maxRows: 12  }"  />
     </section>
@@ -139,18 +140,18 @@ onMounted(() => {
     <div class="mb-4">
         <div class="flex justify-start  items-end">
             <div> 
-                <input type="file"  @change="selectFile"  ref="fsRef" style="display: none" accept="image/jpeg, image/jpg, image/png, image/gif"/>
+                <input ref="fsRef"  type="file"  style="display: none" accept="image/jpeg, image/jpg, image/png, image/gif" @change="selectFile"/>
                 <div   class="h-[80px] w-[80px]   overflow-hidden rounded-sm border border-gray-400/20 flex justify-center items-center cursor-pointer" @click=" fsRef.click()">
-                    <img :src="f.image" v-if="f.image" />
-                    <div class="text-center" v-else>{{ $t('video.selectimg') }}</div> 
+                    <img v-if="f.image" :src="f.image" />
+                    <div v-else class="text-center">{{ $t('video.selectimg') }}</div> 
                     
                 </div>
             </div>
             <div class="pl-2"> 
-                <input type="file"  @change="selectFile2"  ref="fsRef2" style="display: none" accept="image/jpeg, image/jpg, image/png, image/gif"/>
+                <input ref="fsRef2"  type="file"  style="display: none" accept="image/jpeg, image/jpg, image/png, image/gif" @change="selectFile2"/>
                 <div class="h-[80px] w-[80px] overflow-hidden rounded-sm border border-gray-400/20 flex justify-center items-center cursor-pointer" @click=" fsRef2.click()">
-                    <img :src="f.image_tail" v-if="f.image_tail" />
-                    <div class="text-center" v-else>{{ $t('video.endImg') }}</div> 
+                    <img v-if="f.image_tail" :src="f.image_tail" />
+                    <div v-else class="text-center">{{ $t('video.endImg') }}</div> 
                 </div>
             </div>
            
@@ -160,11 +161,11 @@ onMounted(() => {
     
     <section class="mb-4 flex justify-between items-end" >
         <div class="relative"> 
-            <div  class=" cursor-pointer pb-2" @click="clearInput"  v-if="f.image|| f.prompt || f.image_tail"><NTag type="success" size="small" :bordered="false" round  ><span class="cursor-pointer">{{$t('video.clear')}}</span></NTag></div>
+            <div  v-if="f.image|| f.prompt || f.image_tail" class=" cursor-pointer pb-2"  @click="clearInput"><NTag type="success" size="small" :bordered="false" round  ><span class="cursor-pointer">{{$t('video.clear')}}</span></NTag></div>
         </div>
         <div class="text-right">
 
-            <NButton :loading="st.isLoading" type="primary" @click="createImg()" :disabled="!f.prompt"  >{{$t('video.generate')}}</NButton>
+            <NButton :loading="st.isLoading" type="primary" :disabled="!f.prompt" @click="createImg()"  >{{$t('video.generate')}}</NButton>
         </div>
     </section>
 

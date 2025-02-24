@@ -48,7 +48,8 @@ loadImages();
     <div v-for="(img, k) of images" :key="k">
       <NImage :src="img.fileBase64" preview class="rounded" :class="[images.length <= 1 ? 'w-[250px]' : 'w-[130px]']">
         <template #placeholder>
-          <a class="w-full h-full flex items-center justify-center text-neutral-500" :href="img.fileBase64"
+          <a
+class="w-full h-full flex items-center justify-center text-neutral-500" :href="img.fileBase64"
             target="_blank">
             <SvgIcon icon="mdi:download" />{{ img.fileName }}
           </a>
@@ -57,7 +58,8 @@ loadImages();
     </div>
   </div>
   <div v-if="files.length" class="block justify-start items-baseline p-1">
-    <div v-for="(file, k) of files" :key="k" :class="[
+    <div
+v-for="(file, k) of files" :key="k" :class="[
       'w-full h-full block items-center text-xs text-neutral-500',
       { 'mb-1': k !== files.length - 1 },
     ]">

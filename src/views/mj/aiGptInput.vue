@@ -232,17 +232,17 @@ watch(()=> homeStore.myData.vtoken ,  regCookie  )
 
 </script>
 <template>
-<vue-turnstile ref="tRef"  :site-key="homeStore.myData.session.turnstile" :appearance="appearance"    v-model="homeStore.myData.vtoken" v-if="homeStore.myData.session.turnstile" />
+<vue-turnstile v-if="homeStore.myData.session.turnstile"  ref="tRef" v-model="homeStore.myData.vtoken"    :site-key="homeStore.myData.session.turnstile" :appearance="appearance" />
 <!-- <div>{{ homeStore.myData.vtoken }}</div> -->
 <div v-if="st.showMic" class="  myinputs flex justify-center items-center" >
     <AiMic @cancel="st.showMic=false" @send="sendMic" />
 </div>
-<div class="  myinputs"  @drop="drop" @paste="paste" v-else>
+<div v-else  class="  myinputs" @drop="drop" @paste="paste">
 
-    <input type="file" id="fileInput"  @change="selectFile"  class="hidden" ref="fsRef"   :accept="acceptData"/>
+    <input id="fileInput" ref="fsRef"  type="file"  class="hidden" :accept="acceptData"   @change="selectFile"/>
     <div class="w-full relative">
-        <div class="flex items-base justify-start pb-1 flex-wrap-reverse" v-if="st.fileBase64.length>0 "> 
-            <div class="w-[60px] h-[60px] rounded-sm bg-slate-50 mr-1 mt-1 text-red-300 relative group" v-for="(v,ii) in st.fileBase64">
+        <div v-if="st.fileBase64.length>0 " class="flex items-base justify-start pb-1 flex-wrap-reverse"> 
+            <div v-for="(v,ii) in st.fileBase64" class="w-[60px] h-[60px] rounded-sm bg-slate-50 mr-1 mt-1 text-red-300 relative group">
             <NImage :src="v" object-fit="cover" class="w-full h-full" >
                 <template #placeholder>
                     <a class="w-full h-full flex items-center justify-center  text-neutral-500" :href="v" target="_blank" >
@@ -266,7 +266,7 @@ watch(()=> homeStore.myData.vtoken ,  regCookie  )
                 {{ $t('mj.tokenInfo1') }}
                 <p class="py-1" v-text="$t('mj.tokenInfo2')"> </p>
                 <p class=" text-right">
-                <NButton @click="st.isShow=true" type="info" size="small">{{ $t('setting.setting') }}</NButton>
+                <NButton type="info" size="small" @click="st.isShow=true">{{ $t('setting.setting') }}</NButton>
                 </p>
                 </div>
                   
@@ -276,7 +276,8 @@ watch(()=> homeStore.myData.vtoken ,  regCookie  )
     </div>
     <NAutoComplete v-model:value="mvalue" :options="searchOptions" :render-label="renderOption" >
         <template #default="{ handleInput, handleBlur, handleFocus }">
-        <NInput ref="inputRef"  v-model:value="mvalue"    type="textarea"
+        <NInput
+ref="inputRef"  v-model:value="mvalue"    type="textarea"
             :placeholder="placeholder"  :autosize="{ minRows: 1, maxRows: isMobile ? 4 : 8 }"
             @input="handleInput"
             @focus="handleFocus"
@@ -286,8 +287,8 @@ watch(()=> homeStore.myData.vtoken ,  regCookie  )
                 <div  class=" relative; w-[22px]">
                     <n-tooltip trigger="hover">
                     <template #trigger>
-                    <SvgIcon icon="line-md:uploading-loop" class="absolute bottom-[10px] left-[8px] cursor-pointer" v-if="st.isLoad==1"></SvgIcon>
-                    <SvgIcon icon="ri:attachment-line" class="absolute bottom-[10px] left-[8px] cursor-pointer" @click="fsRef.click()" v-else></SvgIcon>
+                    <SvgIcon v-if="st.isLoad==1" icon="line-md:uploading-loop" class="absolute bottom-[10px] left-[8px] cursor-pointer"></SvgIcon>
+                    <SvgIcon v-else icon="ri:attachment-line" class="absolute bottom-[10px] left-[8px] cursor-pointer" @click="fsRef.click()"></SvgIcon>
                     </template>
                     <div v-if="canVisionModel(gptConfigStore.myData.model)" v-html="$t('mj.upPdf')" >
                         
@@ -301,7 +302,7 @@ watch(()=> homeStore.myData.vtoken ,  regCookie  )
                 </div> -->
                 <n-dropdown trigger="hover" :options="drOption" @select="handleSelectASR">
                     <div  class=" relative; w-[22px]">
-                        <div class="absolute bottom-[14px] left-[31px]" v-if="st.micStart">
+                        <div v-if="st.micStart" class="absolute bottom-[14px] left-[31px]">
                             <span class="relative flex h-3 w-3" >
                                 <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-500 opacity-75"></span>
                                 <span class="relative inline-flex rounded-full h-3 w-3 bg-red-400"></span>
@@ -320,8 +321,8 @@ watch(()=> homeStore.myData.vtoken ,  regCookie  )
                          
                             <template #icon>
                             <span class="dark:text-black">
-                                <SvgIcon icon="ri:stop-circle-line" v-if="homeStore.myData.isLoader" /> 
-                                <SvgIcon icon="ri:send-plane-fill"   v-else/> 
+                                <SvgIcon v-if="homeStore.myData.isLoader" icon="ri:stop-circle-line" /> 
+                                <SvgIcon v-else   icon="ri:send-plane-fill"/> 
                             </span>
                             </template>
                             

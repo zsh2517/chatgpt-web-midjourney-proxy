@@ -94,7 +94,7 @@ watch(()=>gptConfigStore.myData , toMyuid , {deep:true})
             @click="handleSelect(item)"
           >
              
-             <AiListText   :myObj="isInObjs(item.uuid)" :myItem="item">
+             <AiListText   :my-obj="isInObjs(item.uuid)" :my-item="item">
                <NInput
                 v-if="item.isEdit"
                 v-model:value="item.title" size="tiny"

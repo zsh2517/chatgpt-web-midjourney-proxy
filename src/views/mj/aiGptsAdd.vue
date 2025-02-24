@@ -43,7 +43,7 @@ watch(()=>st.value.q, (n)=>{
 <template>
 
  
-    <n-input round :placeholder="$t('mjchat.addPlaceholder')" clearable v-model:value="st.q" @keydown.enter="doAdd()" >
+    <n-input v-model:value="st.q" round :placeholder="$t('mjchat.addPlaceholder')" clearable @keydown.enter="doAdd()" >
         <template #prefix>
             <SvgIcon icon="ri:function-add-line"/>
         </template>

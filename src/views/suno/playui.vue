@@ -38,8 +38,9 @@ watch(()=>homeStore.myData.act, (n)=>{
 </script>
 <template>
 <div class="sss"    style="--n-rail-height:2px">
-<n-slider :on-dragend="()=>sp.idDrop=false" :on-dragstart="()=>sp.idDrop=true" 
-            class="w-full" v-model:value="sp.v" :step="1" v-if="sp.max" :max="sp.max" 
+<n-slider
+v-if="sp.max" v-model:value="sp.v" 
+            :on-dragend="()=>sp.idDrop=false" :on-dragstart="()=>sp.idDrop=true" class="w-full" :step="1" :max="sp.max" 
             :on-update:value="updatev"
             :format-tooltip="(v)=>v.toFixed(1)+'s'" />
 </div>

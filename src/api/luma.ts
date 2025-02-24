@@ -50,7 +50,7 @@ export const lumaFetch=(url:string,data?:any,opt2?:any )=>{
     headers={...headers,...getHeaderAuthorization()}
    
     return new Promise<any>((resolve, reject) => {
-        let opt:RequestInit ={method:'GET'};
+        const opt:RequestInit ={method:'GET'};
        
         opt.headers= headers ;
         if(opt2?.upFile ){
@@ -66,7 +66,7 @@ export const lumaFetch=(url:string,data?:any,opt2?:any )=>{
             if (!d.ok) { 
                 let msg = '发生错误: '+ d.status
                 try{ 
-                  let bjson:any  = await d.json();
+                  const bjson:any  = await d.json();
                   msg = '('+ d.status+')发生错误: '+(bjson?.error?.message??'' ) 
                 }catch( e ){ 
                 }
@@ -101,7 +101,7 @@ export const FeedLumaTask= async(id:string)=>{
         let url= '/generations/'+id;
         if(hkObj && hkObj.isHK ) url= '/pro/generations/'+id;
 
-        let d:LumaMedia = await lumaFetch( url );
+        const d:LumaMedia = await lumaFetch( url );
         if(d.id){
             d.last_feed = new Date().getTime()
             lumaS.save(d);

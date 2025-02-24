@@ -60,10 +60,10 @@ async function  selectFile(input:any){
 </script>
 <template>
     <NTag   type="success" size="small" round  >
-        <span class="cursor-pointer"   v-if="st.isUpload">Upload...</span>
-        <span class="cursor-pointer" @click="fsRef.click()" v-else>{{ $t('suno.upMps') }}</span>
+        <span v-if="st.isUpload"   class="cursor-pointer">Upload...</span>
+        <span v-else class="cursor-pointer" @click="fsRef.click()">{{ $t('suno.upMps') }}</span>
     </NTag>
     
-    <input type="file"  @change="selectFile"  ref="fsRef" style="display: none" accept=".mp3,audio/*,.m4a,.mp4" />
+    <input ref="fsRef"  type="file"  style="display: none" accept=".mp3,audio/*,.m4a,.mp4" @change="selectFile" />
 
 </template>

@@ -70,8 +70,8 @@ load();
         <div class="flex justify-start items-center flex-1" @click="go">
             <span v-html="chat.opt?.duration?.toFixed(2)"  ></span>s 
             <div class=" rotate-90  cursor-pointer"   >
-                <SvgIcon icon="svg-spinners:wifi" v-if="st.isLoad==1" ></SvgIcon>
-                <SvgIcon icon="mdi:wifi"  v-else></SvgIcon>
+                <SvgIcon v-if="st.isLoad==1" icon="svg-spinners:wifi" ></SvgIcon>
+                <SvgIcon v-else  icon="mdi:wifi"></SvgIcon>
             </div>
         </div>
         <div  class="text-blue-500 cursor-pointer" @click="download"> <SvgIcon icon="ri:download-2-fill"></SvgIcon> </div>

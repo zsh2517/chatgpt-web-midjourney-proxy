@@ -65,7 +65,7 @@ export const gptFetch=(url:string,data?:any,opt2?:any )=>{
 
     headers={...headers,...getHeaderAuthorization()}
     return new Promise<any>((resolve, reject) => {
-        let opt:RequestInit ={method:'GET'};
+        const opt:RequestInit ={method:'GET'};
         opt.headers= headers ;
         if(opt2?.upFile ){
              opt.method='POST';
@@ -86,9 +86,9 @@ export const gptFetch=(url:string,data?:any,opt2?:any )=>{
 export const regCookie= async (n:string )=>{
     if( n=='' ) return ;
     //mlog('regCookie:', n)
-    let headers= {'Content-Type':'application/json', 'x-vtoken':n  }
+    const headers= {'Content-Type':'application/json', 'x-vtoken':n  }
     //headers={...headers,...getHeaderAuthorization()}
-    let opt:RequestInit ={method:'GET'};
+    const opt:RequestInit ={method:'GET'};
     opt.headers= headers ;
     const ck= await  new Promise<any>((resolve, reject) => {
     fetch('/api/reg', opt )
@@ -189,13 +189,13 @@ export const GptUploader =   ( _url :string, FormData:FormData )=>{
             const  header2={ 'x-ptoken':  authStore.token };
             headers= {...headers, ...header2}
         }
-        let url= `/openapi${_url}`
+        const url= `/openapi${_url}`
         return  uploadNomalDo(url,headers );
 
     //前端API
     }else if( uploadType=='api' ) { 
         headers={...headers,...getHeaderAuthorization()}
-        let url= `${ gptServerStore.myData.OPENAI_API_BASE_URL}${_url}`
+        const url= `${ gptServerStore.myData.OPENAI_API_BASE_URL}${_url}`
         return  uploadNomalDo(url,headers );
     
     //自定义链接
@@ -224,12 +224,12 @@ export const whisperUpload = ( FormData:FormData )=>{
 
 export const subGPT= async (data:any, chat:Chat.Chat )=>{
    let d:any;
-   let action= data.action;
+   const action= data.action;
    //chat.myid=  `${Date.now()}`;
    if(  action=='gpt.dall-e-3' && data.data && data.data.model && data.data.model.indexOf('ideogram')>-1 ){ //ideogram
          mlog("ddlog 数据 ", data.data  )
          try{
-            let d= await ideoSubmit(data.data );
+            const d= await ideoSubmit(data.data );
             mlog("ddlog 数据返回 ", d  )
              const rz = d[0];
             chat.text= rz.prompt//rz.p??`图片已完成`;
@@ -247,7 +247,7 @@ export const subGPT= async (data:any, chat:Chat.Chat )=>{
        // chat.model= 'dall-e-3';
        
 
-       let d= await gptFetch('/v1/images/generations', data.data);
+       const d= await gptFetch('/v1/images/generations', data.data);
        try{
             const rz : any= d.data[0];
             chat.text= rz.revised_prompt??`图片已完成`;
@@ -311,7 +311,7 @@ export const getSystemMessage = (uuid?:number )=>{
         sysTem= chatS.getGptConfig().systemMessage ;
     }
     if(  sysTem ) return sysTem;
-    let model= gptConfigStore.myData.model?gptConfigStore.myData.model: "gpt-3.5-turbo";
+    const model= gptConfigStore.myData.model?gptConfigStore.myData.model: "gpt-3.5-turbo";
     let producer= 'You are ChatGPT, a large language model trained by OpenAI.'
     if(model.includes('claude')) producer=  'You are Claude, a large language model trained by Anthropic.';
     if(model.includes('gemini')) producer=  'You are Gemini, a large language model trained by Google.';
@@ -414,7 +414,7 @@ export const subModel= async (opt: subModelType)=>{
         try {
             mlog('🐞非流输出',body  )
             opt.onMessage({text: t('mj.thinking') ,isFinish: false })
-            let obj :any= await gptFetch( '/v1/chat/completions',body  )
+            const obj :any= await gptFetch( '/v1/chat/completions',body  )
             //mlog('结果 >>',obj   )
             opt.onMessage({text:obj.choices[0].message.content??'' ,isFinish: true ,isAll:true})
             
@@ -426,7 +426,7 @@ export const subModel= async (opt: subModelType)=>{
 }
 
 export const getInitChat = (txt:string )=>{
-    let promptMsg: Chat.Chat= {
+    const promptMsg: Chat.Chat= {
         dateTime: new Date().toLocaleString(),
         text:  txt ,
         inversion: true,
@@ -445,7 +445,7 @@ export interface ttsType{
 }
 export const subTTS = async (tts:ttsType )=>{
     if(!tts.voice) tts.voice='alloy';
-    let url= getUrl('/v1/audio/speech');
+    const url= getUrl('/v1/audio/speech');
     let headers=  {
         'Content-Type': 'application/json'
       }
@@ -522,7 +522,7 @@ export const openaiSetting= ( q:any,ms:MessageApiInjection )=>{
     if(q.settings){
         mlog('q.setting', q.settings )
         try {
-            let obj = JSON.parse( q.settings );
+            const obj = JSON.parse( q.settings );
             const url = obj.url ?? undefined;
             const key = obj.key ?? undefined;
             //let setQ= { }
@@ -583,7 +583,7 @@ export const blurClean= ()=>{
 export const countTokens= async ( dataSources:Chat.Chat[], input:string ,uuid:number )=>{
     const chatSet= new chatSetting(uuid);
     const myStore= chatSet.getGptConfig();
-    let rz={system:0,input:0 ,history:0,remain:330,modelTokens:'4k',planOuter:myStore.max_tokens  }
+    const rz={system:0,input:0 ,history:0,remain:330,modelTokens:'4k',planOuter:myStore.max_tokens  }
     const model =myStore.model;
     const max= getModelMax(model );
     let unit= 1024;
@@ -647,23 +647,23 @@ export const encodeChatAsync = async ( ) => {
 
 export const getHistoryMessage= async (dataSources:Chat.Chat[],loadingCnt=1 ,start=1000)=>{
     let i=0;
-    let rz: ChatMessage[] = [];
+    const rz: ChatMessage[] = [];
     //const loadingCnt= 1;// 1就是没有loading，3 就是有loading
-    let istart = (isNumber( start)&& start>=0 )? Math.min(start  ,   dataSources.length - loadingCnt ):  dataSources.length- loadingCnt  ;
+    const istart = (isNumber( start)&& start>=0 )? Math.min(start  ,   dataSources.length - loadingCnt ):  dataSources.length- loadingCnt  ;
     mlog('istart',istart, start);
     for( let ii=  istart  ; ii>=0 ; ii-- ){ //let o of dataSources.value
         if(i>=gptConfigStore.myData.talkCount) break;
         i++;
 
-        let o = dataSources[ii];
+        const o = dataSources[ii];
         //mlog('o',ii ,o);
         let content= o.text;
         if( o.inversion && o.opt?.images && o.opt.images.length>0 ){
             //获取附件信息 比如 图片 文件等
             try{
-               let str =  await localGet(  o.opt.images[0]) as string;
-               let fileBase64= JSON.parse(str) as string[];
-               let arr =  fileBase64.filter( (ff:string)=>ff.indexOf('http')>-1);
+               const str =  await localGet(  o.opt.images[0]) as string;
+               const fileBase64= JSON.parse(str) as string[];
+               const arr =  fileBase64.filter( (ff:string)=>ff.indexOf('http')>-1);
                if(arr.length>0) content = arr.join(' ')+' '+ content ;
                mlog(t('mjchat.attr') ,o.opt.images[0] , content );
             }catch(ee){

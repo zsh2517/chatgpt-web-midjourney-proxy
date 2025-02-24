@@ -24,8 +24,8 @@ export class lumaStore{
   private localKey='luma-store';
   public save(obj:LumaMedia ){
     if(!obj.id ) throw "id must";
-    let arr=  this.getObjs();
-    let i= arr.findIndex( v=>v.id==obj.id );
+    const arr=  this.getObjs();
+    const i= arr.findIndex( v=>v.id==obj.id );
     if(i>-1) arr[i]= obj;
     else arr.push(obj);
      ss.set(this.localKey, arr );
@@ -42,8 +42,8 @@ export class lumaStore{
   }
   public delete( obj:LumaMedia ){
     if(!obj.id ) throw "id must";
-    let arr=  this.getObjs();
-    let i= arr.findIndex( v=>v.id==obj.id );
+    const arr=  this.getObjs();
+    const i= arr.findIndex( v=>v.id==obj.id );
     if(i<0) return false
     arr.splice(i, 1);
     ss.set(this.localKey, arr );
@@ -61,8 +61,8 @@ export class lumaHkStore{
   private localKey='luma-HK';
   public save(obj:LumaHk ){
     if(!obj.id ) throw "id must";
-    let arr=  this.getObjs();
-    let i= arr.findIndex( v=>v.id==obj.id );
+    const arr=  this.getObjs();
+    const i= arr.findIndex( v=>v.id==obj.id );
     if(i>-1) arr[i]= obj;
     else arr.push(obj);
      ss.set(this.localKey, arr );
@@ -80,7 +80,7 @@ export class lumaHkStore{
   public getOneById(id:string):LumaHk|null{
     const i= this.findIndex(id)
     if(i<0) return null;
-    let arr=  this.getObjs();
+    const arr=  this.getObjs();
     return arr[i]
   }
 }

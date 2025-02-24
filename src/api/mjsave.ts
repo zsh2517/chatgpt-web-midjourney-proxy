@@ -36,10 +36,10 @@ export const localSaveAny = async( value:any,key?:string )=>{
 
 
 export function img2base64(img:any) {
-    let canvas = document.createElement('canvas');
+    const canvas = document.createElement('canvas');
     canvas.width = img.width;
     canvas.height = img.height;
-    let ctx = canvas.getContext('2d');
+    const ctx = canvas.getContext('2d');
     if( ! ctx) return "";
     ctx.drawImage(img, 0, 0);
     return canvas.toDataURL('image/jpeg');
@@ -82,7 +82,7 @@ export const mjImgUrl= (url:string)=>{
 }
 
 export const getMjAll= async ( ChatState:Chat.ChatState)=>{
-    let rz:Chat.Chat[]=[]
+    const rz:Chat.Chat[]=[]
     ChatState.chat.forEach(v=>{
        // mlog('uid>>', v.uuid );
         v.data.forEach(chat=>{

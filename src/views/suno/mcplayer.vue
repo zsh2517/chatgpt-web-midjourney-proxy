@@ -47,7 +47,7 @@ watch(()=>homeStore.myData.act, (n)=>{
    
     <pre class=" whitespace-pre-wrap p-2">{{ pObj.prompt }}</pre>
 </div>
-<div class=" flex w-full h-full justify-center items-center" v-else >
+<div v-else class=" flex w-full h-full justify-center items-center" >
     <n-empty :description="$t('suno.emputy')" ></n-empty>
 </div>
 

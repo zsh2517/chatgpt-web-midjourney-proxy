@@ -171,46 +171,48 @@ onMounted(() => {
          <n-select v-model:value="f.bgMode" :options="bgOption" size="small" />
     </div>
     <div class="pt-2 flex justify-center items-center w-full relative">
-        <input type="file"  @change="selectFile"  ref="fsRef" style="display: none" accept="image/jpeg, image/jpg, image/png, image/gif"/>
-        <div class="absolute right-1 top-3 z-40"  v-if="st.imgSrc" >
+        <input ref="fsRef"  type="file"  style="display: none" accept="image/jpeg, image/jpg, image/png, image/gif" @change="selectFile"/>
+        <div v-if="st.imgSrc"  class="absolute right-1 top-3 z-40" >
                     <NButton strong secondary round size="small" type="success" @click="clear(2)" >{{$t('common.clear')}}</NButton> 
         </div>
         <div class="h-[180px] w-full overflow-hidden rounded-sm border border-gray-400/20 flex justify-center items-center cursor-pointer" @click=" fsRef.click()">
-            <NImage :src="st.imgSrc" v-if="st.imgSrc" object-fit="contain" />
-            <div class="text-center"  v-else> 
+            <NImage v-if="st.imgSrc" :src="st.imgSrc" object-fit="contain" />
+            <div v-else  class="text-center"> 
                 <NButton  type="primary" size="small">+{{ $t('dance.character') }}</NButton>
             </div> 
         </div>
     </div>
 
-    <div class="pt-2 " v-if="useTem">
+    <div v-if="useTem" class="pt-2 ">
          <div class="relative h-[180px]" > 
                 <div class="absolute right-1 top-1 z-40"  >
                     <NButton strong secondary round size="small" type="success" @click="clear(1)" >{{$t('common.clear')}}</NButton> 
                 </div>
                 <div class=" absolute w-full h-full top-0 left-0 z-1"   >
                 
-                <video controls   playsinline loop :poster="useTem.processedCoverURL" 
+                <video
+controls   playsinline loop :poster="useTem.processedCoverURL" 
                  class="  rounded-lg bg-[#242424] object-contain w-full h-full transition-all"      :src="useTem.processedURL" ></video>
                 </div>
             </div>
     </div>
-     <div class="pt-2 " v-else-if="st.vgSrc">
+     <div v-else-if="st.vgSrc" class="pt-2 ">
          <div class="relative h-[180px]" > 
                 <div class="absolute right-1 top-1 z-40"  >
                     <NButton strong secondary round size="small" type="success" @click="clear(3)" >{{$t('common.clear')}}</NButton> 
                 </div>
                 <div class=" absolute w-full h-full top-0 left-0 z-1"   >
                 
-                <video controls   playsinline loop :poster="st.vgCoverURL" 
+                <video
+controls   playsinline loop :poster="st.vgCoverURL" 
                  class="  rounded-lg bg-[#242424] object-contain w-full h-full transition-all"      :src="st.vgSrc" ></video>
                 </div>
             </div>
     </div>
     
 
-    <div class="pt-2 flex justify-center items-center w-full" v-else>
-        <input type="file"  @change="selectFileVideo"  ref="vsRef" style="display: none" accept=".mp4" />
+    <div v-else class="pt-2 flex justify-center items-center w-full">
+        <input ref="vsRef"  type="file"  style="display: none" accept=".mp4" @change="selectFileVideo" />
 
         <div class="h-[180px] w-full overflow-hidden rounded-sm border border-gray-400/20 flex justify-center items-center " >
             <!-- <img :src="luma.image_url" v-if="luma.image_url" /> -->
@@ -221,7 +223,7 @@ onMounted(() => {
         </div>
     </div>
 
-    <div  class="pt-2" v-if="isHK">
+    <div  v-if="isHK" class="pt-2">
         <n-select v-model:value="st.version" :options="mvOption" size="small" />
     </div>
 
@@ -238,7 +240,7 @@ onMounted(() => {
             <div class="flex justify-between items-center w-full"> 
             <div class="pr-4">{{$t('dance.moban')}}</div>
             <div class=" max-w-[400px]">
-                <n-input round :placeholder="t('dance.moban2')" clearable v-model:value="st.q" @keydown.enter="search()" >
+                <n-input v-model:value="st.q" round :placeholder="t('dance.moban2')" clearable @keydown.enter="search()" >
                     <template #prefix>
                         <SvgIcon icon="uil:search"/>
                     </template>

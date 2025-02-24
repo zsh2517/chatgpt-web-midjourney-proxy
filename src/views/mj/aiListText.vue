@@ -8,9 +8,9 @@ defineProps<{myItem:Chat.History,myObj?:gptConfigType}>()
 <template>
 <span class="flex justify-start items-center">
 
-    <SvgIcon icon="ri:message-3-line"   v-if="!myObj  "  />
+    <SvgIcon v-if="!myObj  "   icon="ri:message-3-line"  />
     <n-avatar v-else-if="myObj.gpts" :src="myObj.gpts.logo" fallback-src="../../assets/avatar.jpg" :size="18" round/> 
-    <SvgIcon icon="bi:chat"  v-else/>
+    <SvgIcon v-else  icon="bi:chat"/>
 </span>
 <div class="relative flex-1 overflow-hidden break-all text-ellipsis whitespace-nowrap">
     <slot/> 

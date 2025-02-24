@@ -30,20 +30,20 @@ const send=()=>{
 }
 </script>
 <template>
-<input type="file"  @change="selectFile"  ref="fsRef" style="display: none" accept="image/jpeg, image/jpg, image/png, image/gif"/>
+<input ref="fsRef"  type="file"  style="display: none" accept="image/jpeg, image/jpg, image/png, image/gif" @change="selectFile"/>
 
 <div class="flex justify-around items-center">
     <div class="h-[80px] w-[80px] rounded-sm border border-gray-400/20 flex justify-center items-center cursor-pointer" @click="(st.status='source') && fsRef.click()">
-        <img :src="f.sourceBase64" v-if="f.sourceBase64" />
-        <div class="text-center" v-else>{{ $t('mjchat.yourHead') }}</div> 
+        <img v-if="f.sourceBase64" :src="f.sourceBase64" />
+        <div v-else class="text-center">{{ $t('mjchat.yourHead') }}</div> 
     </div>
     <div>+</div>
     <div class="h-[80px] w-[80px] rounded-sm border border-gray-400/20  flex justify-center items-center cursor-pointer"  @click="(st.status='target') && fsRef.click()">
-         <img :src="f.targetBase64" v-if="f.targetBase64"/>
-        <div class="text-center" v-else>{{ $t('mjchat.your2Head') }}</div> 
+         <img v-if="f.targetBase64" :src="f.targetBase64"/>
+        <div v-else class="text-center">{{ $t('mjchat.your2Head') }}</div> 
     </div>
 </div>
-<div   class="flex justify-center pt-5"><NButton @click="send" type="primary" :disabled="!st.isGo">{{ $t('mjchat.submit') }}</NButton> </div>
+<div   class="flex justify-center pt-5"><NButton type="primary" :disabled="!st.isGo" @click="send">{{ $t('mjchat.submit') }}</NButton> </div>
 <ul class="pt-4" v-html="$t('mjchat.tipInfo')">
     
 </ul>

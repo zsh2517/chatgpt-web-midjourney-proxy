@@ -110,7 +110,8 @@ onMounted(() => {
                 <span>{{$t('mj.ud_prompt')}}：</span>
         </template>
         </n-input> -->
-         <n-input v-model:value="f.prompt"  
+         <n-input
+v-model:value="f.prompt"  
         :placeholder="$t('mj.ud_prompt_pls')" type="textarea"  size="small"   
         :autosize="{ minRows: 3, maxRows: 12  }"  /> 
     </div>
@@ -120,8 +121,9 @@ onMounted(() => {
         </n-radio-button>  
         </n-radio-group>
     </div>
-    <div class="pt-1" v-if="f.lyrics_type=='user'">
-        <n-input v-model:value="f.lyrice"  
+    <div v-if="f.lyrics_type=='user'" class="pt-1">
+        <n-input
+v-model:value="f.lyrice"  
         :placeholder="$t('suno.lypls')" type="textarea"  size="small"   
         :autosize="{ minRows: 5, maxRows: 12  }"  /> 
     </div>
@@ -133,7 +135,7 @@ onMounted(() => {
 
     <div  class="pt-4">
         <div class="flex justify-end items-start">
-            <NButton v-bind:loading="st.loading" type="primary" :disabled="!canPost" @click="generate()"><SvgIcon icon="ri:music-fill"  /> {{$t('suno.generate')}}</NButton> 
+            <NButton :loading="st.loading" type="primary" :disabled="!canPost" @click="generate()"><SvgIcon icon="ri:music-fill"  /> {{$t('suno.generate')}}</NButton> 
         </div>
     </div>
 
@@ -172,10 +174,10 @@ onMounted(() => {
                         <h3>{{exSuno.title}}</h3>
                         <!-- <div class="opacity-80"  >{{exSuno.metadata.tags}}</div> -->
                     </div>
-                    <div class="opacity-60 line-clamp-1 w-full text-[12px] cursor-pointer"   v-if="exSuno.lyrics ||exSuno.prompt">
+                    <div v-if="exSuno.lyrics ||exSuno.prompt"   class="opacity-60 line-clamp-1 w-full text-[12px] cursor-pointer">
                     {{exSuno.lyrics ||exSuno.prompt}}
                     </div>
-                    <div class="opacity-60 line-clamp-1 w-full text-[12px] cursor-pointer"  v-else>
+                    <div v-else  class="opacity-60 line-clamp-1 w-full text-[12px] cursor-pointer">
                     {{$t('suno.noly')}}
                     </div>
                     <div class="text-right text-[14px] flex justify-end items-center space-x-2  ">
@@ -193,6 +195,6 @@ onMounted(() => {
     </template>
     
     
-    <div v-html="t('mj.ud_info')"  class="pt-4 px-2 text-[12px]"></div>
+    <div class="pt-4 px-2 text-[12px]"  v-html="t('mj.ud_info')"></div>
 </div>
 </template>

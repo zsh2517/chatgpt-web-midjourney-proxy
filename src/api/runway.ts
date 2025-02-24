@@ -49,7 +49,7 @@ export const runwayFetch=(url:string,data?:any,opt2?:any )=>{
     headers={...headers,...getHeaderAuthorization()}
    
     return new Promise<any>((resolve, reject) => {
-        let opt:RequestInit ={method:'GET'};
+        const opt:RequestInit ={method:'GET'};
        
         opt.headers= headers ;
         if(opt2?.upFile ){
@@ -65,7 +65,7 @@ export const runwayFetch=(url:string,data?:any,opt2?:any )=>{
             if (!d.ok) { 
                 let msg = '发生错误: '+ d.status
                 try{ 
-                  let bjson:any  = await d.json();
+                  const bjson:any  = await d.json();
                   msg = '('+ d.status+')发生错误: '+(bjson?.error?.message??'' ) 
                 }catch( e ){ 
                 }
@@ -95,8 +95,8 @@ export const runwayFeed= async(id:string)=>{
     const sunoS = new runwayStore();
     for(let i=0; i<200;i++){
         try{
-            let a= await runwayFetch('/tasks/' +id )
-            let task= a.task  as RunwayTask;
+            const a= await runwayFetch('/tasks/' +id )
+            const task= a.task  as RunwayTask;
             task.last_feed=new Date().getTime()
             //ss.save( task )
             mlog("a",a.task  )
@@ -114,7 +114,7 @@ export const runwayFeed= async(id:string)=>{
 
 
 export const runwayUpload= async (file:any , type :string)=>{
-     let obj={
+     const obj={
             "filename": file.name,
             "numberOfParts": 1,
             type //"DATASET_PREVIEW"
@@ -138,7 +138,7 @@ export const runwayUpload= async (file:any , type :string)=>{
     }
     //mlog("runwayUpload2", djson)
     // return djson uploads/0e01608a-89f8-4cb8-920a-669813fb224f/complete
-    let obj2={"parts":[{"PartNumber":1,"ETag":"ca3b00c313b6fd9a5c48889ad16f7d5e"}]}
+    const obj2={"parts":[{"PartNumber":1,"ETag":"ca3b00c313b6fd9a5c48889ad16f7d5e"}]}
     const  d2:any = await runwayFetch(`/uploads/${d.id}/complete`, obj2 )
     mlog("runwayUpload2", d2)
     return d2;

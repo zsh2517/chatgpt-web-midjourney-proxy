@@ -76,19 +76,20 @@ initLoad();
                     <div v-if="mapRef.has(item.id)   ">
                         <NButton  size="small" type="primary" @click="reRunwayFeed( item.id )"   >{{$t('video.repeat2')}}</NButton>
                     </div>
-                    <video v-else  loop  playsinline  :controls="st.pIndex==index"
+                    <video
+v-else  loop  playsinline  :controls="st.pIndex==index"
                     referrerpolicy="no-referrer" :poster="item.artifacts[0].previewUrls[0]" 
                     class="w-full h-full object-cover" @error="videoError(item, index)"  >
-                        <source  :src="item.artifacts[0].url" referrerpolicy="no-referrer" type="video/mp4" v-if="st.pIndex==index">
+                        <source  v-if="st.pIndex==index" :src="item.artifacts[0].url" referrerpolicy="no-referrer" type="video/mp4">
                     </video>
                 </template>
-                <div class=" text-center" v-else>
+                <div v-else class=" text-center">
                     <div v-if="item.status=='FAILED'" class="pt-2" >
                         <div>{{ $t('video.failed') }}</div>
                     <div class="line-clamp-3" >{{ item.progressText }}</div>
                     </div> 
-                    <NButton  size="small" type="primary" @click="runwayFeed( item.id )"   v-else-if="!item.last_feed|| ((new Date().getTime())-item.last_feed)>20*1000" >{{$t('video.repeat')}}</NButton>
-                    <div class="pt-2" v-else>
+                    <NButton  v-else-if="!item.last_feed|| ((new Date().getTime())-item.last_feed)>20*1000" size="small" type="primary"   @click="runwayFeed( item.id )" >{{$t('video.repeat')}}</NButton>
+                    <div v-else class="pt-2">
                         <div>
                         {{$t('video.process')}}{{ new Date(item.last_feed).toLocaleString() }}
                         </div>
@@ -117,19 +118,19 @@ initLoad();
                     <div v-if="item.taskType=='gen3a_turbo'" >Version: Gen-3-turbo</div>
                     <div v-if="item.taskType=='gen2'" >Version: Gen-2</div>
                     <div v-if="item.createdAt" >createdAt: {{ new Date( item.createdAt).toLocaleString() }}</div>
-                    <div class=" max-w-[300px]" v-if="item.options.text_prompt">{{ item.options.text_prompt }}</div>
+                    <div v-if="item.options.text_prompt" class=" max-w-[300px]">{{ item.options.text_prompt }}</div>
                     <div class=" max-w-[300px]">{{ item.options.gen2Options?.text_prompt?item.options.gen2Options.text_prompt: item.name }}</div>
                 </n-popover>
                 
                 </div>
-                <div class="flex justify-end items-center pt-1"  v-if="item.artifacts && item.artifacts.length>0  && item.artifacts[0].url"> 
+                <div v-if="item.artifacts && item.artifacts.length>0  && item.artifacts[0].url"  class="flex justify-end items-center pt-1"> 
                      <!-- <span    @click="FeedLumaTaskDown( item.id )" class="cursor-pointer" ><SvgIcon icon="mdi:download" /></span> -->
 
                     
                       <n-button-group size="tiny">
                         <n-button  size="tiny" round ghost   @click="RunwayTaskDown( item )"  ><SvgIcon icon="mdi:download" /> {{ $t('video.download') }}</n-button>
                         <n-button   size="tiny"  round ghost    > 
-                            <n-popconfirm @positive-click="()=>deleteGo(item)" placement="bottom">
+                            <n-popconfirm placement="bottom" @positive-click="()=>deleteGo(item)">
                                 <template #trigger> <SvgIcon icon="mdi:delete"  /></template>
                                 {{ $t('mj.confirmDelete') }}
                             </n-popconfirm> 
@@ -144,7 +145,7 @@ initLoad();
         </div>
     </div>
 </div>
-<div class="w-full h-full flex justify-center items-center" v-else>
+<div v-else class="w-full h-full flex justify-center items-center">
     <NEmpty :description="$t('video.nodata')"></NEmpty>
 </div>
 </template>

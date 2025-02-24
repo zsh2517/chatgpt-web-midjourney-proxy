@@ -48,7 +48,7 @@ export const runwayMlFetch=(url:string,data?:any,opt2?:any )=>{
     headers={...headers,...getHeaderAuthorization()} //,...otherHeader
    
     return new Promise<any>((resolve, reject) => {
-        let opt:RequestInit ={method:'GET'};
+        const opt:RequestInit ={method:'GET'};
        
         opt.headers= headers ;
         if(opt2?.upFile ){
@@ -64,7 +64,7 @@ export const runwayMlFetch=(url:string,data?:any,opt2?:any )=>{
             if (!d.ok) { 
                 let msg = '发生错误: '+ d.status
                 try{ 
-                  let bjson:any  = await d.json();
+                  const bjson:any  = await d.json();
                   msg = '('+ d.status+')发生错误: '+(bjson?.error?.message??'' ) 
                 }catch( e ){ 
                 }
@@ -97,8 +97,8 @@ export interface RunwayMlInput {
 export const runwayMlFeed= async(id:string, input:RunwayMlInput)=>{
     const sunoS = new RunwayMlStore();
     for(let i=0; i<1200; i++){
-        let d= await runwayMlFetch(`/v1/tasks/${id}`)
-        let task:RunwayMlTask={...d,...input} as RunwayMlTask
+        const d= await runwayMlFetch(`/v1/tasks/${id}`)
+        const task:RunwayMlTask={...d,...input} as RunwayMlTask
         task.last_feed=new Date().getTime()
         sunoS.save( task )
         homeStore.setMyData({act:'runwayml.feed'})

@@ -41,15 +41,15 @@ function drawSent(e:any){
     </div> -->
     <n-drawer v-model:show="st.show" :height="565"  placement="bottom">
     <n-drawer-content   style="--n-body-padding:0" class="h-full">
-      <aiDrawInput @draw-sent="drawSent" :button-disabled="isLoading"/>
+      <aiDrawInput :button-disabled="isLoading" @draw-sent="drawSent"/>
     </n-drawer-content>
   </n-drawer>
 </div>
-<section class="h-full overflow-auto w-[300px]"  @update-collapsed="handleUpdateCollapsed" v-else>
+<section v-else  class="h-full overflow-auto w-[300px]" @update-collapsed="handleUpdateCollapsed">
    <!-- <div class="h-full w-full">
      <aiDrawInput class="p-4"/>
    </div> -->
-   <div class="h-full w-full"> <aiDrawInput @draw-sent="drawSent" :button-disabled="isLoading"/></div>
+   <div class="h-full w-full"> <aiDrawInput :button-disabled="isLoading" @draw-sent="drawSent"/></div>
   </section>
 
   

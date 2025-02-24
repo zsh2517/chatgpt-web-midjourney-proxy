@@ -251,8 +251,8 @@ load();
             <template v-if="chat.opt?.buttons">
                 <div v-for="(bts,ii) in bt" class=" flex justify-start items-center flex-wrap "> 
                     <template v-for="ib in bts" >
-                    <div class="p-1" v-if="   getIndex(chat.opt?.buttons, ib) >-1"> 
-                        <NButton  @click="subV2(ib)" size="small" :type="ii==1?'warning':'primary'" >{{  getIndexName(chat.opt?.buttons, ib)  }}  </NButton>
+                    <div v-if="   getIndex(chat.opt?.buttons, ib) >-1" class="p-1"> 
+                        <NButton  size="small" :type="ii==1?'warning':'primary'" @click="subV2(ib)" >{{  getIndexName(chat.opt?.buttons, ib)  }}  </NButton>
                     </div>
                     </template>
                 </div>
@@ -260,17 +260,17 @@ load();
             <template v-else-if="chat.opt?.action==='UPSCALE' || 'DESCRIBE'===chat.opt?.action"></template>
             <template v-else>
                 <div class="flex space-x-2">
-                    <NButton type="primary" @click="sub('UPSCALE',1)" size="small">U1</NButton>
-                    <NButton type="primary" @click="sub('UPSCALE',2)"  size="small">U2</NButton>
-                    <NButton type="primary" @click="sub('UPSCALE',3)"  size="small">U3</NButton>
-                    <NButton type="primary" @click="sub('UPSCALE',4)"  size="small">U4</NButton>
+                    <NButton type="primary" size="small" @click="sub('UPSCALE',1)">U1</NButton>
+                    <NButton type="primary" size="small"  @click="sub('UPSCALE',2)">U2</NButton>
+                    <NButton type="primary" size="small"  @click="sub('UPSCALE',3)">U3</NButton>
+                    <NButton type="primary" size="small"  @click="sub('UPSCALE',4)">U4</NButton>
                 </div>
                 <div class="flex space-x-2">
-                    <NButton type="warning" @click="sub('VARIATION',1)"  size="small">V1</NButton>
-                    <NButton type="warning" @click="sub('VARIATION',2)"  size="small">V2</NButton>
-                    <NButton type="warning" @click="sub('VARIATION',3)"  size="small">V3</NButton>
-                    <NButton type="warning" @click="sub('VARIATION',4)"  size="small">V4</NButton>
-                    <NButton type="warning" @click="sub('REROLL',1)"  size="small" v-if="chat.opt?.action==='IMAGINE'">{{ $t('mjchat.reroll') }}</NButton>
+                    <NButton type="warning" size="small"  @click="sub('VARIATION',1)">V1</NButton>
+                    <NButton type="warning" size="small"  @click="sub('VARIATION',2)">V2</NButton>
+                    <NButton type="warning" size="small"  @click="sub('VARIATION',3)">V3</NButton>
+                    <NButton type="warning" size="small"  @click="sub('VARIATION',4)">V4</NButton>
+                    <NButton v-if="chat.opt?.action==='IMAGINE'" type="warning"  size="small" @click="sub('REROLL',1)">{{ $t('mjchat.reroll') }}</NButton>
 
                 </div>
             </template>
@@ -288,10 +288,11 @@ load();
     <div class=" hidden">{{ chat.dateTime }}</div>
 
     <NModal v-model:show="st.isShow"   preset="card"  :title="$t('mjchat.redrawEditing')" style="max-width: 800px;" @close="st.isShow=false" >
-        <aiCanvas :chat="chat" :base64="st.uri_base64" v-if="st.isShow" @success="maskOk" />
+        <aiCanvas v-if="st.isShow" :chat="chat" :base64="st.uri_base64" @success="maskOk" />
     </NModal>
     <NModal v-model:show="st.isCustom"   preset="card"  :title="$t('mj.customTitle')" style="max-width: 600px;" @close="st.isCustom=false" >
-         <n-input    type="textarea"  v-model:value="st.customText"    round   maxlength="2000" show-count 
+         <n-input
+v-model:value="st.customText"  type="textarea"    round   maxlength="2000" show-count 
       :autosize="{   minRows:3, maxRows:8 }" />
            <div class="pt-2 flex justify-between items-center">  
                 <div class="text-neutral-500">{{ $t('mj.zoominfo') }}</div>   
@@ -302,7 +303,7 @@ load();
 <div v-else class="w-[200px] h-[150px] flex flex-col justify-center items-center" >
     <div class="p-4">{{ $t('mjchat.loading') }}</div>
     
-    <NButton type="primary" v-if="chat.opt?.imageUrl" ><a :href=" mjImgUrl(chat.opt?.imageUrl)" target="_blank">{{ $t('mjchat.openurl') }}</a></NButton> 
+    <NButton v-if="chat.opt?.imageUrl" type="primary" ><a :href=" mjImgUrl(chat.opt?.imageUrl)" target="_blank">{{ $t('mjchat.openurl') }}</a></NButton> 
 </div>
 
 

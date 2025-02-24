@@ -43,5 +43,5 @@ load();
 </script>
 
 <template>
-<LazyImg :url="st.uri_base64?st.uri_base64:pp.item.src" v-if="st.isLoad"  @success="emit('kgSuccess')"  @click="emit('kgClick', {base64:st.uri_base64, src:pp.item.src} )"  />
+<LazyImg v-if="st.isLoad" :url="st.uri_base64?st.uri_base64:pp.item.src"  @success="emit('kgSuccess')"  @click="emit('kgClick', {base64:st.uri_base64, src:pp.item.src} )"  />
 </template>

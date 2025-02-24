@@ -51,7 +51,7 @@ export const pixFetch=(url:string,data?:any,opt2?:any )=>{
     headers={...headers,...getHeaderAuthorization()}
    
     return new Promise<any>((resolve, reject) => {
-        let opt:RequestInit ={method:'GET'};
+        const opt:RequestInit ={method:'GET'};
        
         opt.headers= headers ;
         if(opt2?.upFile ){
@@ -67,7 +67,7 @@ export const pixFetch=(url:string,data?:any,opt2?:any )=>{
             if (!d.ok) { 
                 let msg = '发生错误: '+ d.status
                 try{ 
-                  let bjson:any  = await d.json();
+                  const bjson:any  = await d.json();
                   msg = '('+ d.status+')发生错误: '+(bjson?.error?.message??'' ) 
                 }catch( e ){ 
                 }
@@ -95,15 +95,15 @@ export const pixFetch=(url:string,data?:any,opt2?:any )=>{
 
 export const pixFeed= async( id:number)=>{
     const sunoS = new pixverseStore();
-    let url= `/feed/${id}`;
+    const url= `/feed/${id}`;
     for(let i=0; i<200;i++){
          try{
             
-            let a= await pixFetch( url )
+            const a= await pixFetch( url )
             //let task= a  as KlingTask;
             if(a.ErrCode==0 && a.Resp){
             //task.last_feed=new Date().getTime()
-                let d= a.Resp as pixverseRep
+                const d= a.Resp as pixverseRep
                 const task:pixverseTask={ video_id:id,last_feed:new Date().getTime(), data:d } 
                 sunoS.save( task )
                 homeStore.setMyData({act:'PixFeed'});

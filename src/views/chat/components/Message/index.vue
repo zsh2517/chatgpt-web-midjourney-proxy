@@ -144,9 +144,9 @@ function handleRegenerate2() {
         <span v-if="chat.model"  class="text-[#b4bbc4]/50">{{ chat.model }}</span>
         <!-- <span>{{ chat.opt?.progress }}</span> -->
         <template  v-if="chat.opt?.status=='SUCCESS'">
-          <SvgIcon icon="ri:restart-line" @click="sendReload"  class="cursor-pointer text-neutral-300 hover:text-neutral-800 dark:hover:text-neutral-300 " ></SvgIcon>
+          <SvgIcon icon="ri:restart-line" class="cursor-pointer text-neutral-300 hover:text-neutral-800 dark:hover:text-neutral-300 "  @click="sendReload" ></SvgIcon>
           
-          <div @click="getSeed(chat, message )" class="cursor-pointer">
+          <div class="cursor-pointer" @click="getSeed(chat, message )">
             <span v-if="chat.opt?.seed">Seed:{{ chat.opt?.seed }}</span>
             <span v-else>Seed</span>
           </div>
@@ -154,7 +154,8 @@ function handleRegenerate2() {
         </template>
       </p>
       
-      <div  class="flex items-end gap-1 mt-2"
+      <div
+class="flex items-end gap-1 mt-2"
         :class="[inversion ? 'flex-row-reverse' : 'flex-row']" > 
         <TextComponent 
           ref="textRef"
@@ -166,7 +167,7 @@ function handleRegenerate2() {
           :chat="chat"
         />
         <!-- <div class="flex flex-col" v-if="!chat.mjID && chat.model!='dall-e-3' && chat.model!='dall-e-2' "> -->
-        <div class="flex flex-col" v-if="!chat.mjID &&   !isDallImageModel(chat.model) ">
+        <div v-if="!chat.mjID &&   !isDallImageModel(chat.model) " class="flex flex-col">
           <!-- <button
             v-if="!inversion "
             class="mb-2 transition text-neutral-300 hover:text-neutral-800 dark:hover:text-neutral-300"

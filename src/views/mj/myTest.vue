@@ -106,9 +106,9 @@ const voice = 'alloy';
 <div class="text-red-300" @click="sound.stop() " >eend</div> -->
 <div class="p-4 space-y-4">
 <NInput v-model:value="f.text" type="textarea"></NInput>
-<NButton @click="go" type="primary">提交</NButton>
+<NButton type="primary" @click="go">提交</NButton>
 <div>
-<input type="file" id="audioFile" accept="audio/*" @change="ccgo">
+<input id="audioFile" type="file" accept="audio/*" @change="ccgo">
 </div>
 </div>
 

@@ -130,7 +130,7 @@ onMounted(() => {
     <n-select v-model:value="nGptStore.model" :options="modellist" size="small"  filterable  class="!w-[50%]"   />
 </section>
 <section class="mb-4 flex justify-between items-center"  >
-    <n-input   :placeholder="$t('mjchat.modlePlaceholder')" v-model:value="gptConfigStore.myData.userModel">
+    <n-input   v-model:value="gptConfigStore.myData.userModel" :placeholder="$t('mjchat.modlePlaceholder')">
       <template #prefix>
         {{ $t('mjchat.myModle') }}
       </template>
@@ -159,7 +159,7 @@ onMounted(() => {
  <section class="mb-4"  >
     <div>{{ $t('mjchat.role') }}</div>
     <div>
-     <n-input  type="textarea"  :placeholder=" $t('mjchat.rolePlaceholder') "   v-model:value="nGptStore.systemMessage" :autosize="{ minRows: 3 }"
+     <n-input  v-model:value="nGptStore.systemMessage"  type="textarea"   :placeholder=" $t('mjchat.rolePlaceholder') " :autosize="{ minRows: 3 }"
     />
     </div>
  </section>

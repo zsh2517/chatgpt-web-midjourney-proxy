@@ -237,7 +237,8 @@ watch(()=>homeStore.myData.act, (n)=>{
         <n-select v-model:value="st.version" :options="mvOption" size="small" />
     </div>
     <div class="pt-1">
-      <n-input v-model:value="runway.text_prompt" 
+      <n-input
+v-model:value="runway.text_prompt" 
                 :placeholder="$t('video.descpls')"  type="textarea"  size="small"   
                 :autosize="{ minRows: 3, maxRows: 12  }"  />
     </div>
@@ -259,14 +260,15 @@ watch(()=>homeStore.myData.act, (n)=>{
                     <div v-if="exRunway.taskType=='gen3a_turbo'" >Version: Gen-3-turbo</div>
                     <div v-if="exRunway.taskType=='gen2'" >Version: Gen-2</div>
                     <div v-if="exRunway.createdAt" >createdAt: {{ new Date( exRunway.createdAt).toLocaleString() }}</div>
-                    <div class=" max-w-[300px]" v-if="exRunway.options.text_prompt">{{ exRunway.options.text_prompt }}</div>
+                    <div v-if="exRunway.options.text_prompt" class=" max-w-[300px]">{{ exRunway.options.text_prompt }}</div>
                     <div class=" max-w-[300px]">{{ exRunway.options.gen2Options?.text_prompt?exRunway.options.gen2Options.text_prompt: exRunway.name }}</div>
                 
                 </n-popover>
             </div>
         </div>
         <div class="relative flex items-center justify-center bg-white bg-opacity-10 rounded-[5px] overflow-hidden aspect-[16/8.85] ">
-            <video   loop  playsinline  controls v-if="exRunway.artifacts && exRunway.artifacts[0].url"
+            <video
+v-if="exRunway.artifacts && exRunway.artifacts[0].url"  loop  playsinline controls
                 referrerpolicy="no-referrer" :poster="exRunway.artifacts[0].previewUrls[0]" 
                 class="w-full h-full object-cover"  >
                 <source  :src="exRunway.artifacts[0].url" referrerpolicy="no-referrer" type="video/mp4"  >
@@ -275,7 +277,7 @@ watch(()=>homeStore.myData.act, (n)=>{
             
     </div>
 
-    <div  class="pt-1" v-if="st.version!='gen2'" >
+    <div  v-if="st.version!='gen2'" class="pt-1" >
         <n-select v-model:value="st.time" :options="timeOption" size="small" />
     </div>
 
@@ -284,7 +286,7 @@ watch(()=>homeStore.myData.act, (n)=>{
     <div class="pt-1">
         <div class="flex justify-between  items-end">
             <div class=" relative"> 
-                <input type="file"  @change="selectFile"  ref="fsRef" style="display: none" accept="image/jpeg, image/jpg, image/png, image/gif, .mp4"/>
+                <input ref="fsRef"  type="file"  style="display: none" accept="image/jpeg, image/jpg, image/png, image/gif, .mp4" @change="selectFile"/>
                 
                 <!-- <div v-if="st.version=='europa'"
                  class="h-[80px] w-[80px] overflow-hidden rounded-sm border border-gray-400/20 flex justify-center items-center"
@@ -294,23 +296,24 @@ watch(()=>homeStore.myData.act, (n)=>{
                 <div   class="h-[80px] w-[80px] overflow-hidden rounded-sm border border-gray-400/20 flex justify-center items-center cursor-pointer" @click=" fsRef.click()">
                   
                    
-                    <SvgIcon icon="line-md:uploading-loop" class="text-[60px] text-green-300"  v-if="st.uploading"  ></SvgIcon>
+                    <SvgIcon v-if="st.uploading" icon="line-md:uploading-loop"  class="text-[60px] text-green-300"  ></SvgIcon>
                     <!-- <video :src="runway.image_prompt" v-else-if="runway.image_prompt && isMp4(runway.image_prompt)" /> -->
-                    <video   loop  playsinline    v-else-if="runway.image_prompt && isMp4(runway.image_prompt)"
+                    <video
+v-else-if="runway.image_prompt && isMp4(runway.image_prompt)"  loop    playsinline
                         referrerpolicy="no-referrer" 
                         class="w-full h-full object-cover"  >
                         <source  :src="runway.image_prompt" referrerpolicy="no-referrer" type="video/mp4"  >
                     </video>  
-                    <img :src="runway.image_prompt" v-else-if="runway.image_prompt" />
-                    <div class="text-center"  v-else >{{ $t('video.selectimg') }}</div> 
+                    <img v-else-if="runway.image_prompt" :src="runway.image_prompt" />
+                    <div v-else  class="text-center" >{{ $t('video.selectimg') }}</div> 
                    
                 </div>
 
-                <div class=" absolute bottom-[-5px] right-[-15px]" v-if="runway.image_prompt&&st.version!='gen2' ">
-                     <a :href="runway.image_prompt" class="cursor-pointer" target="_blank" v-if="isMp4(runway.image_prompt) ">
+                <div v-if="runway.image_prompt&&st.version!='gen2' " class=" absolute bottom-[-5px] right-[-15px]">
+                     <a v-if="isMp4(runway.image_prompt) " :href="runway.image_prompt" class="cursor-pointer" target="_blank">
                       <NTag  type="success" size="small"  class="cursor-pointer" round :bordered="false">Vidoe</NTag>
                      </a>
-                     <NSwitch v-model:value="st.image_as_end_frame" size="small" v-else>
+                     <NSwitch v-else v-model:value="st.image_as_end_frame" size="small">
                         <template #checked>尾帧</template> 
                         <template #unchecked>首帧</template>
                     </NSwitch>

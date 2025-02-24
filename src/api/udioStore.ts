@@ -61,8 +61,8 @@ export class udioStore{
   private localKey='udio-store';
   public save(obj:udioTask ){
     if(!obj.id ) throw "taskID must";
-    let arr=  this.getObjs();
-    let i= arr.findIndex( v=>v.id==obj.id );
+    const arr=  this.getObjs();
+    const i= arr.findIndex( v=>v.id==obj.id );
     if(i>-1) arr[i]= obj;
     else arr.push(obj);
      ss.set(this.localKey, arr );
@@ -80,13 +80,13 @@ export class udioStore{
   public getOneById(id:string):udioTask|null{
     const i= this.findIndex(id)
     if(i<0) return null;
-    let arr=  this.getObjs();
+    const arr=  this.getObjs();
     return arr[i]
   }
   public delete( id:string ){ 
-    let arr=  this.getObjs();
+    const arr=  this.getObjs();
     
-    let i= arr.findIndex( v=>v.id==id );
+    const i= arr.findIndex( v=>v.id==id );
     //mlog('ddd',i , arr)
     if(i<0) return false
     arr.splice(i, 1);

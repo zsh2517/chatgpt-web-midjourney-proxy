@@ -130,14 +130,14 @@ watch(()=>homeStore.myData.act, (n)=>{
 </script>
 <template>
 <div class="p-2"> 
-    <n-tabs type="segment" animated  v-model:value="st.type">
+    <n-tabs v-model:value="st.type" type="segment"  animated>
         <!-- <n-tab-pane name="start" tab=""> 
 
         </n-tab-pane> -->
         <!-- <NText depth="3" class="text-center">{{ $t('suno.mic') }}</NText> -->
         <n-tab-pane name="description" :tab="$t('suno.description')">
             <div class="pt-1">
-                <n-input :placeholder="$t('suno.titlepls')" v-model:value="cs.title">
+                <n-input v-model:value="cs.title" :placeholder="$t('suno.titlepls')">
                 <template #prefix>
                      <span>{{$t('suno.title')}}：</span>
                 </template>
@@ -157,7 +157,8 @@ watch(()=>homeStore.myData.act, (n)=>{
                 </div>
             </div>
             <div  class="pt-1"> 
-            <n-input v-model:value="des.gpt_description_prompt" :disabled="des.make_instrumental"
+            <n-input
+v-model:value="des.gpt_description_prompt" :disabled="des.make_instrumental"
                 :placeholder="$t('suno.descpls')"  type="textarea"  size="small"   
                 :autosize="{ minRows: 3, maxRows: 12  }"  />
             </div>
@@ -168,14 +169,14 @@ watch(()=>homeStore.myData.act, (n)=>{
 
         <n-tab-pane name="custom" :tab="$t('suno.custom')">
             <div class="pt-1">
-                <n-input :placeholder="$t('suno.titlepls')" v-model:value="cs.title">
+                <n-input v-model:value="cs.title" :placeholder="$t('suno.titlepls')">
                 <template #prefix>
                      <span>{{$t('suno.title')}}：</span>
                 </template>
                 </n-input>
             </div>
              <div class="pt-4">
-                <n-input :placeholder="$t('suno.stylepls')" v-model:value="cs.tags">
+                <n-input v-model:value="cs.tags" :placeholder="$t('suno.stylepls')">
                     <template #prefix>
                         <span>{{$t('suno.style')}}：</span>
                     </template>
@@ -205,7 +206,8 @@ watch(()=>homeStore.myData.act, (n)=>{
                 </div>
             </div>
             <div  class="pt-1"> 
-                <n-input v-model:value="cs.prompt" :disabled="des.make_instrumental"
+                <n-input
+v-model:value="cs.prompt" :disabled="des.make_instrumental"
                 :placeholder="$t('suno.lypls')" type="textarea"  size="small"   
                 :autosize="{ minRows: 3, maxRows: 12  }"  />
             </div>
@@ -241,10 +243,10 @@ watch(()=>homeStore.myData.act, (n)=>{
                                 <h3>{{exSuno.title}}</h3>
                                 <!-- <div class="opacity-80"  >{{exSuno.metadata.tags}}</div> -->
                             </div>
-                            <div class="opacity-60 line-clamp-1 w-full text-[12px] cursor-pointer"   v-if="exSuno.metadata && exSuno.metadata.prompt">
+                            <div v-if="exSuno.metadata && exSuno.metadata.prompt"   class="opacity-60 line-clamp-1 w-full text-[12px] cursor-pointer">
                             {{exSuno.metadata.prompt}}
                             </div>
-                            <div class="opacity-60 line-clamp-1 w-full text-[12px] cursor-pointer"  v-else>
+                            <div v-else  class="opacity-60 line-clamp-1 w-full text-[12px] cursor-pointer">
                             {{$t('suno.noly')}}
                             </div>
                             <div class="text-right text-[14px] flex justify-end items-center space-x-2  ">
@@ -253,7 +255,7 @@ watch(()=>homeStore.myData.act, (n)=>{
                                 <template v-if="exSuno.metadata && exSuno.metadata.duration">
                                     <div class="text-[8px] flex items-center border-[1px] border-gray-500/30 px-1 list-none rounded-md" > {{exSuno.metadata.duration.toFixed(1)}}s</div>
                                 </template>
-                                <div class="text-[8px] flex items-center border-[1px] border-gray-500/30 px-1 list-none rounded-md" v-if="exSuno.major_model_version"> {{exSuno.major_model_version}}</div>
+                                <div v-if="exSuno.major_model_version" class="text-[8px] flex items-center border-[1px] border-gray-500/30 px-1 list-none rounded-md"> {{exSuno.major_model_version}}</div>
                             </div>
                         </div>
                     </div>

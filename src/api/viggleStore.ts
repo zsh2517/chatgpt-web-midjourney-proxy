@@ -24,8 +24,8 @@ export class viggleStore{
   private localKey='viggle-store';
   public save(obj:ViggleTask ){
     if(!obj.taskID ) throw "taskID must";
-    let arr=  this.getObjs();
-    let i= arr.findIndex( v=>v.taskID==obj.taskID );
+    const arr=  this.getObjs();
+    const i= arr.findIndex( v=>v.taskID==obj.taskID );
     if(i>-1) arr[i]= obj;
     else arr.push(obj);
      ss.set(this.localKey, arr );
@@ -43,14 +43,14 @@ export class viggleStore{
   public getOneById(id:string):ViggleTask|null{
     const i= this.findIndex(id)
     if(i<0) return null;
-    let arr=  this.getObjs();
+    const arr=  this.getObjs();
     return arr[i]
   }
 
    public delete( obj:ViggleTask ){
     if(!obj.taskID ) throw "id must";
-    let arr=  this.getObjs();
-    let i= arr.findIndex( v=>v.taskID==obj.taskID );
+    const arr=  this.getObjs();
+    const i= arr.findIndex( v=>v.taskID==obj.taskID );
     if(i<0) return false
     arr.splice(i, 1);
     ss.set(this.localKey, arr );

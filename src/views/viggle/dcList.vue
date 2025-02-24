@@ -46,15 +46,16 @@ initLoad()
     <div  class="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
         <div v-for="(item, index) in list" :key="index" class="relative" @mousemove="st.pIndex=index" @mouseout="st.pIndex=-1">
             <div class="relative flex items-center justify-center bg-white bg-opacity-10 rounded-[16px] overflow-hidden aspect-[16/8.85] ">
-                <video class="bg-[#242424] object-contain w-full h-full transition-all"
-                 v-if="item.result"   referrerpolicy="no-referrer"
+                <video
+v-if="item.result"
+                 class="bg-[#242424] object-contain w-full h-full transition-all"   referrerpolicy="no-referrer"
                 :poster="item.resultCover" loop  playsinline  :controls="st.pIndex==index" >
-                    <source :src="item.result" referrerpolicy="no-referrer" type="video/mp4" v-if="st.pIndex==index">
+                    <source v-if="st.pIndex==index" :src="item.result" referrerpolicy="no-referrer" type="video/mp4">
                 </video>
-                <div class=" text-center" v-else>
+                <div v-else class=" text-center">
                      
-                    <NButton  size="small" type="primary" @click="FeedViggleTask( item.taskID )"   v-if="!item.last_feed|| ((new Date().getTime())-item.last_feed)>20*1000" >{{$t('video.repeat')}}</NButton>
-                    <div class="pt-2" v-else>
+                    <NButton  v-if="!item.last_feed|| ((new Date().getTime())-item.last_feed)>20*1000" size="small" type="primary"   @click="FeedViggleTask( item.taskID )" >{{$t('video.repeat')}}</NButton>
+                    <div v-else class="pt-2">
                         <div>{{$t('video.process')}}{{ new Date(item.last_feed).toLocaleString() }}</div> 
                     </div>
                    
@@ -78,7 +79,7 @@ initLoad()
                         <n-button  size="tiny" round ghost @click="TaskDown( item )"   ><SvgIcon icon="mdi:download" /> {{ $t('video.download') }}</n-button>
                         <!-- <n-button   size="tiny"  round ghost   ><SvgIcon icon="ri:video-add-line" /> {{ $t('video.extend') }}</n-button> -->
                         <n-button   size="tiny"  round ghost    > 
-                                <n-popconfirm @positive-click="()=>deleteGo(item)" placement="bottom">
+                                <n-popconfirm placement="bottom" @positive-click="()=>deleteGo(item)">
                                     <template #trigger> <SvgIcon icon="mdi:delete"  /></template>
                                     {{ $t('mj.confirmDelete') }}
                                 </n-popconfirm> 
@@ -90,7 +91,7 @@ initLoad()
         </div>
     </div>
 </div> 
-<div class="w-full h-full flex justify-center items-center" v-else>
+<div v-else class="w-full h-full flex justify-center items-center">
     <NEmpty description="请先创作才有跳舞视频列表"></NEmpty>
 </div>
 </template>

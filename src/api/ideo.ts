@@ -47,18 +47,18 @@ export const  getUrl=(url:string)=>{
 
 export const ideoSubmit= async( data:any ):Promise<IdeoImageData[]>=>{
     let rz:IdeoImageData[]
-    let rzdata:any={image_request:data.image_request}
+    const rzdata:any={image_request:data.image_request}
     if(data.file) { 
         //mlog('文件上传', data.file  ); 
         const formData = new FormData(); 
         formData.append('image_file',   data.file )
         formData.append('image_request',  JSON.stringify(data.image_request) )
     
-        let d:any = await ideoFetch( '/remix', formData,{upFile:true})
+        const d:any = await ideoFetch( '/remix', formData,{upFile:true})
         //mlog(' 文件上传 back', d ); 
         rz= d.data as IdeoImageData[]
     }else{
-        let  d:any = await ideoFetch('/generate ' ,rzdata ) 
+        const  d:any = await ideoFetch('/generate ' ,rzdata ) 
         //mlog('back', d ); 
         rz= d.data as IdeoImageData[]
     }
@@ -74,7 +74,7 @@ export const ideoFetch=(url:string,data?:any,opt2?:any )=>{
     headers={...headers,...getHeaderAuthorization()}
    
     return new Promise<any>((resolve, reject) => {
-        let opt:RequestInit ={method:'GET'};
+        const opt:RequestInit ={method:'GET'};
        
         opt.headers= headers ;
         if(opt2?.upFile ){
@@ -90,7 +90,7 @@ export const ideoFetch=(url:string,data?:any,opt2?:any )=>{
             if (!d.ok) { 
                 let msg = '发生错误: '+ d.status
                 try{ 
-                  let bjson:any  = await d.json();
+                  const bjson:any  = await d.json();
                   msg = '('+ d.status+')发生错误: '+(bjson?.error?.message??'' ) 
                 }catch( e ){ 
                 }

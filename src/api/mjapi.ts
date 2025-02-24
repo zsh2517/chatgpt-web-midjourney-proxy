@@ -42,7 +42,7 @@ export function upImg(file:any   ):Promise<any>
 }
 
 export const clearImageBase64= ( str:string)=>{
-    let arr= str.split('base64,',2 )
+    const arr= str.split('base64,',2 )
     return arr[1]??arr[0];
 }
 
@@ -73,10 +73,10 @@ export const blob2file= ( blob:Blob,fileName:string )=>{
 }
 
 export const  isFileMp3= (filename:string )=>{
-    let arr='.mp3, .mp4, .mpeg, .mpga, .m4a, .wav, .webm'.split(/[, ]+/ig);
+    const arr='.mp3, .mp4, .mpeg, .mpga, .m4a, .wav, .webm'.split(/[, ]+/ig);
     mlog('fileIsMp3', arr );
     filename= filename.toLocaleLowerCase();
-    for(let ext of arr ){
+    for(const ext of arr ){
         if(filename.endsWith(ext)) return true;
     }
     return false;
@@ -158,7 +158,7 @@ export const mjFetch=(url:string,data?:any)=>{
     header= {...header,...getHeaderApiSecret() }
 
     return new Promise<any>((resolve, reject) => {
-        let opt:RequestInit ={method:'GET'}; 
+        const opt:RequestInit ={method:'GET'}; 
         opt.headers=header;
         if(data) {
             opt.body= JSON.stringify(data) ;
@@ -178,11 +178,11 @@ export const mjFetch=(url:string,data?:any)=>{
 
 export const myFetch=(url:string,data?:any)=>{
     //mlog('myFetch', url  );
-    let header = {'Content-Type':'application/json'};
+    const header = {'Content-Type':'application/json'};
     //header= {...header  }
 
     return new Promise<any>((resolve, reject) => {
-        let opt:RequestInit ={method:'GET'}; 
+        const opt:RequestInit ={method:'GET'}; 
         opt.headers=header;
         if(data) {
             opt.body= JSON.stringify(data) ;
@@ -197,11 +197,11 @@ export const myFetch=(url:string,data?:any)=>{
 }
 export const my2Fetch=(url:string,data?:any)=>{
     mlog('mjFetch', url  );
-    let header = {'Content-Type':'application/json'};
+    const header = {'Content-Type':'application/json'};
     //header= {...header  }
 
     return new Promise<any>((resolve, reject) => {
-        let opt:RequestInit ={method:'GET'}; 
+        const opt:RequestInit ={method:'GET'}; 
         opt.headers=header;
         if(data) {
             opt.body= JSON.stringify(data) ;
@@ -253,14 +253,14 @@ export const subTask= async (data:any, chat:Chat.Chat )=>{
     }else if( data.action &&data.action=="CustomZoom") { //自定义变焦
             d =  await mjFetch('/mj/submit/action' , data.data  );
             if(d.result){
-                let bdata= data.maskData;
+                const bdata= data.maskData;
                 bdata.taskId= d.result;
                 d=  await mjFetch('/mj/submit/modal' , bdata );
             }
     }else if( data.action &&data.action=='mask') { //局部重绘
         d =  await mjFetch('/mj/submit/action' , data.data  );
         if(d.result){
-            let bdata= data.maskData;
+            const bdata= data.maskData;
             bdata.taskId= d.result;
             d=  await mjFetch('/mj/submit/modal' , bdata );
         }
@@ -281,7 +281,7 @@ export const subTask= async (data:any, chat:Chat.Chat )=>{
             d=  await mjFetch('/mj/submit/modal' , { taskId:d.result, prompt: d.properties.finalPrompt??''} );
         }
     }else {
-        let toData =  {
+        const toData =  {
             "base64Array":data.fileBase64??[],
             "notifyHook": "",
             "prompt": data.drawText,
@@ -386,15 +386,15 @@ export const canVisionModel= (model:string)=>{
 export const isCanBase64Model=(model:string)=>{
     //gpt-4o
     //customVisionModel
-    let arr=['gpt-4o','gemini','1.5','sonnet','opus','deepseek' ];
-    for( let m of arr){
+    const arr=['gpt-4o','gemini','1.5','sonnet','opus','deepseek' ];
+    for( const m of arr){
         if(model.indexOf(m)>-1) return true
     }
     if(model.indexOf('gpt-4o')>-1 || ( model.indexOf('gemini')>-1 && model.indexOf('1.5')>-1 ) ){
         return true
     }
     //if(model.indexOf('sonnet')>-1 ) return true ;
-    let visionArr=['gemini-pro-vision','gpt-4o-2024-08-06','gpt-4o-2024-11-20','gpt-4o','gpt-4o-2024-05-13','gpt-4o-mini','gpt-4o-mini-2024-07-18','gemini-pro-1.5','gpt-4-turbo','gpt-4-turbo-2024-04-09','gpt-4-vision-preview','luma-video','claude-3-5-sonnet-20240620' ,'claude-3-sonnet-20240229','claude-3-opus-20240229', defaultVisionModel() ]
+    const visionArr=['gemini-pro-vision','gpt-4o-2024-08-06','gpt-4o-2024-11-20','gpt-4o','gpt-4o-2024-05-13','gpt-4o-mini','gpt-4o-mini-2024-07-18','gemini-pro-1.5','gpt-4-turbo','gpt-4-turbo-2024-04-09','gpt-4-vision-preview','luma-video','claude-3-5-sonnet-20240620' ,'claude-3-sonnet-20240229','claude-3-opus-20240229', defaultVisionModel() ]
     if( homeStore.myData.session.customVisionModel ){ 
         homeStore.myData.session.customVisionModel.split(/[ ,]+/ig).map( (v:string)=>{
             visionArr.push( v.toLocaleLowerCase() )
@@ -425,7 +425,7 @@ function isStringOnlyDigits(input: string): boolean {
     return regex.test(input);
 }
 export const loadGallery  = async ()=>{
-     let localKey= 'mj-list-condition';
+     const localKey= 'mj-list-condition';
      const d2:any = await localGet(localKey);
      //mlog('d2',d2 , (Date.now()- d2.ctime));
      if(d2 && (Date.now()- d2.ctime)<300*1000 ){
@@ -448,11 +448,11 @@ export const loadGallery  = async ()=>{
 
 //从剪贴板中读取文件
 export   function getFileFromClipboard(event:any ){
-    let rz=[];
+    const rz=[];
     if ( event.clipboardData || event.originalEvent ) {
-        let clipboardData = (event.clipboardData || event.originalEvent.clipboardData);
+        const clipboardData = (event.clipboardData || event.originalEvent.clipboardData);
         if (clipboardData.items) {
-            let items = clipboardData.items;
+            const items = clipboardData.items;
             // mlog('getFileFromClipboard',  items  );
             for (let i = 0; i < items.length; i++) {
                 if (items[i].type.indexOf("image") !== -1 || items[i].kind === 'file') {

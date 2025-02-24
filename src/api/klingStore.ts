@@ -33,8 +33,8 @@ export class klingStore{
   private localKey='kling-store';
   public save(obj:KlingTask ){
     if(!obj.data.task_id ) throw "taskID must";
-    let arr=  this.getObjs();
-    let i= arr.findIndex( v=>v.data.task_id==obj.data.task_id );
+    const arr=  this.getObjs();
+    const i= arr.findIndex( v=>v.data.task_id==obj.data.task_id );
     if(i>-1) arr[i]= obj;
     else arr.push(obj);
      ss.set(this.localKey, arr );
@@ -52,13 +52,13 @@ export class klingStore{
   public getOneById(id:string):KlingTask|null{
     const i= this.findIndex(id)
     if(i<0) return null;
-    let arr=  this.getObjs();
+    const arr=  this.getObjs();
     return arr[i]
   }
   public delete( id:string ){
     //if(!obj.data.task_id ) throw "id must";
-    let arr=  this.getObjs();
-    let i= arr.findIndex( v=>v.data.task_id==id );
+    const arr=  this.getObjs();
+    const i= arr.findIndex( v=>v.data.task_id==id );
     if(i<0) return false
     arr.splice(i, 1);
     ss.set(this.localKey, arr );

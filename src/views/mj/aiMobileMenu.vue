@@ -36,7 +36,7 @@ const urouter = useRouter() //
 </script>
 <template>
   <div class=" bg-gray-100 dark:bg-[#282832] h-[55px] flex  justify-around  items-center dark:text-white/70 " >
-      <div class="flex items-center justify-center flex-col"  @click="urouter.push('/chat') && homeStore.setMyData({act:'showChat'}) "   :class="[ goHome =='Chat' ? 'active' : '']" >
+      <div class="flex items-center justify-center flex-col"  :class="[ goHome =='Chat' ? 'active' : '']"   @click="urouter.push('/chat') && homeStore.setMyData({act:'showChat'}) " >
         <SvgIcon icon="ri:wechat-line" class="text-3xl"></SvgIcon>
         <div class="text-[13px]">{{$t('mjtab.chat')}}</div>
       </div>
@@ -51,12 +51,12 @@ const urouter = useRouter() //
       </div>
 
 
-      <div v-if="!isDisableMenu ( 'draws')" class="flex items-center justify-center flex-col "  @click="homeStore.setMyData({act:'showDraw'}) " :class="[goHome=='draw' ? 'active' : '']" >
+      <div v-if="!isDisableMenu ( 'draws')" class="flex items-center justify-center flex-col "  :class="[goHome=='draw' ? 'active' : '']" @click="homeStore.setMyData({act:'showDraw'}) " >
         <SvgIcon icon="ic:outline-palette" class="text-3xl"></SvgIcon>
         <div class="text-[13px]">{{$t('mjtab.draw')}}</div>
       </div>
 
-      <div v-if="!isDisableMenu ( 'music')"    class="flex items-center justify-center flex-col "   @click="  urouter.push('/music')"  :class="[ goHome =='music' ? 'active' : '']" >
+      <div v-if="!isDisableMenu ( 'music')"    class="flex items-center justify-center flex-col "   :class="[ goHome =='music' ? 'active' : '']"  @click="  urouter.push('/music')" >
         <SvgIcon icon="arcticons:wynk-music" class="text-3xl"></SvgIcon>
         <div class="text-[13px]">{{ $t('suno.menu') }}</div>
       </div>
@@ -68,7 +68,7 @@ const urouter = useRouter() //
       </div>  -->
   </div>
 
-  <n-drawer v-model:show="st.show"  class="!h-[90vh] !max-h-[660px]"     placement="bottom" v-if="goHome=='draw'">
+  <n-drawer v-if="goHome=='draw'"  v-model:show="st.show"     class="!h-[90vh] !max-h-[660px]" placement="bottom">
     <n-drawer-content   style="--n-body-padding:0" class="h-full">
       <aiDrawInput @draw-sent="drawSent" @close="st.show=false"  />
     </n-drawer-content>

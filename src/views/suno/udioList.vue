@@ -80,7 +80,7 @@ initLoad();
 </script>
 <template>
 <div  v-if="list.length>0">
-    <div  v-for="item in list" :class="getNowCls( item )" class="flex relative  justify-between items-start p-2 hover:dark:bg-black hover:bg-gray-200 border-b-[1px] border-gray-500/10 ">
+    <div  v-for="(item, index) in list" :key="index" :class="getNowCls( item )" class="flex relative  justify-between items-start p-2 hover:dark:bg-black hover:bg-gray-200 border-b-[1px] border-gray-500/10 ">
         <playui v-if="st.playid==item.id" class="absolute top-[-4px] left-0 w-full  z-10"  @update="update" ></playui>
         <div class="w-[60px] h-[60px] relative  cursor-pointer"  @click="goPlay( item )">
            <template v-if="item.status=='SUCCESS'">

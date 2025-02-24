@@ -342,7 +342,7 @@ const selectFile3=  (input:any)=>{
             </div>
         </div>
         <div class=" flex items-center justify-between space-x-1">
-            <template  v-for="(item,index) in vf" >
+            <template  v-for="(item,index) in vf" :key="index">
             <section class="aspect-item flex-1 rounded border-2 dark:border-neutral-700 cursor-pointer"  :class="{'active':index==f.bili}"  @click="f.bili=index">
                 <div class="aspect-box-wrapper mx-auto my-2 flex h-5 w-5 items-center justify-center">
                     <div class="aspect-box rounded border-2 dark:border-neutral-700" :style="item.s"></div>
@@ -353,7 +353,7 @@ const selectFile3=  (input:any)=>{
 
         </div>
     </section>
-    <section v-for=" v in farr" class="mb-4 flex justify-between items-center">
+    <section v-for=" v in farr" :key="v.k" class="mb-4 flex justify-between items-center">
         <div>{{ v.v }}</div>
         <n-select v-model:value="f[v.k]" :options="drawlocalized[v.k+'List']" size="small"  class="!w-[60%]" :clearable="true" />
 	</section>
@@ -391,10 +391,10 @@ v-model:value="st.text"  type="textarea"   :placeholder="$t('mjchat.prompt')" ro
              <div class="pt-1 pr-1 ">
              <NPopover trigger="hover">
                 <template #trigger>
-                <n-tag v-if="st.fileBase64.length" type="error" round size="small" style="cursor: pointer; " :bordered="false"   @click="fsRef.click()">
+                <n-tag v-if="(item, index) in st.fileBase64" type="error" round size="small" style="cursor: pointer; " :bordered="false"   @click="fsRef.click()">
                 <div style="display: flex;">  <SvgIcon icon="mdi:file-chart-check-outline" /> {{ $t('mjchat.imgCYes') }} </div>
                 </n-tag>
-                <n-tag v-else="st.fileBase64" type="warning" round size="small" style="cursor: pointer; " :bordered="false"   @click="fsRef.click()">
+                <n-tag v-else type="warning" round size="small" style="cursor: pointer; " :bordered="false"   @click="fsRef.click()">
                 <div style="display: flex;">  <SvgIcon icon="mdi:file-document-plus-outline" />  {{ $t('mjchat.imgCUpload') }} </div>
                 </n-tag>
                 </template>
@@ -402,11 +402,11 @@ v-model:value="st.text"  type="textarea"   :placeholder="$t('mjchat.prompt')" ro
                 <p v-html="$t('mjchat.imgCInfo')"></p>
 
                 3.<a class="text-green-500 cursor-pointer"  @click="fsRef.click()" v-html="$t('mjchat.imgCadd')"></a><br/>
-                <div  v-if="st.fileBase64.length>0" class="flex justify-start items-baseline">
-                    <div v-for="(v ) in st.fileBase64" class="p-1">
-                        <img  class="w-[60px]" :src="v">
+                <div v-for="(item, index) in st.fileBase64" :key="index" class="flex justify-start items-baseline">
+                    <div class="p-1">
+                        <img  class="w-[60px]" :src="item">
                         <br/>
-                        <NButton size="small" type="warning" @click="st.fileBase64= st.fileBase64.filter((item)=>item!=v) " >{{$t('mjchat.del')}}</NButton>
+                        <NButton size="small" type="warning" @click="st.fileBase64= st.fileBase64.filter((i)=>i!=item) " >{{$t('mjchat.del')}}</NButton>
                     </div>
 
                 </div>

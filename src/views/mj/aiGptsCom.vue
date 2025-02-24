@@ -121,7 +121,7 @@ defineExpose({ searchQ });
 <div class="w-full h-full p-4">
     <template v-if="gptsList.length>0">
         <div class="flex items-center justify-start line-clamp-1 pb-4"  >
-            <div v-for="v in tag" class="m-1 cursor-pointer" @click="goSearch(v)">
+            <div v-for="(v, index) in tag" :key="index" class="m-1 cursor-pointer" @click="goSearch(v)">
             <n-button v-if="v==pp.q"   strong round size="small" type="success">{{ v }}</n-button>
             <n-button v-else strong secondary round size="small" type="success">{{ v }}</n-button>
             </div>
@@ -135,7 +135,7 @@ defineExpose({ searchQ });
 
         <div class="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3"  >
             
-            <div v-for="v in gptsList" class="group relative flex gap-3 rounded-2xl bg-[#e8eaf1] p-5 dark:bg-neutral-600 cursor-pointer " @click="go(v)">
+            <div v-for="(v, index) in gptsList" :key="index" class="group relative flex gap-3 rounded-2xl bg-[#e8eaf1] p-5 dark:bg-neutral-600 cursor-pointer " @click="go(v)">
             
                 <div class="min-w-0 flex-1 mt-[-10px]">
                     <div class="flex justify-between items-center">
@@ -187,7 +187,7 @@ defineExpose({ searchQ });
     <div v-else-if="st.tab=='search' && !st.search"  class="h-full flex items-center justify-center flex-col">
         <div>{{ $t('mjchat.nofind') }}<b class=" text-green-400">{{st.q}}</b> {{$t('mjchat.nofind2')}}</div>
         <div class="flex items-center justify-center flex-wrap">
-            <div v-for="v in tag" class="m-1 cursor-pointer" @click="goSearch(v)"><n-button strong secondary round size="small" type="success" >{{ v }}</n-button></div>
+            <div v-for="(v, index) in tag" :key="index" class="m-1 cursor-pointer" @click="goSearch(v)"><n-button strong secondary round size="small" type="success" >{{ v }}</n-button></div>
         </div>
         <div class="p-10" >
             <div class="w-[400px]"><aiGptsAdd/></div> 

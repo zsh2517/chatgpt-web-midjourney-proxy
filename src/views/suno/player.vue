@@ -86,4 +86,7 @@ watch(()=>homeStore.myData.act, (n)=>{
 });
 </script>
 <template>
+  <div class="player-container">
+    <!-- ... existing code ... -->
+  </div>
 </template>

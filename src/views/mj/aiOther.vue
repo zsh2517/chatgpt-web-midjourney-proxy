@@ -18,4 +18,8 @@ watch( ()=>homeStore.myData.local,n=>{
  
 </script>
 
-<template></template>
+<template>
+  <div class="ai-other-container">
+    <!-- ... existing code ... -->
+  </div>
+</template>

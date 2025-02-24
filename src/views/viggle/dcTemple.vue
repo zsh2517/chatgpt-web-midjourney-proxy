@@ -55,13 +55,13 @@ initLoad();
 <template>
 <div class="w-full h-full p-4">
     <div class="flex items-center justify-start line-clamp-1 pb-4"  >
-        <div v-for="v in tagOption" class="m-1 cursor-pointer" @click="goSearch(v)">
+        <div v-for="(v, index) in tagOption" :key="index" class="m-1 cursor-pointer" @click="goSearch(v)">
         <n-button v-if="v.name==pp.q"   strong round size="small" type="success">{{ v.name }}</n-button>
         <n-button v-else strong secondary round size="small" type="success">{{ v.name }}</n-button>
         </div>
     </div>
     <div v-if="myList.length>0"   class="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
-        <div   v-for="(v,k) in myList" class="  mb-2 " >
+        <div   v-for="(v,k) in myList" :key="k" class="  mb-2 " >
             <div class="relative h-[180px]" @mousemove="st.qindex=k">
                 <div v-if="st.qindex==k" class="absolute right-2 top-2 z-40">
                     <NButton rounded size="small" type="success" @click="useVideo(v)">{{$t('dance.use')}}</NButton>

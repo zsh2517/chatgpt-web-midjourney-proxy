@@ -1,6 +1,6 @@
 <script setup lang='ts'>
 import { computed, onMounted, ref } from 'vue';
-import { NSpin } from 'naive-ui';
+import { NSpin, NButton } from 'naive-ui';
 import pkg from '../../../../package.json';
 import { fetchChatConfig ,getLastVersion} from '@/api';
 import { useAuthStore } from '@/store';
@@ -79,7 +79,7 @@ const  isShow = computed(()=>{
 </script>
 
 <template>
-  <NSpin :show="loading">
+  <n-spin :show="loading">
     <div class="p-4 space-y-4">
       <h2 class="text-xl font-bold">
         Version - {{ pkg.version }}
@@ -91,23 +91,22 @@ const  isShow = computed(()=>{
       </div>
       <p>{{ $t("setting.api") }}：{{ config?.apiModel ?? '-' }}</p>
       <p v-if="isChatGPTAPI" class=" flex items-center justify-between">
-        <div>
+        <!-- eslint: vue/no-parsing-error div 不能在 p 内 -->
+        <span style="display: block;">
         {{ $t("setting.monthlyUsage") }}：{{ config?.usage ?? '-' }}
-        </div>
-        <div>
+        </span>
+        <!-- eslint: vue/no-parsing-error div 不能在 p 内 -->
+        <span style="display: block;">
         {{ $t("mj.totalUsage") }}：{{ config?.hard_limit_usd ?(+config?.hard_limit_usd).toFixed(2): '-' }}
-        </div>
-        <div>
+        </span>
+        <!-- eslint: vue/no-parsing-error div 不能在 p 内 -->
+        <span style="display: block;">
         {{ $t("setting.balance") }}：{{ config?.remaining ?? '-' }}
-        </div>
+        </span>
       </p>
       <p v-if="!isChatGPTAPI">
         {{ $t("setting.reverseProxy") }}：{{ config?.reverseProxy ?? '-' }}
       </p>
-       
-      <!-- <p>{{ $t("setting.timeout") }}：{{ config?.timeoutMs ?? '-' }}</p>  -->
-      <!-- <p>{{ $t("setting.socks") }}：{{ config?.socksProxy ?? '-' }}</p>
-      <p>{{ $t("setting.httpsProxy") }}：{{ config?.httpsProxy ?? '-' }}</p> -->
     </div>
-  </NSpin>
+  </n-spin>
 </template>

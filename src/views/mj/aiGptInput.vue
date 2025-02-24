@@ -262,15 +262,15 @@ watch(()=> homeStore.myData.vtoken ,  regCookie  );
     <input id="fileInput" ref="fsRef"  type="file"  class="hidden" :accept="acceptData"   @change="selectFile"/>
     <div class="w-full relative">
         <div v-if="st.fileBase64.length>0 " class="flex items-base justify-start pb-1 flex-wrap-reverse"> 
-            <div v-for="(v,ii) in st.fileBase64" class="w-[60px] h-[60px] rounded-sm bg-slate-50 mr-1 mt-1 text-red-300 relative group">
-            <NImage :src="v" object-fit="cover" class="w-full h-full" >
+            <div v-for="(item, index) in st.fileBase64" :key="index" class="w-[60px] h-[60px] rounded-sm bg-slate-50 mr-1 mt-1 text-red-300 relative group">
+            <NImage :src="item" object-fit="cover" class="w-full h-full" >
                 <template #placeholder>
-                    <a class="w-full h-full flex items-center justify-center  text-neutral-500" :href="v" target="_blank" >
-                        <SvgIcon icon="mdi:download" />{{ $t('mj.attr1') }} {{ ii+1 }}
+                    <a class="w-full h-full flex items-center justify-center  text-neutral-500" :href="item" target="_blank" >
+                        <SvgIcon icon="mdi:download" />{{ $t('mj.attr1') }} {{ index+1 }}
                     </a>
                 </template>
             </NImage> 
-            <SvgIcon icon="mdi:close" class="hidden group-hover:block absolute top-[-5px] right-[-5px] rounded-full bg-red-300 text-white cursor-pointer" @click="st.fileBase64.splice(st.fileBase64.indexOf(v),1)"></SvgIcon>
+            <SvgIcon icon="mdi:close" class="hidden group-hover:block absolute top-[-5px] right-[-5px] rounded-full bg-red-300 text-white cursor-pointer" @click="st.fileBase64.splice(st.fileBase64.indexOf(item),1)"></SvgIcon>
             </div>
         </div>
         <div class="absolute bottom-0 right-0 z-1">

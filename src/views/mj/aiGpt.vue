@@ -364,5 +364,7 @@ const submit= (model:string, message:any[] ,  opt?:any )=>{
 homeStore.setMyData({isLoader:false});
 </script>
 <template>
- 
+  <div class="ai-gpt-container">
+    // ... existing code ...
+  </div>
 </template>

@@ -201,20 +201,20 @@ onMounted(()=>{
     <NEmpty v-if="items.length<=0" description="没内容"/>
     <div v-else class="flex justify-between items-baseline">
         <section class=" w-full">
-            <div v-for="conversationItem in items" class="p-4  " :class="conversationItem.role === 'assistant'?['text-right']:[]">
-                <div >{{ conversationItem.role }}</div>
-                <div v-if="conversationItem.role === 'user'">
-                    {{conversationItem.formatted.transcript ||
-                                (conversationItem.formatted.audio?.length
+            <div v-for="(item, index) in items" :key="index" class="p-4  " :class="item.role === 'assistant'?['text-right']:[]">
+                <div >{{ item.role }}</div>
+                <div v-if="item.role === 'user'">
+                    {{item.formatted.transcript ||
+                                (item.formatted.audio?.length
                                     ? '(awaiting transcript)'
-                                    : conversationItem.formatted.text ||
+                                    : item.formatted.text ||
                                     '(item sent)')}}
                 </div>
-                <div v-if="!conversationItem.formatted.tool &&  conversationItem.role === 'assistant'">
-                    {{conversationItem.formatted.transcript || conversationItem.formatted.text || '(truncated)'}}
+                <div v-if="!item.formatted.tool &&  item.role === 'assistant'">
+                    {{item.formatted.transcript || item.formatted.text || '(truncated)'}}
                 </div>
-                <div class="flex " :class="conversationItem.role === 'assistant'?['justify-end']:[]">
-                    <audio v-if="conversationItem.formatted.file"  :src="conversationItem.formatted.file.url"  controls />
+                <div class="flex " :class="item.role === 'assistant'?['justify-end']:[]">
+                    <audio v-if="item.formatted.file"  :src="item.formatted.file.url"  controls />
                 </div>      
             </div>
         </section>

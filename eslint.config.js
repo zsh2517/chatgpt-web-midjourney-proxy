@@ -64,6 +64,12 @@ export default [
       curly: ['error', 'all'],
       // 5. 大括号不换行
       'brace-style': ['error', '1tbs'],
+
+      // 其他一些规则
+      'vue/multi-word-component-names': 'off', // 关闭组件名必须多单词的限制（错误太多，不想改了）
+      'vue/no-v-html': 'off', // 太多了
+
+      // src/components/common/Setting/About.vue 有一个 vue/no-parsing-error
     }
   }
 ];

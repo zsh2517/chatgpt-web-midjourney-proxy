@@ -253,4 +253,7 @@ const toBottom= ()=>{
 </script>
 
 <template>
+  <div class="draw-list-container">
+    <!-- ... existing code ... -->
+  </div>
 </template>

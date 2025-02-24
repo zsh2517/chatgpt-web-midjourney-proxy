@@ -1,5 +1,7 @@
 <template>
+  <div class="ai-msg-container">
 
+  </div>
 </template>
 <script lang="ts" setup>
 import {  ref ,h} from 'vue';

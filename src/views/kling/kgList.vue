@@ -100,7 +100,7 @@ const deleteGo=(item:any)=>{
 <template>
 <div v-if="list.length>0" class="p-4">
     <Waterfall v-if="list2.length" :list="list2"  :breakpoints="breakpoints" class=" !bg-transparent">
-    <template #item="{ item, url, index }">
+    <template #item="{ item, index }">
         <div class="bg-white dark:bg-[#24272e] rounded-md   overflow-hidden cursor-pointer group/item relative">
             <div v-if="'failed'==item.task.data.task_status" >
                 

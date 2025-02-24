@@ -93,7 +93,7 @@ onMounted(() => {
 <div class="overflow-y-auto  h-full ">
     <section class="mb-4">
          <div class=" flex items-center justify-between space-x-1">
-            <template  v-for="(item,index) in vf" >
+            <template  v-for="(item,index) in vf" :key="index">
             <section class="aspect-item flex-1 rounded border-2 dark:border-neutral-700 cursor-pointer"  :class="{'active':index==st.bili}"  @click="st.bili=index">
                 <div class="aspect-box-wrapper mx-auto my-2 flex h-5 w-5 items-center justify-center">
                     <div class="aspect-box rounded border-2 dark:border-neutral-700" :style="item.s"></div>

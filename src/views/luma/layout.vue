@@ -46,8 +46,8 @@ const getContainerClass = computed(() => {
         <aiSider v-if="!isMobile"/>
        
         <NLayoutContent class="h-full">
-          <RouterView v-slot="{ Component, route }">
-            <component :is="Component" :key="route.fullPath" />
+          <RouterView v-slot="{ Component, r }">
+            <component :is="Component" :key="r.fullPath" />
           </RouterView>
         </NLayoutContent>
          <!-- <Sider /> -->

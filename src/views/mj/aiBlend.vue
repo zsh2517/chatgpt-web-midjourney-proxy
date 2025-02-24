@@ -65,7 +65,7 @@ const drawlocalized = computed(() => {
     <n-select v-model:value="st.dimensions" :options="drawlocalized.dimensionsList" size="small"  class="!w-[70%]" :clearable="true" />
 </section>
 <div class="flex justify-start items-center flex-wrap myblend">
-    <div v-for="item in base64Array" class="w-[var(--my-blend-img-size)] h-[var(--my-blend-img-size)] mr-2 mt-2 bg-[#ddd] overflow-hidden rounded-sm relative group ">
+    <div v-for="(item, index) in base64Array" :key="index" class="w-[var(--my-blend-img-size)] h-[var(--my-blend-img-size)] mr-2 mt-2 bg-[#ddd] overflow-hidden rounded-sm relative group ">
         <NImage :src="item" object-fit="cover"></NImage>
         <SvgIcon
 icon="fluent:delete-12-filled"

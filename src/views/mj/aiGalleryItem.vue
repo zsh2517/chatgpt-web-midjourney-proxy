@@ -171,7 +171,7 @@ loadImg();
 <template>
  
  <Waterfall v-if="list.length" :list="list"  :breakpoints="breakpoints" class=" !bg-transparent">
-  <template #item="{ item, url, index }">
+  <template #item="{ item }">
     <div class="bg-white dark:bg-[#24272e] rounded-md   overflow-hidden cursor-pointer group/item relative">
       <LazyImg :url="item.image_url"  @success="item.isLoad=1" @click="goShow(item )" />
       <!-- <LazyImg :url="item.image_hd_url"  @success="item.isLoad=1" /> -->
@@ -184,8 +184,12 @@ loadImg();
         <div class="p-3">
             <div class="line-clamp-2 text-[13px]"> 
                 <template v-if="item.prompt">{{ item.prompt }}</template>
-                <NTag v-else-if="item.action=='SWAP_FACE'" type="success" size="small" round v-html="$t('mjchat.face')"></NTag>
-                <NTag v-else-if="item.action=='BLEND'" type="success" size="small" round  v-html="$t('mjchat.blend')" ></NTag>
+                <NTag v-else-if="item.action=='SWAP_FACE'" type="success" size="small" round>
+                  <div v-html="$t('mjchat.face')"></div>
+                </NTag>
+                <NTag v-else-if="item.action=='BLEND'" type="success" size="small" round>
+                  <div v-html="$t('mjchat.blend')"></div>
+                </NTag>
                 <NTag v-else type="success" size="small" round >{{ item.action }}</NTag>
             </div>
             <div class="line-clamp-1 text-[12px] text-right">{{ new Date( item.time).toLocaleString() }}</div>

@@ -265,10 +265,10 @@ load();
         <NImage v-if="chat.opt.imageUrl" :src="st.uri_base64?st.uri_base64: mjImgUrl( chat.opt.imageUrl)" class=" rounded-sm " :class="[isMobile?'':'!max-w-[500px]']"  /> 
         <div v-if="chat.opt?.status=='SUCCESS' " class=" space-y-2"  >
             <template v-if="chat.opt?.buttons">
-                <div v-for="(bts,ii) in bt" class=" flex justify-start items-center flex-wrap "> 
-                    <template v-for="ib in bts" >
+                <div v-for="(bts, index) in bt" :key="index" class=" flex justify-start items-center flex-wrap "> 
+                    <template v-for="ib in bts" :key="ib.k">
                     <div v-if="   getIndex(chat.opt?.buttons, ib) >-1" class="p-1"> 
-                        <NButton  size="small" :type="ii==1?'warning':'primary'" @click="subV2(ib)" >{{  getIndexName(chat.opt?.buttons, ib)  }}  </NButton>
+                        <NButton  size="small" :type="index==1?'warning':'primary'" @click="subV2(ib)" >{{  getIndexName(chat.opt?.buttons, ib)  }}  </NButton>
                     </div>
                     </template>
                 </div>

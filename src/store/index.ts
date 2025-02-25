@@ -1,5 +1,5 @@
-import type { App } from 'vue';
-import { store } from './helper';
+import type {App} from 'vue';
+import {store} from './helper';
 
 export function setupStore(app: App) {
     app.use(store);

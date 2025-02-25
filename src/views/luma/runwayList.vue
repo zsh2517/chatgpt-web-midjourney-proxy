@@ -1,66 +1,66 @@
 <script setup lang="ts">
-import { RunwayTask, runwayStore } from '@/api/runwayStore';
-import { ref, watch } from 'vue';
-import {NEmpty ,NButton,NPopover, NButtonGroup, useMessage,NPopconfirm} from 'naive-ui';
+import {RunwayTask, runwayStore} from '@/api/runwayStore';
+import {ref, watch} from 'vue';
+import {NEmpty, NButton, NPopover, NButtonGroup, useMessage, NPopconfirm} from 'naive-ui';
 import {runwayFeed} from '@/api/runway';
-import { mlog } from '@/api';
-import { homeStore } from '@/store';
+import {mlog} from '@/api';
+import {homeStore} from '@/store';
 import {SvgIcon} from '@/components/common';
-import { t } from '@/locales';
+import {t} from '@/locales';
 
-const ms= useMessage();
+const ms = useMessage();
 const mapRef = ref(new Map<string, number>());
 
-const st= ref({pIndex:-1});
-const list= ref<RunwayTask[]>([]);
-const csuno= new runwayStore();
-const initLoad=()=>{
+const st = ref({pIndex:-1});
+const list = ref<RunwayTask[]>([]);
+const csuno = new runwayStore();
+const initLoad = ()=>{
     let arr = csuno.getObjs();
-    list.value= arr.reverse();
+    list.value = arr.reverse();
 };
-const RunwayTaskDown=(item:RunwayTask)=>{
+const RunwayTaskDown = (item:RunwayTask)=>{
     mlog('RunwayTaskDown', item);
-    if(  !item.artifacts ||  item.artifacts.length==0 ) {
+    if (  !item.artifacts ||  item.artifacts.length == 0 ) {
         return;
     }
 
     const link = document.createElement('a');
 
     link.href = item.artifacts[0].url ;
-    link.download = item.id+'.mp4';
+    link.download = item.id + '.mp4';
     link.target = '_blank';
-    link.rel='noreferrer';
+    link.rel = 'noreferrer';
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
 };
 
-const extend=  (item:RunwayTask )=>{
+const extend =  (item:RunwayTask )=>{
     mlog('extend ', item ); 
-    homeStore.setMyData({act:'runway.extend', actData: item  });
+    homeStore.setMyData({act:'runway.extend', actData: item});
 };
 
 watch(()=>homeStore.myData.act, (n)=>{
-    if(n=='RunwayFeed')  {
+    if (n == 'RunwayFeed')  {
         initLoad();
     } 
 });
 
-const videoError=(item:RunwayTask, index:number)=>{
-    //if(  st.value.pIndex!=index ) return;
-    mlog('videoError', index , item);
-    //item.artifacts[0].url= item.artifacts[0].previewUrls[0]
-    mapRef.value.set(item.id, index+1 );
+const videoError = (item:RunwayTask, index:number)=>{
+    // if(  st.value.pIndex!=index ) return;
+    mlog('videoError', index, item);
+    // item.artifacts[0].url= item.artifacts[0].previewUrls[0]
+    mapRef.value.set(item.id, index + 1 );
 };
 
-const reRunwayFeed= async(id:string)=>{ 
+const reRunwayFeed = async (id:string)=>{ 
     await runwayFeed(id);
     mapRef.value.delete( id);
 };
 
-const deleteGo=(item:RunwayTask)=>{
-    mlog('deleteGo',item );
-    if( csuno.delete( item)){ 
+const deleteGo = (item:RunwayTask)=>{
+    mlog('deleteGo', item );
+    if ( csuno.delete( item)) { 
         ms.success( t('common.deleteSuccess'));
         initLoad();
     }

@@ -1,8 +1,8 @@
-import type { App } from 'vue';
-import type { RouteRecordRaw } from 'vue-router';
-import { createRouter, createWebHashHistory } from 'vue-router';
-import { setupPageGuard } from './permission';
-import { ChatLayout } from '@/views/chat/layout';
+import type {App} from 'vue';
+import type {RouteRecordRaw} from 'vue-router';
+import {createRouter, createWebHashHistory} from 'vue-router';
+import {setupPageGuard} from './permission';
+import {ChatLayout} from '@/views/chat/layout';
 import mjlayout from '@/views/mj/layout.vue';
 import sunoLayout from '@/views/suno/layout.vue';
 import lumaLayout from '@/views/luma/layout.vue';
@@ -134,7 +134,7 @@ const routes: RouteRecordRaw[] = [
         ],
     },
 
-    //调试
+    // 调试
     // {
     //   path: '/mytest',
     //   name: 'mytest',
@@ -163,7 +163,7 @@ const routes: RouteRecordRaw[] = [
 export const router = createRouter({
     history: createWebHashHistory(),
     routes,
-    scrollBehavior: () => ({ left: 0, top: 0 }),
+    scrollBehavior: () => ({left: 0, top: 0}),
 });
 
 setupPageGuard(router);

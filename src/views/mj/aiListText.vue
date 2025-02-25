@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { gptConfigType } from '@/store';
-import { NPopover, NAvatar } from 'naive-ui';
-import { SvgIcon } from '@/components/common';
+import {gptConfigType} from '@/store';
+import {NPopover, NAvatar} from 'naive-ui';
+import {SvgIcon} from '@/components/common';
 
-defineProps<{myItem:Chat.History,myObj?:gptConfigType}>();
+defineProps<{myItem:Chat.History, myObj?:gptConfigType}>();
 </script>
 <template>
 <span class="flex justify-start items-center">

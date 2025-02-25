@@ -1,17 +1,17 @@
 <script setup lang="ts">
-import {useMessage, NButton,NInput,NTag,NRadioGroup,NRadioButton} from 'naive-ui';
+import {useMessage, NButton, NInput, NTag, NRadioGroup, NRadioButton} from 'naive-ui';
  
-import { getRandomInt, runwayMlFeed, runwayMlFeedById, runwayMlFetch } from '@/api/runwayml';
-import { computed, onMounted, ref } from 'vue';
-import { mlog, upImg } from '@/api';
-import { homeStore } from '@/store';
-import { t } from '@/locales';
+import {getRandomInt, runwayMlFeed, runwayMlFeedById, runwayMlFetch} from '@/api/runwayml';
+import {computed, onMounted, ref} from 'vue';
+import {mlog, upImg} from '@/api';
+import {homeStore} from '@/store';
+import {t} from '@/locales';
 
  
 const ms = useMessage();
-const f= ref({
+const f = ref({
     'promptImage': [
-        {'uri':'','position':'last'}
+        {'uri':'', 'position':'last'}
     ],
     'seed': 4294967295,
     'model': 'gen3a_turbo',
@@ -21,33 +21,33 @@ const f= ref({
     'ratio': '1280:768'
 }
 );
-const luma=ref({image_url:'',image_end_url:''});
-const st= ref({isLoading:false });
-const vf=[ 
-    {s:'width: 100%; height: 50%;',label: t('mj.rml_heng'),value:'1280:768'}
-    ,{s:'width: 50%; height: 100%;',label:t('mj.rml_shu'),value:'768:1280'}
+const luma = ref({image_url:'', image_end_url:''});
+const st = ref({isLoading:false});
+const vf = [ 
+    {s:'width: 100%; height: 50%;', label: t('mj.rml_heng'), value:'1280:768'}
+    , {s:'width: 50%; height: 100%;', label:t('mj.rml_shu'), value:'768:1280'}
 ];
-const duanConfig=[
-    {key:5,value: '5s'},
-    {key:10,value:'10s'}
+const duanConfig = [
+    {key:5, value: '5s'},
+    {key:10, value:'10s'}
 ];
 
-const fsRef= ref() ;
+const fsRef = ref() ;
 const fsRef2 = ref() ;
 
-function selectFile(input:any){
+function selectFile(input:any) {
      
     upImg(input.target.files[0]).then(d=>{
-        luma.value.image_url= d;
-        fsRef.value='';
+        luma.value.image_url = d;
+        fsRef.value = '';
     }).catch(e=>ms.error(e));
     
 }
 
-function selectFile2(input:any){
+function selectFile2(input:any) {
     upImg(input.target.files[0]).then(d=>{
-        luma.value.image_end_url= d;
-        fsRef2.value='';
+        luma.value.image_end_url = d;
+        fsRef2.value = '';
     }).catch(e=>ms.error(e));
     
 }
@@ -56,33 +56,33 @@ onMounted(() => {
     
 });
 const clearInput = ()=>{
-    f.value.promptImage=[];
-    f.value.promptText= '';
-    luma.value.image_end_url= '';
-    luma.value.image_url= '';
-    fsRef.value='';
-    fsRef2.value='';
+    f.value.promptImage = [];
+    f.value.promptText = '';
+    luma.value.image_end_url = '';
+    luma.value.image_url = '';
+    fsRef.value = '';
+    fsRef2.value = '';
 };
-const canPost= computed(()=>{
+const canPost = computed(()=>{
     return f.value.promptText && luma.value.image_url;
 });
 
-const create= async ()=>{ 
-    f.value.promptImage=[];
-    f.value.promptImage.push({uri:luma.value.image_url,'position':'first'});
-    if(luma.value.image_end_url ) {
-        f.value.promptImage.push({uri:luma.value.image_end_url,'position':'last'});
+const create = async ()=>{ 
+    f.value.promptImage = [];
+    f.value.promptImage.push({uri:luma.value.image_url, 'position':'first'});
+    if (luma.value.image_end_url ) {
+        f.value.promptImage.push({uri:luma.value.image_end_url, 'position':'last'});
     }
-    f.value.seed= getRandomInt(1375247627, 3975247627);
-    st.value.isLoading=true;
-    //mlog('create', f.value  )
+    f.value.seed = getRandomInt(1375247627, 3975247627);
+    st.value.isLoading = true;
+    // mlog('create', f.value  )
     try {
-        let d:any= await runwayMlFetch('/v1/image_to_video', f.value);
-        runwayMlFeed(d.id ,{model:'gen3a_turbo',promptText:f.value.promptText });
+        let d:any = await runwayMlFetch('/v1/image_to_video', f.value);
+        runwayMlFeed(d.id, {model:'gen3a_turbo', promptText:f.value.promptText});
     } catch (error) {
         
     }
-    st.value.isLoading=false; 
+    st.value.isLoading = false; 
 };
 </script>
 <template> 

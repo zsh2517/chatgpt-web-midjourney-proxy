@@ -1,9 +1,9 @@
-import { defineStore } from 'pinia';
-import { defaultState, getLocalState, setLocalState } from './helper';
-import { router } from '@/router';
-import { homeStore } from '@/store/homeStore';
-import { sleep } from '@/api/suno';
-import { mlog } from '@/api';
+import {defineStore} from 'pinia';
+import {defaultState, getLocalState, setLocalState} from './helper';
+import {router} from '@/router';
+import {homeStore} from '@/store/homeStore';
+import {sleep} from '@/api/suno';
+import {mlog} from '@/api';
 
 export const useChatStore = defineStore('chat-store', {
     state: (): Chat.ChatState => getLocalState(),
@@ -35,7 +35,7 @@ export const useChatStore = defineStore('chat-store', {
 
         addHistory(history: Chat.History, chatData: Chat.Chat[] = []) {
             this.history.unshift(history);
-            this.chat.unshift({ uuid: history.uuid, data: chatData });
+            this.chat.unshift({uuid: history.uuid, data: chatData});
             this.active = history.uuid;
             this.reloadRoute(history.uuid);
         },
@@ -43,7 +43,7 @@ export const useChatStore = defineStore('chat-store', {
         updateHistory(uuid: number, edit: Partial<Chat.History>) {
             const index = this.history.findIndex(item => item.uuid === uuid);
             if (index !== -1) {
-                this.history[index] = { ...this.history[index], ...edit };
+                this.history[index] = {...this.history[index], ...edit};
                 this.recordState();
             }
         },
@@ -103,8 +103,8 @@ export const useChatStore = defineStore('chat-store', {
             if (!uuid || uuid === 0) {
                 if (this.history.length === 0) {
                     const uuid = Date.now();
-                    this.history.push({ uuid, title: chat.text, isEdit: false });
-                    this.chat.push({ uuid, data: [chat] });
+                    this.history.push({uuid, title: chat.text, isEdit: false});
+                    this.chat.push({uuid, data: [chat]});
                     this.active = uuid;
                     this.recordState();
                 } else {
@@ -145,7 +145,7 @@ export const useChatStore = defineStore('chat-store', {
         updateChatSomeByUuid(uuid: number, index: number, chat: Partial<Chat.Chat>) {
             if (!uuid || uuid === 0) {
                 if (this.chat.length) {
-                    this.chat[0].data[index] = { ...this.chat[0].data[index], ...chat };
+                    this.chat[0].data[index] = {...this.chat[0].data[index], ...chat};
                     this.recordState();
                 }
                 return;
@@ -153,7 +153,7 @@ export const useChatStore = defineStore('chat-store', {
 
             const chatIndex = this.chat.findIndex(item => item.uuid === uuid);
             if (chatIndex !== -1) {
-                this.chat[chatIndex].data[index] = { ...this.chat[chatIndex].data[index], ...chat };
+                this.chat[chatIndex].data[index] = {...this.chat[chatIndex].data[index], ...chat};
                 this.recordState();
             }
         },
@@ -189,25 +189,25 @@ export const useChatStore = defineStore('chat-store', {
                 this.recordState();
             }
 
-            //清空标题
-            const i2= this.history.findIndex( v=>v.uuid===uuid );
+            // 清空标题
+            const i2 = this.history.findIndex( v=>v.uuid === uuid );
             if (i2 !== -1) {
-                this.history[i2].title= 'New Chat';
+                this.history[i2].title = 'New Chat';
                 this.recordState();
             }
-            //end 清空标题
+            // end 清空标题
         },
 
         clearHistory() {
-            this.$state = { ...defaultState() };
+            this.$state = {...defaultState()};
             this.recordState();
         },
 
         async reloadRoute(uuid?: number) {
             this.recordState();
-            mlog('toMyuid19','reloadRoute');
-            //await sleep(1000)
-            await router.push({ name: homeStore.myData.local=='draw'?'draw': 'Chat', params: { uuid } });
+            mlog('toMyuid19', 'reloadRoute');
+            // await sleep(1000)
+            await router.push({name: homeStore.myData.local == 'draw' ? 'draw' : 'Chat', params: {uuid}});
         },
 
         recordState() {

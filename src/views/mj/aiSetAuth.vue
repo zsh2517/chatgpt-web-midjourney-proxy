@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { ref } from 'vue';
-import { NTag } from 'naive-ui';
+import {ref} from 'vue';
+import {NTag} from 'naive-ui';
 import Permission from '../chat/layout/Permission.vue';
 const st = ref({show:false});
 </script>

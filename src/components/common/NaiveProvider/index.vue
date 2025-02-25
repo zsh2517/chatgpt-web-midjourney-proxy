@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { defineComponent, h } from 'vue';
+import {defineComponent, h} from 'vue';
 import {
     NDialogProvider,
     NLoadingBarProvider,

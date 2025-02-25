@@ -1,56 +1,56 @@
 <script setup lang="ts">
-import { ref, watch } from 'vue';
-import { SvgIcon } from '@/components/common';
-import {   udioStore,udioTask} from '@/api/udioStore';  
-import {NEmpty, NImage ,useMessage,NPopconfirm} from 'naive-ui';
-import { homeStore } from '@/store';
-import { mlog } from '@/api';
-import { t } from '@/locales';
+import {ref, watch} from 'vue';
+import {SvgIcon} from '@/components/common';
+import {udioStore, udioTask} from '@/api/udioStore';  
+import {NEmpty, NImage, useMessage, NPopconfirm} from 'naive-ui';
+import {homeStore} from '@/store';
+import {mlog} from '@/api';
+import {t} from '@/locales';
 import playui from './playui.vue';
-import { udioFeedTask } from '@/api/udio';
+import {udioFeedTask} from '@/api/udio';
 
 const ms = useMessage();
 
-const list= ref<udioTask[]>([]);
-const csuno= new udioStore();
-const st= ref({playid:''});
-const sp= ref({v:10, max:0 ,status:'',idDrop:false });
+const list = ref<udioTask[]>([]);
+const csuno = new udioStore();
+const st = ref({playid:''});
+const sp = ref({v:10, max:0, status:'', idDrop:false});
 
-const initLoad=()=>{
+const initLoad = ()=>{
     let arr = csuno.getObjs();
-    list.value= arr.reverse();
+    list.value = arr.reverse();
 };
-const getNowCls=(v:udioTask)=>{
-    if(v.id==st.value.playid ){
-        return ['bg-gray-200','dark:bg-black'];
+const getNowCls = (v:udioTask)=>{
+    if (v.id == st.value.playid ) {
+        return ['bg-gray-200', 'dark:bg-black'];
     }
     return [];
 };
 
-const goPlay=(v:udioTask)=>{
-    if(v.status=='ERROR'){
+const goPlay = (v:udioTask)=>{
+    if (v.status == 'ERROR') {
         ms.info(t('mj.ud_fail'));
         return ;
     }
-    //mlog('TK ',v.status ,  v.taskId )
-    if(v.status!='SUCCESS'){
+    // mlog('TK ',v.status ,  v.taskId )
+    if (v.status != 'SUCCESS') {
         v.taskId  && udioFeedTask( v.taskId );
     }
-    if(v.song_path==''){
+    if (v.song_path == '') {
         ms.info(t('mj.ud_doing'));
         return ;
     }
-    st.value.playid=v.id;
-    homeStore.setMyData({act:'goPlayUdio',actData:v});
+    st.value.playid = v.id;
+    homeStore.setMyData({act:'goPlayUdio', actData:v});
     
     
 };
 const update = (v:any )=>{
-    sp.value=v; 
+    sp.value = v; 
 };
-const deleteGo=(v:string)=>{
+const deleteGo = (v:string)=>{
     mlog('deleteGo', v);
-    if(csuno.delete(v)) {
+    if (csuno.delete(v)) {
         ms.success( t('common.deleteSuccess'));
         initLoad();
     }
@@ -58,23 +58,23 @@ const deleteGo=(v:string)=>{
 };
 
 watch(()=>homeStore.myData.act, (n)=>{
-    if(n=='udio.feed'){
+    if (n == 'udio.feed') {
         initLoad();
     }
-    if(n=='playEned'){
+    if (n == 'playEned') {
     //
-        let  i= list.value.findIndex((v)=>v.id==st.value.playid);
+        let  i = list.value.findIndex((v)=>v.id == st.value.playid);
         i++;
-        mlog('playEned,',i, list.value.length );
-        if(i<list.value.length) {
-            setTimeout(()=>goPlay(list.value[i]),1000);
+        mlog('playEned,', i, list.value.length );
+        if (i < list.value.length) {
+            setTimeout(()=>goPlay(list.value[i]), 1000);
         }  
     }
 });
-const extend=(v:udioTask)=>{
+const extend = (v:udioTask)=>{
     mlog('extend', extend );
-    //homeStore.myData.actData
-    homeStore.setMyData({act:'udio.extend', actData: v  });
+    // homeStore.myData.actData
+    homeStore.setMyData({act:'udio.extend', actData: v});
 };
 initLoad();
 </script>

@@ -1,20 +1,20 @@
 
-import { gptConfigStore, gptServerStore, homeStore,useAuthStore } from '@/store';
-import { mlog,myTrim } from './mjapi';
-import { fetchSSE } from './sse/fetchsse';
+import {gptConfigStore, gptServerStore, homeStore, useAuthStore} from '@/store';
+import {mlog, myTrim} from './mjapi';
+import {fetchSSE} from './sse/fetchsse';
 import axios from 'axios';
-import { localGet, localSaveAny } from './mjsave';
-import { isNumber, isObject } from '@/utils/is';
-import { t } from '@/locales';
-import { ChatMessage } from 'gpt-tokenizer/esm/GptEncoding';
-import { chatSetting } from './chat';
-import { MessageApiInjection } from 'naive-ui/es/message/src/MessageProvider';
-import { ideoSubmit } from './ideo';
-import { error } from 'console';
-//import {encode,  encodeChat}  from "gpt-tokenizer"
-//import {encode,  encodeChat} from "gpt-tokenizer/cjs/encoding/cl100k_base.js";
-//import { get_encoding } from '@dqbd/tiktoken'
-//import FormData from 'form-data';
+import {localGet, localSaveAny} from './mjsave';
+import {isNumber, isObject} from '@/utils/is';
+import {t} from '@/locales';
+import {ChatMessage} from 'gpt-tokenizer/esm/GptEncoding';
+import {chatSetting} from './chat';
+import {MessageApiInjection} from 'naive-ui/es/message/src/MessageProvider';
+import {ideoSubmit} from './ideo';
+import {error} from 'console';
+// import {encode,  encodeChat}  from "gpt-tokenizer"
+// import {encode,  encodeChat} from "gpt-tokenizer/cjs/encoding/cl100k_base.js";
+// import { get_encoding } from '@dqbd/tiktoken'
+// import FormData from 'form-data';
 
 
 export const KnowledgeCutOffDate: Record<string, string> = {
@@ -33,7 +33,7 @@ export const KnowledgeCutOffDate: Record<string, string> = {
     'gpt-4o': '2023-10', 
     'gpt-4o-mini': '2023-10', 
     'gpt-4o-mini-2024-07-18': '2023-10', 
-    'gpt-4o-2024-08-06': '2023-10', //chatgpt-4o-latest
+    'gpt-4o-2024-08-06': '2023-10', // chatgpt-4o-latest
     'chatgpt-4o-latest': '2023-10', 
     'gpt-4o-2024-11-20': '2023-10', 
     'gpt-4-turbo': '2023-12', 
@@ -50,33 +50,33 @@ export const KnowledgeCutOffDate: Record<string, string> = {
     'gemini-pro-1.5': '2024-04'
 };
 
-const getUrl=(url:string)=>{
-    if(url.indexOf('http')==0) {
+const getUrl = (url:string)=>{
+    if (url.indexOf('http') == 0) {
         return url;
     }
-    if(gptServerStore.myData.OPENAI_API_BASE_URL){
+    if (gptServerStore.myData.OPENAI_API_BASE_URL) {
         return `${ gptServerStore.myData.OPENAI_API_BASE_URL}${url}`;
     }
     return `/openapi${url}`;
 };
 export const gptGetUrl = getUrl;
-export const gptFetch=(url:string,data?:any,opt2?:any )=>{
+export const gptFetch = (url:string, data?:any, opt2?:any )=>{
     mlog('gptFetch', url  );
-    let headers= {'Content-Type':'application/json'};
-    if(opt2 && opt2.headers ) {
-        headers= opt2.headers;
+    let headers = {'Content-Type':'application/json'};
+    if (opt2 && opt2.headers ) {
+        headers = opt2.headers;
     }
 
-    headers={...headers,...getHeaderAuthorization()};
+    headers = {...headers, ...getHeaderAuthorization()};
     return new Promise<any>((resolve, reject) => {
-        const opt:RequestInit ={method:'GET'};
-        opt.headers= headers ;
-        if(opt2?.upFile ){
-            opt.method='POST';
-            opt.body=data as FormData ;
-        } else if(data) {
-            opt.body= JSON.stringify(data) ;
-            opt.method='POST';
+        const opt:RequestInit = {method:'GET'};
+        opt.headers = headers ;
+        if (opt2?.upFile ) {
+            opt.method = 'POST';
+            opt.body = data as FormData ;
+        } else if (data) {
+            opt.body = JSON.stringify(data) ;
+            opt.method = 'POST';
         }
         fetch(getUrl(url),  opt )
             .then(d=>d.json().then(d=> resolve(d))
@@ -86,35 +86,35 @@ export const gptFetch=(url:string,data?:any,opt2?:any )=>{
 
 };
 
-export const regCookie= async (n:string )=>{
-    if( n=='' ) {
+export const regCookie = async (n:string )=>{
+    if ( n == '' ) {
         return ;
     }
-    //mlog('regCookie:', n)
-    const headers= {'Content-Type':'application/json', 'x-vtoken':n  };
-    //headers={...headers,...getHeaderAuthorization()}
-    const opt:RequestInit ={method:'GET'};
-    opt.headers= headers ;
-    const ck= await  new Promise<any>((resolve, reject) => {
+    // mlog('regCookie:', n)
+    const headers = {'Content-Type':'application/json', 'x-vtoken':n};
+    // headers={...headers,...getHeaderAuthorization()}
+    const opt:RequestInit = {method:'GET'};
+    opt.headers = headers ;
+    const ck = await  new Promise<any>((resolve, reject) => {
         fetch('/api/reg', opt )
             .then(d=>d.json().then(d=> resolve(d))
                 .catch(e=>reject(e)))
             .catch(e=>reject(e));
     });
-    homeStore.setMyData({ctoken:ck.ctoken });
+    homeStore.setMyData({ctoken:ck.ctoken});
      
-    mlog('regCookie:',   ck,n  );
+    mlog('regCookie:',   ck, n  );
 };
 // 前端直传 cloudflare r2
 function uploadR2(file: File) {
     return new Promise<any>((resolve, reject) => {
-    //预签名
-        axios.post(gptGetUrl('/pre_signed'), { file_name: file.name, content_type: file.type }, {
-            headers: { 'Content-Type': 'application/json' }
+    // 预签名
+        axios.post(gptGetUrl('/pre_signed'), {file_name: file.name, content_type: file.type}, {
+            headers: {'Content-Type': 'application/json'}
         }).then(response => {
             if (response.data.status == 'Success') {
                 const signedUrl = response.data.data.up;
-                //上传
+                // 上传
                 fetch(signedUrl, {
                     method: 'PUT',
                     body: file,
@@ -124,7 +124,7 @@ function uploadR2(file: File) {
                 }).then(res2 => {
                     if (res2.ok) {
                         console.log('Upload successful!', response.data.data.url);
-                        return resolve({ url: response.data.data.url });
+                        return resolve({url: response.data.data.url});
                     } else {
                         return reject(res2);
                     }
@@ -142,74 +142,74 @@ function uploadR2(file: File) {
 
 export const GptUploader =   ( _url :string, FormData:FormData )=>{
 
-    //R2上传
-    const upLoaderR2= ()=>{
+    // R2上传
+    const upLoaderR2 = ()=>{
         const file = FormData.get('file') as File;
         return uploadR2(file);
     };
 
-    //执行上传
+    // 执行上传
     const uploadNomalDo = (url:string, headers:any)=>{
         return new Promise<any>((resolve, reject) => {
-            axios.post( url , FormData, {
+            axios.post( url, FormData, {
                 headers
             }).then(response =>  resolve(response.data )
             ).catch(error =>reject(error)  );
         });
     };
 
-    //除R2外默认流程
-    const uploadNomal= (url:string)=>{ 
-        url= gptServerStore.myData.UPLOADER_URL? gptServerStore.myData.UPLOADER_URL :  gptGetUrl( url );
-        let headers=   {'Content-Type': 'multipart/form-data' }; 
-        if(gptServerStore.myData.OPENAI_API_BASE_URL && url.indexOf(gptServerStore.myData.OPENAI_API_BASE_URL)>-1  ) {
-            headers={...headers,...getHeaderAuthorization()};
+    // 除R2外默认流程
+    const uploadNomal = (url:string)=>{ 
+        url = gptServerStore.myData.UPLOADER_URL ? gptServerStore.myData.UPLOADER_URL :  gptGetUrl( url );
+        let headers =   {'Content-Type': 'multipart/form-data'}; 
+        if (gptServerStore.myData.OPENAI_API_BASE_URL && url.indexOf(gptServerStore.myData.OPENAI_API_BASE_URL) > -1  ) {
+            headers = {...headers, ...getHeaderAuthorization()};
             
-        }else{
+        } else {
             const authStore = useAuthStore();
-            if( authStore.token ) {
-                const  header2={ 'x-ptoken':  authStore.token };
-                headers= {...headers, ...header2};
+            if ( authStore.token ) {
+                const  header2 = {'x-ptoken':  authStore.token};
+                headers = {...headers, ...header2};
             }
         }
-        if( homeStore.myData.vtoken ){
-            const  vtokenh={ 'x-vtoken':  homeStore.myData.vtoken };
-            headers= {...headers, ...vtokenh};
+        if ( homeStore.myData.vtoken ) {
+            const  vtokenh = {'x-vtoken':  homeStore.myData.vtoken};
+            headers = {...headers, ...vtokenh};
         }
-        return  uploadNomalDo(url,headers );
+        return  uploadNomalDo(url, headers );
         
     };
 
-    //处理上传流程 
-    const uploadType=   ( (homeStore.myData.session.uploadType??'') as string).toLocaleLowerCase() ;
-    let headers=   {'Content-Type': 'multipart/form-data' };
+    // 处理上传流程 
+    const uploadType =   ( (homeStore.myData.session.uploadType ?? '') as string).toLocaleLowerCase() ;
+    let headers =   {'Content-Type': 'multipart/form-data'};
     
-    //R2
-    if(uploadType=='r2' ){
+    // R2
+    if (uploadType == 'r2' ) {
         return upLoaderR2(); 
-    //容器
-    }else if( uploadType=='container' ) { 
+    // 容器
+    } else if ( uploadType == 'container' ) { 
         const authStore = useAuthStore();
-        if( authStore.token ) {
-            const  header2={ 'x-ptoken':  authStore.token };
-            headers= {...headers, ...header2};
+        if ( authStore.token ) {
+            const  header2 = {'x-ptoken':  authStore.token};
+            headers = {...headers, ...header2};
         }
-        const url= `/openapi${_url}`;
-        return  uploadNomalDo(url,headers );
+        const url = `/openapi${_url}`;
+        return  uploadNomalDo(url, headers );
 
-    //前端API
-    }else if( uploadType=='api' ) { 
-        headers={...headers,...getHeaderAuthorization()};
-        const url= `${ gptServerStore.myData.OPENAI_API_BASE_URL}${_url}`;
-        return  uploadNomalDo(url,headers );
+    // 前端API
+    } else if ( uploadType == 'api' ) { 
+        headers = {...headers, ...getHeaderAuthorization()};
+        const url = `${ gptServerStore.myData.OPENAI_API_BASE_URL}${_url}`;
+        return  uploadNomalDo(url, headers );
     
-    //自定义链接
-    }else if( uploadType=='myurl' ) { 
-        return  uploadNomalDo(_url,headers );
+    // 自定义链接
+    } else if ( uploadType == 'myurl' ) { 
+        return  uploadNomalDo(_url, headers );
     }
 
-    //默认上传流程
-    if(homeStore.myData.session.isUploadR2){
+    // 默认上传流程
+    if (homeStore.myData.session.isUploadR2) {
         return upLoaderR2();
     }
     return uploadNomal( _url);
@@ -217,136 +217,136 @@ export const GptUploader =   ( _url :string, FormData:FormData )=>{
 
 export const whisperUpload = ( FormData:FormData )=>{
     const url = gptGetUrl('/v1/audio/transcriptions');
-    let headers=   {'Content-Type': 'multipart/form-data' };
-    headers={...headers,...getHeaderAuthorization()};
+    let headers =   {'Content-Type': 'multipart/form-data'};
+    headers = {...headers, ...getHeaderAuthorization()};
     return new Promise<any>((resolve, reject) => {
-        axios.post( url , FormData, {
+        axios.post( url, FormData, {
             headers
         }).then(response =>  resolve(response.data )
         ).catch(error =>reject(error)  );
     });
 };
 
-export const subGPT= async (data:any, chat:Chat.Chat )=>{
+export const subGPT = async (data:any, chat:Chat.Chat )=>{
     let d:any;
-    const action= data.action;
-    //chat.myid=  `${Date.now()}`;
-    if(  action=='gpt.dall-e-3' && data.data && data.data.model && data.data.model.indexOf('ideogram')>-1 ){ //ideogram
+    const action = data.action;
+    // chat.myid=  `${Date.now()}`;
+    if (  action == 'gpt.dall-e-3' && data.data && data.data.model && data.data.model.indexOf('ideogram') > -1 ) { // ideogram
         mlog('ddlog 数据 ', data.data  );
-        try{
-            const d= await ideoSubmit(data.data );
+        try {
+            const d = await ideoSubmit(data.data );
             mlog('ddlog 数据返回 ', d  );
             const rz = d[0];
-            chat.text= rz.prompt;//rz.p??`图片已完成`;
-            chat.opt={imageUrl:rz.url } ;
+            chat.text = rz.prompt;// rz.p??`图片已完成`;
+            chat.opt = {imageUrl:rz.url} ;
             chat.loading = false;
-            homeStore.setMyData({act:'updateChat', actData:chat });
+            homeStore.setMyData({act:'updateChat', actData:chat});
 
-        }catch(e){
-            //chat.text='失败！'+"\n```json\n"+JSON.stringify(d, null, 2)+"\n```\n";
-            chat.text='失败！'+'\n```json\n'+   e  +'\n```\n';
-            chat.loading=false;
-            homeStore.setMyData({act:'updateChat', actData:chat });
+        } catch (e) {
+            // chat.text='失败！'+"\n```json\n"+JSON.stringify(d, null, 2)+"\n```\n";
+            chat.text = '失败！' + '\n```json\n' +   e  + '\n```\n';
+            chat.loading = false;
+            homeStore.setMyData({act:'updateChat', actData:chat});
         }
-    }else if(  action=='gpt.dall-e-3' ){ //执行变化
+    } else if (  action == 'gpt.dall-e-3' ) { // 执行变化
     // chat.model= 'dall-e-3';
        
 
-        const d= await gptFetch('/v1/images/generations', data.data);
-        try{
-            const rz : any= d.data[0];
-            chat.text= rz.revised_prompt??'图片已完成';
-            chat.opt={imageUrl:rz.url } ;
+        const d = await gptFetch('/v1/images/generations', data.data);
+        try {
+            const rz : any = d.data[0];
+            chat.text = rz.revised_prompt ?? '图片已完成';
+            chat.opt = {imageUrl:rz.url} ;
             chat.loading = false;
-            homeStore.setMyData({act:'updateChat', actData:chat });
-        }catch(e){
-            //chat.text='失败！'+"\n```json\n"+JSON.stringify(d, null, 2)+"\n```\n";
-            chat.text='失败！'+'\n```json\n'+ (d?JSON.stringify(d, null, 2):e) +'\n```\n';
-            chat.loading=false;
-            homeStore.setMyData({act:'updateChat', actData:chat });
+            homeStore.setMyData({act:'updateChat', actData:chat});
+        } catch (e) {
+            // chat.text='失败！'+"\n```json\n"+JSON.stringify(d, null, 2)+"\n```\n";
+            chat.text = '失败！' + '\n```json\n' + (d ? JSON.stringify(d, null, 2) : e) + '\n```\n';
+            chat.loading = false;
+            homeStore.setMyData({act:'updateChat', actData:chat});
         }
 
     }
 
 };
 
-export const isDallImageModel =(model:string|undefined)=>{
-    if(!model) {
+export const isDallImageModel = (model:string|undefined)=>{
+    if (!model) {
         return false;
     }
-    if( model.indexOf('flux')>-1 ) {
+    if ( model.indexOf('flux') > -1 ) {
         return true;
     } 
-    if( model.indexOf('ideogram')>-1 ) {
+    if ( model.indexOf('ideogram') > -1 ) {
         return true;
     } 
-    return ['dall-e-2' ,'dall-e-3','ideogram' ].indexOf(model)>-1;
+    return ['dall-e-2', 'dall-e-3', 'ideogram'].indexOf(model) > -1;
       
 };
 
 interface subModelType{
     message:any[]
-    onMessage:(d:{text:string,isFinish:boolean,isAll?:boolean})=>void
+    onMessage:(d:{text:string, isFinish:boolean, isAll?:boolean})=>void
     onError?:(d?:any)=>void
     signal?:AbortSignal
     model?:string
     uuid?:string|number
 }
-function getHeaderAuthorization(){
-    let headers={};
-    if( homeStore.myData.vtoken ){
-        const  vtokenh={ 'x-vtoken':  homeStore.myData.vtoken ,'x-ctoken':  homeStore.myData.ctoken};
-        headers= {...headers, ...vtokenh};
+function getHeaderAuthorization() {
+    let headers = {};
+    if ( homeStore.myData.vtoken ) {
+        const  vtokenh = {'x-vtoken':  homeStore.myData.vtoken, 'x-ctoken':  homeStore.myData.ctoken};
+        headers = {...headers, ...vtokenh};
     }
-    if(!gptServerStore.myData.OPENAI_API_KEY){
+    if (!gptServerStore.myData.OPENAI_API_KEY) {
         const authStore = useAuthStore();
-        if( authStore.token ) {
-            const bmi= { 'x-ptoken':  authStore.token };
-            headers= {...headers, ...bmi };
+        if ( authStore.token ) {
+            const bmi = {'x-ptoken':  authStore.token};
+            headers = {...headers, ...bmi};
             return headers;
         }
         return headers;
     }
-    const bmi={
-        'Authorization': 'Bearer ' +gptServerStore.myData.OPENAI_API_KEY
+    const bmi = {
+        'Authorization': 'Bearer ' + gptServerStore.myData.OPENAI_API_KEY
     };
-    headers= {...headers, ...bmi };
+    headers = {...headers, ...bmi};
     return headers;
 }
 
 export const getSystemMessage = (uuid?:number )=>{
-    //KnowledgeCutOffDate
-    let sysTem= gptConfigStore.myData.systemMessage;
-    if( uuid ){
-        const chatS= new chatSetting(uuid);
-        sysTem= chatS.getGptConfig().systemMessage ;
+    // KnowledgeCutOffDate
+    let sysTem = gptConfigStore.myData.systemMessage;
+    if ( uuid ) {
+        const chatS = new chatSetting(uuid);
+        sysTem = chatS.getGptConfig().systemMessage ;
     }
-    if(  sysTem ) {
+    if (  sysTem ) {
         return sysTem;
     }
-    const model= gptConfigStore.myData.model?gptConfigStore.myData.model: 'gpt-3.5-turbo';
-    let producer= 'You are ChatGPT, a large language model trained by OpenAI.';
-    if(model.includes('claude')) {
-        producer=  'You are Claude, a large language model trained by Anthropic.';
+    const model = gptConfigStore.myData.model ? gptConfigStore.myData.model : 'gpt-3.5-turbo';
+    let producer = 'You are ChatGPT, a large language model trained by OpenAI.';
+    if (model.includes('claude')) {
+        producer =  'You are Claude, a large language model trained by Anthropic.';
     }
-    if(model.includes('gemini')) {
-        producer=  'You are Gemini, a large language model trained by Google.';
+    if (model.includes('gemini')) {
+        producer =  'You are Gemini, a large language model trained by Google.';
     }
-    if(model.includes('deepseek')) {
-        producer=  'You are DeepSeek, a large language model trained by DeepSeek.';
+    if (model.includes('deepseek')) {
+        producer =  'You are DeepSeek, a large language model trained by DeepSeek.';
     }
-    //用户自定义系统
-    if(homeStore.myData.session.systemMessage )  {
-        producer= homeStore.myData.session.systemMessage;
+    // 用户自定义系统
+    if (homeStore.myData.session.systemMessage )  {
+        producer = homeStore.myData.session.systemMessage;
     }
     
     let DEFAULT_SYSTEM_TEMPLATE = `${producer}`;
 
-    if ( KnowledgeCutOffDate[model] || model.indexOf('gpt-')>-1 ){
-        DEFAULT_SYSTEM_TEMPLATE+=`
-Knowledge cutoff: ${KnowledgeCutOffDate[model]??KnowledgeCutOffDate.default}`;
+    if ( KnowledgeCutOffDate[model] || model.indexOf('gpt-') > -1 ) {
+        DEFAULT_SYSTEM_TEMPLATE += `
+Knowledge cutoff: ${KnowledgeCutOffDate[model] ?? KnowledgeCutOffDate.default}`;
     }
-    DEFAULT_SYSTEM_TEMPLATE+=`
+    DEFAULT_SYSTEM_TEMPLATE += `
 Current model: ${model}
 Current time: ${ new Date().toLocaleString()}
 Latex inline: $x^2$
@@ -355,129 +355,129 @@ Latex block: $$e=mc^2$$`;
 
 };
 
-export const isNewModel=(model:string)=>{
+export const isNewModel = (model:string)=>{
     return model.startsWith('o1-');
 };
-export const subModel= async (opt: subModelType)=>{
+export const subModel = async (opt: subModelType)=>{
     //
-    let model= opt.model?? ( gptConfigStore.myData.model?gptConfigStore.myData.model: 'gpt-3.5-turbo');
-    let max_tokens= gptConfigStore.myData.max_tokens;
-    let temperature= 0.5;
-    let top_p= 1;
-    let presence_penalty= 0 , frequency_penalty=0;
-    if(opt.uuid){
-        const chatSet= new chatSetting( +opt.uuid);
-        const gStore= chatSet.getGptConfig();
-        temperature= gStore.temperature??temperature;
-        top_p = gStore.top_p??top_p;
-        presence_penalty = gStore.presence_penalty??presence_penalty;
-        frequency_penalty = gStore.frequency_penalty??frequency_penalty;
-        max_tokens= gStore.max_tokens;
+    let model = opt.model ?? ( gptConfigStore.myData.model ? gptConfigStore.myData.model : 'gpt-3.5-turbo');
+    let max_tokens = gptConfigStore.myData.max_tokens;
+    let temperature = 0.5;
+    let top_p = 1;
+    let presence_penalty = 0, frequency_penalty = 0;
+    if (opt.uuid) {
+        const chatSet = new chatSetting( +opt.uuid);
+        const gStore = chatSet.getGptConfig();
+        temperature = gStore.temperature ?? temperature;
+        top_p = gStore.top_p ?? top_p;
+        presence_penalty = gStore.presence_penalty ?? presence_penalty;
+        frequency_penalty = gStore.frequency_penalty ?? frequency_penalty;
+        max_tokens = gStore.max_tokens;
     }
-    if(model=='gpt-4-vision-preview' && max_tokens>2048) {
-        max_tokens=2048;
-    }
-
-    //gptServerStore.myData.GPTS_GX
-    if( gptServerStore.myData.GPTS_GX ){
-        model= model.replace('gpt-4-gizmo-','');
+    if (model == 'gpt-4-vision-preview' && max_tokens > 2048) {
+        max_tokens = 2048;
     }
 
-    let body:any ={
-        max_tokens ,
-        model ,
+    // gptServerStore.myData.GPTS_GX
+    if ( gptServerStore.myData.GPTS_GX ) {
+        model = model.replace('gpt-4-gizmo-', '');
+    }
+
+    let body:any = {
+        max_tokens,
+        model,
         temperature,
         top_p,
-        presence_penalty ,frequency_penalty,
+        presence_penalty, frequency_penalty,
         'messages': opt.message
-        ,stream:true
+        , stream:true
     };
-    if(isNewModel(model)){
-        body ={
-            max_completion_tokens:max_tokens ,
-            model ,
-            //temperature,
+    if (isNewModel(model)) {
+        body = {
+            max_completion_tokens:max_tokens,
+            model,
+            // temperature,
             top_p,
-            presence_penalty ,frequency_penalty,
+            presence_penalty, frequency_penalty,
             'messages': opt.message
-            ,stream:false
+            , stream:false
         };
     }
-    if(body.stream){ 
-        let  headers ={
+    if (body.stream) { 
+        let  headers = {
             'Content-Type': 'application/json'
-            //,'Authorization': 'Bearer ' +gptServerStore.myData.OPENAI_API_KEY
-            ,'Accept': 'text/event-stream '
+            // ,'Authorization': 'Bearer ' +gptServerStore.myData.OPENAI_API_KEY
+            , 'Accept': 'text/event-stream '
         };
-        headers={...headers,...getHeaderAuthorization()};
+        headers = {...headers, ...getHeaderAuthorization()};
 
         try {
-            await fetchSSE( gptGetUrl('/v1/chat/completions'),{
+            await fetchSSE( gptGetUrl('/v1/chat/completions'), {
                 method: 'POST',
                 headers: headers,
                 signal:opt.signal,
                 onMessage: async (data:string)=> {
-                    //mlog('🐞测试'  ,  data )  ;
-                    if(data=='[DONE]') {
-                        opt.onMessage({text:'',isFinish:true});
+                    // mlog('🐞测试'  ,  data )  ;
+                    if (data == '[DONE]') {
+                        opt.onMessage({text:'', isFinish:true});
                     } else {
-                        const obj= JSON.parse(data );
-                        opt.onMessage({text:obj.choices[0].delta?.content??'' ,isFinish:obj.choices[0].finish_reason!=null });
+                        const obj = JSON.parse(data );
+                        opt.onMessage({text:obj.choices[0].delta?.content ?? '', isFinish:obj.choices[0].finish_reason != null});
                     }
                 },
-                onError(e ){
-                    //console.log('eee>>', e )
-                    mlog('❌未错误',e    );
+                onError(e ) {
+                    // console.log('eee>>', e )
+                    mlog('❌未错误', e    );
                     opt.onError && opt.onError(e);
                 },
                 body:JSON.stringify(body)
             });
         } catch (error ) {
-            mlog('❌未错误2',error  );
+            mlog('❌未错误2', error  );
             opt.onError && opt.onError(error);
         }
-    }else{ 
+    } else { 
         try {
-            mlog('🐞非流输出',body  );
-            opt.onMessage({text: t('mj.thinking') ,isFinish: false });
-            const obj :any= await gptFetch( '/v1/chat/completions',body  );
-            //mlog('结果 >>',obj   )
-            opt.onMessage({text:obj.choices[0].message.content??'' ,isFinish: true ,isAll:true});
+            mlog('🐞非流输出', body  );
+            opt.onMessage({text: t('mj.thinking'), isFinish: false});
+            const obj :any = await gptFetch( '/v1/chat/completions', body  );
+            // mlog('结果 >>',obj   )
+            opt.onMessage({text:obj.choices[0].message.content ?? '', isFinish: true, isAll:true});
             
         } catch (error ) {
-            mlog('❌未错误2',error  );
+            mlog('❌未错误2', error  );
             opt.onError && opt.onError(error);
         }
     }
 };
 
 export const getInitChat = (txt:string )=>{
-    const promptMsg: Chat.Chat= {
+    const promptMsg: Chat.Chat = {
         dateTime: new Date().toLocaleString(),
-        text:  txt ,
+        text:  txt,
         inversion: true,
         error: false,
         conversationOptions: null,
-        requestOptions: { prompt:txt, options: null },
+        requestOptions: {prompt:txt, options: null},
     };
     return promptMsg;
 };
 
 export interface ttsType{
         model: string,
-        input: string ,
+        input: string,
         voice?: string,
 
 }
 export const subTTS = async (tts:ttsType )=>{
-    if(!tts.voice) {
-        tts.voice='alloy';
+    if (!tts.voice) {
+        tts.voice = 'alloy';
     }
-    const url= getUrl('/v1/audio/speech');
-    let headers=  {
+    const url = getUrl('/v1/audio/speech');
+    let headers =  {
         'Content-Type': 'application/json'
     };
-    headers={...headers,...getHeaderAuthorization()};
+    headers = {...headers, ...getHeaderAuthorization()};
     const response = await fetch(url, {
         method: 'POST',
         headers,
@@ -489,24 +489,24 @@ export const subTTS = async (tts:ttsType )=>{
     }
     const audioData = await response.arrayBuffer();
     const contentType = response.headers.get('Content-Type');
-    const blob = new Blob([audioData], { type: contentType??'audio/mpeg' });
+    const blob = new Blob([audioData], {type: contentType ?? 'audio/mpeg'});
     mlog('blob', blob);
     const saveID = await localSaveAny( blob );
-    const pp= await bolbObj(blob );
-    return { blob,saveID ,...pp };
+    const pp = await bolbObj(blob );
+    return {blob, saveID, ...pp};
 
 };
 
-export const bolbObj= ( blob:Blob )=>{
-    return new Promise<{player:HTMLAudioElement,duration:number }>((resolve, reject) => {
+export const bolbObj = ( blob:Blob )=>{
+    return new Promise<{player:HTMLAudioElement, duration:number }>((resolve, reject) => {
         const player = new window.Audio();
         player.src = URL.createObjectURL(blob);
 
         player.addEventListener('loadedmetadata', () => {
             mlog('时长', player.duration);
-            resolve({player,duration: player.duration });
+            resolve({player, duration: player.duration});
         });
-        player.addEventListener('error',(e )=>{
+        player.addEventListener('error', (e )=>{
             reject(e );
         });
         player.load();
@@ -526,7 +526,7 @@ function formatDate(): string[] {
 
 //
 
-export const  gptUsage=async ()=>{
+export const  gptUsage = async ()=>{
 
     // fetch(getUrl(url),  opt )
     //     .then(d=>d.json().then(d=> resolve(d))
@@ -538,22 +538,22 @@ export const  gptUsage=async ()=>{
     const billData = await gptFetch('/v1/dashboard/billing/subscription');
 
     const usage = Math.round(usageData.total_usage) / 100;
-    mlog('gpt', usage , billData  );
-    //remaining = subscriptionData.system_hard_limit_usd - totalUsage;
-    return {usage,remaining:Math.round( (billData.hard_limit??billData.hard_limit_usd*100) - usageData.total_usage ) / 100 ,hard_limit_usd:billData.hard_limit_usd } ;
+    mlog('gpt', usage, billData  );
+    // remaining = subscriptionData.system_hard_limit_usd - totalUsage;
+    return {usage, remaining:Math.round( (billData.hard_limit ?? billData.hard_limit_usd * 100) - usageData.total_usage ) / 100, hard_limit_usd:billData.hard_limit_usd} ;
 
 };
 
-export const openaiSetting= ( q:any,ms:MessageApiInjection )=>{
-    //mlog()
+export const openaiSetting = ( q:any, ms:MessageApiInjection )=>{
+    // mlog()
     mlog('setting', q );
-    if(q.settings){
+    if (q.settings) {
         mlog('q.setting', q.settings );
         try {
             const obj = JSON.parse( q.settings );
             const url = obj.url ?? undefined;
             const key = obj.key ?? undefined;
-            //let setQ= { }
+            // let setQ= { }
             gptServerStore.setMyData(  {
                 OPENAI_API_BASE_URL:url, 
                 MJ_SERVER:url, 
@@ -588,76 +588,76 @@ export const openaiSetting= ( q:any,ms:MessageApiInjection )=>{
         } catch (error) {
             
         }
-    } else if(isObject(q)){
+    } else if (isObject(q)) {
         mlog('setting2', q );
         gptServerStore.setMyData(  q );
-        //gptServerStore.setMyData( gptServerStore.myData );
+        // gptServerStore.setMyData( gptServerStore.myData );
         blurClean();
         gptServerStore.setMyData( gptServerStore.myData );
 
     }
 
 };
-export const blurClean= ()=>{
+export const blurClean = ()=>{
     mlog('blurClean');
-    gptServerStore.myData.OPENAI_API_BASE_URL =myTrim( myTrim(gptServerStore.myData.OPENAI_API_BASE_URL.trim(),'/'), '\\' );
+    gptServerStore.myData.OPENAI_API_BASE_URL = myTrim( myTrim(gptServerStore.myData.OPENAI_API_BASE_URL.trim(), '/'), '\\' );
     gptServerStore.myData.OPENAI_API_KEY = gptServerStore.myData.OPENAI_API_KEY.trim();
-    gptServerStore.myData.MJ_SERVER =myTrim( myTrim( gptServerStore.myData.MJ_SERVER.trim(),'/'),'\\');
+    gptServerStore.myData.MJ_SERVER = myTrim( myTrim( gptServerStore.myData.MJ_SERVER.trim(), '/'), '\\');
     gptServerStore.myData.MJ_API_SECRET = gptServerStore.myData.MJ_API_SECRET.trim();
-    gptServerStore.myData.UPLOADER_URL=  myTrim( myTrim( gptServerStore.myData.UPLOADER_URL.trim(),'/'),'\\');
+    gptServerStore.myData.UPLOADER_URL =  myTrim( myTrim( gptServerStore.myData.UPLOADER_URL.trim(), '/'), '\\');
 };
 
-export const countTokens= async ( dataSources:Chat.Chat[], input:string ,uuid:number )=>{
-    const chatSet= new chatSetting(uuid);
-    const myStore= chatSet.getGptConfig();
-    const rz={system:0,input:0 ,history:0,remain:330,modelTokens:'4k',planOuter:myStore.max_tokens  };
-    const model =myStore.model;
-    const max= getModelMax(model );
-    let unit= 1024;
-    if(  model=='gpt-4-1106-preview' || model=='gpt-4-vision-preview' ) {
-        unit=1000;
+export const countTokens = async ( dataSources:Chat.Chat[], input:string, uuid:number )=>{
+    const chatSet = new chatSetting(uuid);
+    const myStore = chatSet.getGptConfig();
+    const rz = {system:0, input:0, history:0, remain:330, modelTokens:'4k', planOuter:myStore.max_tokens};
+    const model = myStore.model;
+    const max = getModelMax(model );
+    let unit = 1024;
+    if (  model == 'gpt-4-1106-preview' || model == 'gpt-4-vision-preview' ) {
+        unit = 1000;
     }
-    //gpt-4-turbo-2024-04-09
-    if (model.indexOf('gpt-4-turbo')>-1 ) {
-        unit=1000;
+    // gpt-4-turbo-2024-04-09
+    if (model.indexOf('gpt-4-turbo') > -1 ) {
+        unit = 1000;
     }
-    rz.modelTokens= `${max}k`;
-    //cl100k_base.encode(input)
+    rz.modelTokens = `${max}k`;
+    // cl100k_base.encode(input)
 
-    const encode= await encodeAsync();
+    const encode = await encodeAsync();
     rz.input = encode(input).length;
     rz.system = encode(getSystemMessage() ).length;
     const encodeChat = await encodeChatAsync();
-    const msg= await getHistoryMessage(  dataSources,1 ) ;
-    rz.history= msg.length==0?0: encodeChat(msg, model.indexOf('gpt-4')>-1? 'gpt-4':'gpt-3.5-turbo').length;
+    const msg = await getHistoryMessage(  dataSources, 1 ) ;
+    rz.history = msg.length == 0 ? 0 : encodeChat(msg, model.indexOf('gpt-4') > -1 ? 'gpt-4' : 'gpt-3.5-turbo').length;
     //
-    rz.remain = unit *max- rz.history- rz.planOuter- rz.input- rz.system; 
+    rz.remain = unit * max - rz.history - rz.planOuter - rz.input - rz.system; 
 
     return rz ;
 };
-const getModelMax=( model:string )=>{
-    let max=4;
-    model= model.toLowerCase();
-    if( model.indexOf('8k')>-1  ){
+const getModelMax = ( model:string )=>{
+    let max = 4;
+    model = model.toLowerCase();
+    if ( model.indexOf('8k') > -1  ) {
         return 8;
-    }else if( model.indexOf('16k')>-1 || model=='gpt-3.5-turbo-1106' || model=='gpt-3.5-turbo-0125' ){
+    } else if ( model.indexOf('16k') > -1 || model == 'gpt-3.5-turbo-1106' || model == 'gpt-3.5-turbo-0125' ) {
         return 16;
-    }else if( model.indexOf('32k')>-1  ){
+    } else if ( model.indexOf('32k') > -1  ) {
         return 32;
-    }else if( model.indexOf('gpt-4-turbo')>-1||  model.indexOf('gpt-4o')>-1 ||   model.indexOf('o1-')>-1){
+    } else if ( model.indexOf('gpt-4-turbo') > -1 ||  model.indexOf('gpt-4o') > -1 ||   model.indexOf('o1-') > -1) {
         return 128; 
-    }else if( model.indexOf('64k')>-1 || model.indexOf('deepseek')>-1 ){
+    } else if ( model.indexOf('64k') > -1 || model.indexOf('deepseek') > -1 ) {
         return 64;
-    }else if( model.indexOf('128k')>-1 
-    || model=='gpt-4-1106-preview' 
-    || model=='gpt-4-0125-preview' 
-    || model=='gpt-4-vision-preview' ){
+    } else if ( model.indexOf('128k') > -1 
+    || model == 'gpt-4-1106-preview' 
+    || model == 'gpt-4-0125-preview' 
+    || model == 'gpt-4-vision-preview' ) {
         return 128; 
-    }else if( model.indexOf('gpt-4')>-1  ){  
-        max=8;
-    }else if( model.toLowerCase().includes('claude-3') ){
-    //options.maxModelTokens = 120*1024;
-    //options.maxResponseTokens = 4096
+    } else if ( model.indexOf('gpt-4') > -1  ) {  
+        max = 8;
+    } else if ( model.toLowerCase().includes('claude-3') ) {
+    // options.maxModelTokens = 120*1024;
+    // options.maxResponseTokens = 4096
         return 120;
     }
 
@@ -665,56 +665,56 @@ const getModelMax=( model:string )=>{
 };
 
 export const encodeAsync = async ( ) => {
-    const { encode } = await import('gpt-tokenizer');
+    const {encode} = await import('gpt-tokenizer');
 
-    return encode;//(str).length;
+    return encode;// (str).length;
 };
 export const encodeChatAsync = async ( ) => {
-    const { encodeChat } = await import('gpt-tokenizer');
+    const {encodeChat} = await import('gpt-tokenizer');
 
-    return encodeChat;//(obj,model ).length;
+    return encodeChat;// (obj,model ).length;
 };
 
 
-export const getHistoryMessage= async (dataSources:Chat.Chat[],loadingCnt=1 ,start=1000)=>{
-    let i=0;
+export const getHistoryMessage = async (dataSources:Chat.Chat[], loadingCnt = 1, start = 1000)=>{
+    let i = 0;
     const rz: ChatMessage[] = [];
-    //const loadingCnt= 1;// 1就是没有loading，3 就是有loading
-    const istart = (isNumber( start)&& start>=0 )? Math.min(start  ,   dataSources.length - loadingCnt ):  dataSources.length- loadingCnt  ;
-    mlog('istart',istart, start);
-    for( let ii=  istart  ; ii>=0 ; ii-- ){ //let o of dataSources.value
-        if(i>=gptConfigStore.myData.talkCount) {
+    // const loadingCnt= 1;// 1就是没有loading，3 就是有loading
+    const istart = (isNumber( start) && start >= 0 ) ? Math.min(start,   dataSources.length - loadingCnt ) :  dataSources.length - loadingCnt  ;
+    mlog('istart', istart, start);
+    for ( let ii =  istart  ; ii >= 0 ; ii-- ) { // let o of dataSources.value
+        if (i >= gptConfigStore.myData.talkCount) {
             break;
         }
         i++;
 
         const o = dataSources[ii];
-        //mlog('o',ii ,o);
-        let content= o.text;
-        if( o.inversion && o.opt?.images && o.opt.images.length>0 ){
-            //获取附件信息 比如 图片 文件等
-            try{
+        // mlog('o',ii ,o);
+        let content = o.text;
+        if ( o.inversion && o.opt?.images && o.opt.images.length > 0 ) {
+            // 获取附件信息 比如 图片 文件等
+            try {
                 const str =  await localGet(  o.opt.images[0]) as string;
-                const fileBase64= JSON.parse(str) as string[];
-                const arr =  fileBase64.filter( (ff:string)=>ff.indexOf('http')>-1);
-                if(arr.length>0) {
-                    content = arr.join(' ')+' '+ content ;
+                const fileBase64 = JSON.parse(str) as string[];
+                const arr =  fileBase64.filter( (ff:string)=>ff.indexOf('http') > -1);
+                if (arr.length > 0) {
+                    content = arr.join(' ') + ' ' + content ;
                 }
-                mlog(t('mjchat.attr') ,o.opt.images[0] , content );
-            }catch(ee){
+                mlog(t('mjchat.attr'), o.opt.images[0], content );
+            } catch (ee) {
             }
         }
 
-        //mlog('d',gptConfigStore.myData.talkCount ,i ,o.inversion , o.text);
-        rz.push({content , role: !o.inversion ? 'assistant' : 'user'});
+        // mlog('d',gptConfigStore.myData.talkCount ,i ,o.inversion , o.text);
+        rz.push({content, role: !o.inversion ? 'assistant' : 'user'});
     }
     rz.reverse();
-    mlog('rz',rz);
+    mlog('rz', rz);
     return rz ;
 };
 
 
-export const isDisableMenu=(menu:string)=>{
+export const isDisableMenu = (menu:string)=>{
 
-    return (homeStore.myData.session  && homeStore.myData.session.menuDisable && homeStore.myData.session.menuDisable.indexOf( menu)>-1 );
+    return (homeStore.myData.session  && homeStore.myData.session.menuDisable && homeStore.myData.session.menuDisable.indexOf( menu) > -1 );
 };

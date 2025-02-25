@@ -1,4 +1,4 @@
-import { ss } from '@/utils/storage';
+import {ss} from '@/utils/storage';
  
  type LumaVideo = {
     url: string;
@@ -19,41 +19,41 @@ export type LumaMedia = {
     estimate_wait_seconds?: number | null;
     last_feed?:number
 };
-export class lumaStore{
-    //private id: string;
-    private localKey='luma-store';
-    public save(obj:LumaMedia ){
-        if(!obj.id ) {
+export class lumaStore {
+    // private id: string;
+    private localKey = 'luma-store';
+    public save(obj:LumaMedia ) {
+        if (!obj.id ) {
             throw 'id must';
         }
-        const arr=  this.getObjs();
-        const i= arr.findIndex( v=>v.id==obj.id );
-        if(i>-1) {
-            arr[i]= obj;
+        const arr =  this.getObjs();
+        const i = arr.findIndex( v=>v.id == obj.id );
+        if (i > -1) {
+            arr[i] = obj;
         } else {
             arr.push(obj);
         }
         ss.set(this.localKey, arr );
         return this;
     } 
-    public findIndex(id:string){ 
-        return this.getObjs().findIndex( v=>v.id== id );
+    public findIndex(id:string) { 
+        return this.getObjs().findIndex( v=>v.id == id );
     }
 
-    public getObjs():LumaMedia[]{
+    public getObjs():LumaMedia[] {
         const obj = ss.get( this.localKey ) as  undefined| LumaMedia[];
-        if(!obj) {
+        if (!obj) {
             return [];
         }
         return obj;
     }
-    public delete( obj:LumaMedia ){
-        if(!obj.id ) {
+    public delete( obj:LumaMedia ) {
+        if (!obj.id ) {
             throw 'id must';
         }
-        const arr=  this.getObjs();
-        const i= arr.findIndex( v=>v.id==obj.id );
-        if(i<0) {
+        const arr =  this.getObjs();
+        const i = arr.findIndex( v=>v.id == obj.id );
+        if (i < 0) {
             return false;
         }
         arr.splice(i, 1);
@@ -67,40 +67,40 @@ export type LumaHk={
   isHK:boolean
 }
 
-export class lumaHkStore{
-    //private id: string;
-    private localKey='luma-HK';
-    public save(obj:LumaHk ){
-        if(!obj.id ) {
+export class lumaHkStore {
+    // private id: string;
+    private localKey = 'luma-HK';
+    public save(obj:LumaHk ) {
+        if (!obj.id ) {
             throw 'id must';
         }
-        const arr=  this.getObjs();
-        const i= arr.findIndex( v=>v.id==obj.id );
-        if(i>-1) {
-            arr[i]= obj;
+        const arr =  this.getObjs();
+        const i = arr.findIndex( v=>v.id == obj.id );
+        if (i > -1) {
+            arr[i] = obj;
         } else {
             arr.push(obj);
         }
         ss.set(this.localKey, arr );
         return this;
     } 
-    public findIndex(id:string){ 
-        return this.getObjs().findIndex( v=>v.id== id );
+    public findIndex(id:string) { 
+        return this.getObjs().findIndex( v=>v.id == id );
     }
 
-    public getObjs():LumaHk[]{
+    public getObjs():LumaHk[] {
         const obj = ss.get( this.localKey ) as  undefined| LumaHk[];
-        if(!obj) {
+        if (!obj) {
             return [];
         }
         return obj;
     }
-    public getOneById(id:string):LumaHk|null{
-        const i= this.findIndex(id);
-        if(i<0) {
+    public getOneById(id:string):LumaHk|null {
+        const i = this.findIndex(id);
+        if (i < 0) {
             return null;
         }
-        const arr=  this.getObjs();
+        const arr =  this.getObjs();
         return arr[i];
     }
 }

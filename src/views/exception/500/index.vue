@@ -1,6 +1,6 @@
 <script lang="ts" setup>
-import { NButton } from 'naive-ui';
-import { useRouter } from 'vue-router';
+import {NButton} from 'naive-ui';
+import {useRouter} from 'vue-router';
 import Icon500 from '@/icons/500.vue';
 
 const router = useRouter();

@@ -1,35 +1,35 @@
 <script setup lang="ts">
-import { SvgIcon } from '@/components/common';
-import { homeStore } from '@/store';
-import { computed,watch ,ref  } from 'vue';
-import { router } from '@/router';
-import { useRouter } from 'vue-router';
+import {SvgIcon} from '@/components/common';
+import {homeStore} from '@/store';
+import {computed, watch, ref} from 'vue';
+import {router} from '@/router';
+import {useRouter} from 'vue-router';
 
 import aiDrawInput from './aiDrawInput.vue'; 
-import {NDrawerContent,NDrawer} from 'naive-ui';
-import { isDisableMenu } from '@/api';
-const st= ref({show:true});
+import {NDrawerContent, NDrawer} from 'naive-ui';
+import {isDisableMenu} from '@/api';
+const st = ref({show:true});
 
-const goHome =computed(  () => {
-    //router.push('/')
+const goHome = computed(  () => {
+    // router.push('/')
     return router.currentRoute.value.name;
 });
-function drawSent(e:any){
-    st.value.show=false;
-    //$emit('drawSent', e)
-    homeStore.setMyData({act:'draw',actData:e});
+function drawSent(e:any) {
+    st.value.show = false;
+    // $emit('drawSent', e)
+    homeStore.setMyData({act:'draw', actData:e});
 }
 
 watch(()=>homeStore.myData.act, (n:string)=>{
-    if('showChat'==n){
+    if ('showChat' == n) {
         router.push('/chat');
     }
-    if('showDraw'==n){
+    if ('showDraw' == n) {
         router.push('/draw');
-        st.value.show=true;
+        st.value.show = true;
     }
-    if(n=='draw'){
-        st.value.show=false;
+    if (n == 'draw') {
+        st.value.show = false;
     }
 });
 const urouter = useRouter(); //

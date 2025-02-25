@@ -1,13 +1,13 @@
 <script setup lang='ts'>
-import { computed } from 'vue';
-import { NLayout, NLayoutContent } from 'naive-ui';
-import { useRouter, useRoute } from 'vue-router'; 
+import {computed} from 'vue';
+import {NLayout, NLayoutContent} from 'naive-ui';
+import {useRouter, useRoute} from 'vue-router'; 
 import Permission from '../chat/layout/Permission.vue';
-import { useBasicLayout } from '@/hooks/useBasicLayout';
-import { homeStore, useAppStore, useAuthStore, useChatStore } from '@/store';
-import { aiSider ,aiFooter} from '@/views/mj';
+import {useBasicLayout} from '@/hooks/useBasicLayout';
+import {homeStore, useAppStore, useAuthStore, useChatStore} from '@/store';
+import {aiSider, aiFooter} from '@/views/mj';
 import aiMobileMenu from '@/views/mj/aiMobileMenu.vue'; 
-import { mlog } from '@/api';
+import {mlog} from '@/api';
 
 const router = useRouter();
 const route = useRoute();
@@ -16,9 +16,9 @@ const chatStore = useChatStore();
 const authStore = useAuthStore();
 
 mlog('layout', route.name );
-router.replace({ name:  route.name??'video', params: { uuid: chatStore.active } });
-homeStore.setMyData({local:  route.name??'video' });
-const { isMobile } = useBasicLayout();
+router.replace({name:  route.name ?? 'video', params: {uuid: chatStore.active}});
+homeStore.setMyData({local:  route.name ?? 'video'});
+const {isMobile} = useBasicLayout();
 
 const collapsed = computed(() => appStore.siderCollapsed);
 
@@ -26,15 +26,15 @@ const needPermission = computed(() => !!authStore.session?.auth && !authStore.to
 
 const getMobileClass = computed(() => {
     if (isMobile.value) {
-        return ['rounded-none', 'shadow-none' ];
+        return ['rounded-none', 'shadow-none'];
     }
-    return [ 'shadow-md', 'dark:border-neutral-800' ]; //'border', 'rounded-md',
+    return ['shadow-md', 'dark:border-neutral-800']; // 'border', 'rounded-md',
 });
 
 const getContainerClass = computed(() => {
     return [
         'h-full',
-        { 'abc': !isMobile.value && !collapsed.value },
+        {'abc': !isMobile.value && !collapsed.value},
     ];
 }); 
 </script>

@@ -1,28 +1,28 @@
 <script setup lang="ts">
-import { ref, watch } from 'vue';
-import { SvgIcon } from '@/components/common';
-import { NInput,useMessage } from 'naive-ui';
-import { t } from '@/locales';
-import { mlog, myFetch } from '@/api';
+import {ref, watch} from 'vue';
+import {SvgIcon} from '@/components/common';
+import {NInput, useMessage} from 'naive-ui';
+import {t} from '@/locales';
+import {mlog, myFetch} from '@/api';
 
 
 const ms = useMessage();
-const st= ref({q:'',gid:''});
-const doAdd=async ()=>{
-    mlog('q=',st.value.q,  st.value.gid );
-    if( !st.value.gid ){
+const st = ref({q:'', gid:''});
+const doAdd = async ()=>{
+    mlog('q=', st.value.q,  st.value.gid );
+    if ( !st.value.gid ) {
         ms.error( t('mjchat.gidError')); //
         return; 
     }
-    const gptUrl= `https://gpts.ddaiai.com/open/gptsapi/add/${ st.value.gid }`; 
+    const gptUrl = `https://gpts.ddaiai.com/open/gptsapi/add/${ st.value.gid }`; 
     const d = await myFetch(gptUrl );
-    if(d.error!=0) {
+    if (d.error != 0) {
         return ms.error( d.error_des);
     }
-    //data.gpts
-    let msg= t('mjchat.success3') +' '+ d.data?.gpts?.name;
+    // data.gpts
+    let msg = t('mjchat.success3') + ' ' + d.data?.gpts?.name;
     ms.success( msg );
-    mlog('rz=',d);
+    mlog('rz=', d);
 };
 function extractGStrings(input: string): string[] { 
     const pattern = /g-[^/]+/g; 
@@ -36,9 +36,9 @@ function extractGStrings(input: string): string[] {
 // // 提取匹配的子字符串
 // const result = extractGStrings(inputString);
 watch(()=>st.value.q, (n)=>{
-    st.value.gid='';
-    if(n) {
-        st.value.gid= extractGStrings(n)[0]??'';
+    st.value.gid = '';
+    if (n) {
+        st.value.gid = extractGStrings(n)[0] ?? '';
     }
 });
 </script>

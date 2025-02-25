@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { mlog } from '@/api'; 
-import { ref } from 'vue';
-import { NButton,NInput } from 'naive-ui';
+import {mlog} from '@/api'; 
+import {ref} from 'vue';
+import {NButton, NInput} from 'naive-ui';
 
 const f = ref({text:'Hi,google ! I am a good student!'});
 const go = async () => {
@@ -11,9 +11,9 @@ const go = async () => {
     const apiUrl = 'https://api.openai-sk.com/v1/audio/speech';
     const ttsModel = 'tts-1';
     const voice = 'alloy';
-    //const inputText = 'I am a good student!';
+    // const inputText = 'I am a good student!';
 
-    //const fetchData = async () => {
+    // const fetchData = async () => {
     try {
         const response = await fetch(apiUrl, {
             method: 'POST',
@@ -23,7 +23,7 @@ const go = async () => {
             },
             body: JSON.stringify({
                 model: ttsModel,
-                input: f.value.text ,
+                input: f.value.text,
                 voice: voice,
             }),
         });
@@ -33,7 +33,7 @@ const go = async () => {
         }
 
         const audioData = await response.arrayBuffer();
-        const blob = new Blob([audioData], { type: 'audio/mp3' });
+        const blob = new Blob([audioData], {type: 'audio/mp3'});
         mlog('blob', blob);
 
         const player = new window.Audio(); 
@@ -54,21 +54,21 @@ const go = async () => {
         document.body.appendChild(a);
         a.click();
         document.body.removeChild(a);
-    }catch (error) {
+    } catch (error) {
         console.error('Error:', error);
     }
 
  
 };
-//go();
+// go();
 
-const ccgo= (event:any )=> {
+const ccgo = (event:any )=> {
     var file = event.target.files[0];
 
     // 通过 FileReader 读取文件内容并创建 Blob 对象
     var reader = new FileReader();
-    reader.onload = function(e:any ) {
-        var blob = new Blob([e.target.result], { type: 'audio/mp3' });
+    reader.onload = function (e:any ) {
+        var blob = new Blob([e.target.result], {type: 'audio/mp3'});
         mlog('blob', blob);
 
         // 创建 Howl 实例

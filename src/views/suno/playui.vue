@@ -1,29 +1,29 @@
 <script setup lang="ts">
-import { mlog } from '@/api';
-import { homeStore } from '@/store';
-import { ref ,watch} from 'vue';
-import { NSlider } from 'naive-ui';
-const sp= ref({v:10, max:0 ,status:'',idDrop:false });
-const updatev=(v:number)=>{
-    homeStore.setMyData({act:'playUpdate',actData:{ v}});
+import {mlog} from '@/api';
+import {homeStore} from '@/store';
+import {ref, watch} from 'vue';
+import {NSlider} from 'naive-ui';
+const sp = ref({v:10, max:0, status:'', idDrop:false});
+const updatev = (v:number)=>{
+    homeStore.setMyData({act:'playUpdate', actData:{v}});
 };
 
-const $emit= defineEmits(['update'] );
+const $emit = defineEmits(['update'] );
  
 
 watch(()=>homeStore.myData.act2, (n)=>{
-    if(n=='playStatus'){
-        if( sp.value.idDrop ) {
+    if (n == 'playStatus') {
+        if ( sp.value.idDrop ) {
             return;
         }
         let data:any = homeStore.myData.actData;
-        mlog('playStatus' , data );
-        if(data && data.d && data.d.duration  ){
+        mlog('playStatus', data );
+        if (data && data.d && data.d.duration  ) {
             sp.value.max = data.d.duration;
             sp.value.v = data.d.currentTime ;// parseInt( data.d.currentTime ) 
            
         }
-        if( data )   {
+        if ( data )   {
             sp.value.status = data.a;
         } 
         $emit('update', sp.value);
@@ -32,9 +32,9 @@ watch(()=>homeStore.myData.act2, (n)=>{
     }
 });
 watch(()=>homeStore.myData.act, (n)=>{
-    if(n=='playStatus'){
+    if (n == 'playStatus') {
         let data:any = homeStore.myData.actData;
-        if(data)   {
+        if (data)   {
             sp.value.status = data.a;
         } 
         $emit('update', sp.value);

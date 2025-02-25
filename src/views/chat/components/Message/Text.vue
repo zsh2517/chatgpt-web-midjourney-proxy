@@ -1,12 +1,12 @@
 <script lang="ts" setup>
-import { computed, onMounted, onUnmounted, onUpdated, ref } from 'vue';
+import {computed, onMounted, onUnmounted, onUpdated, ref} from 'vue';
 import MarkdownIt from 'markdown-it';
 import mdKatex from '@traptitech/markdown-it-katex';
 import mila from 'markdown-it-link-attributes';
 import hljs from 'highlight.js';
-import { useBasicLayout } from '@/hooks/useBasicLayout';
-import { t } from '@/locales';
-import { copyToClip } from '@/utils/copy';
+import {useBasicLayout} from '@/hooks/useBasicLayout';
+import {t} from '@/locales';
+import {copyToClip} from '@/utils/copy';
 
 import mjText from '@/views/mj/mjText.vue';
 import dallText from '@/views/mj/dallText.vue';
@@ -15,7 +15,7 @@ import whisperText from '@/views/mj/whisperText.vue';
 import MjTextAttr from '@/views/mj/mjTextAttr.vue';
 import aiTextSetting from '@/views/mj/aiTextSetting.vue';
 import aiSetAuth from '@/views/mj/aiSetAuth.vue';
-import { isApikeyError, isAuthSessionError, isDallImageModel, isTTS, mlog } from '@/api';
+import {isApikeyError, isAuthSessionError, isDallImageModel, isTTS, mlog} from '@/api';
 
 interface Props {
   inversion?: boolean
@@ -28,7 +28,7 @@ interface Props {
 
 const props = defineProps<Props>();
 
-const { isMobile } = useBasicLayout();
+const {isMobile} = useBasicLayout();
 
 const textRef = ref<HTMLElement>();
 
@@ -39,48 +39,48 @@ const mdi = new MarkdownIt({
         const validLang = !!(language && hljs.getLanguage(language));
         if (validLang) {
             const lang = language ?? '';
-            return highlightBlock(hljs.highlight(code, { language: lang }).value, lang);
+            return highlightBlock(hljs.highlight(code, {language: lang}).value, lang);
         }
         return highlightBlock(hljs.highlightAuto(code).value, '');
     },
 });
 
-mdi.use(mila, { attrs: { target: '_blank', rel: 'noopener' } });
-mdi.use(mdKatex, { blockClass: 'katexmath-block rounded-md p-[10px]', errorColor: ' #cc0000' });
+mdi.use(mila, {attrs: {target: '_blank', rel: 'noopener'}});
+mdi.use(mdKatex, {blockClass: 'katexmath-block rounded-md p-[10px]', errorColor: ' #cc0000'});
 
 const wrapClass = computed(() => {
     return [
         'text-wrap',
-        'min-w-[20px]','max-w-[810px]',
+        'min-w-[20px]', 'max-w-[810px]',
         'rounded-md',
         isMobile.value ? 'p-2' : 'px-3 py-2',
         props.inversion ? 'bg-[#d2f9d1]' : 'bg-[#f4f6f8]',
         props.inversion ? 'dark:bg-[#a1dc95]' : 'dark:bg-[#1e1e20]',
         props.inversion ? 'message-request' : 'message-reply',
-        { 'text-red-500': props.error },
+        {'text-red-500': props.error},
     ];
 });
 
 const text = computed(() => {
     let value = props.text ?? '';
-    if (!props.asRawText){
+    if (!props.asRawText) {
         value = value.replace(/\\\( *(.*?) *\\\)/g, '$$$1$$');
-        //value = value.replace(/\\\((.*?)\\\)/g, '$$$1$$');
+        // value = value.replace(/\\\((.*?)\\\)/g, '$$$1$$');
         value = value.replace(/\\\[ *(.*?) *\\\]/g, '$$$$$1$$$$');
         //
-        value= value.replaceAll('\\[','$$$$');
-        value= value.replaceAll('\\]','$$$$');   
+        value = value.replaceAll('\\[', '$$$$');
+        value = value.replaceAll('\\]', '$$$$');   
 
-        //思考过程处理
-        value= value.replace(/<think>([\s\S]*?)<\/think>/g, (match: string, content: string) => { 
+        // 思考过程处理
+        value = value.replace(/<think>([\s\S]*?)<\/think>/g, (match: string, content: string) => { 
             const processedContent: string = content
                 .split('\n')
                 .map(line => line.trim() ? '>' + line : line)  
                 .join('\n').replace(/(\r?\n)+/g, '\n>\n');
        
-            return '>Thinking...'+processedContent ;
+            return '>Thinking...' + processedContent ;
         });
-        //mlog('replace', value)
+        // mlog('replace', value)
         return mdi.render(value);
     }
     return value;

@@ -1,5 +1,5 @@
-import { StreamProcessorSrc } from './worklets/stream_processor.js';
-import { AudioAnalysis } from './analysis/audio_analysis.js';
+import {StreamProcessorSrc} from './worklets/stream_processor.js';
+import {AudioAnalysis} from './analysis/audio_analysis.js';
 
 /**
  * Plays audio streams received in raw PCM16 chunks from the browser
@@ -11,7 +11,7 @@ export class WavStreamPlayer {
    * @param {{sampleRate?: number}} options
    * @returns {WavStreamPlayer}
    */
-    constructor({ sampleRate = 44100 } = {}) {
+    constructor({sampleRate = 44100} = {}) {
         this.scriptSrc = StreamProcessorSrc;
         this.sampleRate = sampleRate;
         this.context = null;
@@ -26,7 +26,7 @@ export class WavStreamPlayer {
    * @returns {Promise<true>}
    */
     async connect() {
-        this.context = new AudioContext({ sampleRate: this.sampleRate });
+        this.context = new AudioContext({sampleRate: this.sampleRate});
         if (this.context.state === 'suspended') {
             await this.context.resume();
         }
@@ -77,14 +77,14 @@ export class WavStreamPlayer {
         const streamNode = new AudioWorkletNode(this.context, 'stream_processor');
         streamNode.connect(this.context.destination);
         streamNode.port.onmessage = (e) => {
-            const { event } = e.data;
+            const {event} = e.data;
             if (event === 'stop') {
                 streamNode.disconnect();
                 this.stream = null;
             } else if (event === 'offset') {
-                const { requestId, trackId, offset } = e.data;
+                const {requestId, trackId, offset} = e.data;
                 const currentTime = offset / this.sampleRate;
-                this.trackSampleOffsets[requestId] = { trackId, offset, currentTime };
+                this.trackSampleOffsets[requestId] = {trackId, offset, currentTime};
             }
         };
         this.analyser.disconnect();
@@ -117,7 +117,7 @@ export class WavStreamPlayer {
         } else {
             throw new Error('argument must be Int16Array or ArrayBuffer');
         }
-        this.stream.port.postMessage({ event: 'write', buffer, trackId });
+        this.stream.port.postMessage({event: 'write', buffer, trackId});
         return buffer;
     }
 
@@ -140,7 +140,7 @@ export class WavStreamPlayer {
             trackSampleOffset = this.trackSampleOffsets[requestId];
             await new Promise((r) => setTimeout(() => r(), 1));
         }
-        const { trackId } = trackSampleOffset;
+        const {trackId} = trackSampleOffset;
         if (interrupt && trackId) {
             this.interruptedTrackIds[trackId] = true;
         }

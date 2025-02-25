@@ -1,12 +1,12 @@
 <script setup lang='ts'>
-import type { DataTableColumns } from 'naive-ui';
-import { computed, h, ref, watch } from 'vue';
-import { NButton, NCard, NDataTable, NDivider, NInput, NList, NListItem, NModal, NPopconfirm, NSpace, NTabPane, NTabs, NThing, useMessage } from 'naive-ui';
+import type {DataTableColumns} from 'naive-ui';
+import {computed, h, ref, watch} from 'vue';
+import {NButton, NCard, NDataTable, NDivider, NInput, NList, NListItem, NModal, NPopconfirm, NSpace, NTabPane, NTabs, NThing, useMessage} from 'naive-ui';
 import PromptRecommend from '../../../assets/recommend.json';
-import { SvgIcon } from '..';
-import { usePromptStore } from '@/store';
-import { useBasicLayout } from '@/hooks/useBasicLayout';
-import { t } from '@/locales';
+import {SvgIcon} from '..';
+import {usePromptStore} from '@/store';
+import {useBasicLayout} from '@/hooks/useBasicLayout';
+import {t} from '@/locales';
 
 interface DataProps {
   renderKey: string
@@ -42,7 +42,7 @@ const exportLoading = ref(false);
 const searchValue = ref<string>('');
 
 // 移动端自适应相关
-const { isMobile } = useBasicLayout();
+const {isMobile} = useBasicLayout();
 
 const promptStore = usePromptStore();
 
@@ -61,12 +61,12 @@ const modalMode = ref('');
 const tempModifiedItem = ref<any>({});
 
 // 添加修改导入都使用一个Modal, 临时修改内容占用tempPromptKey,切换状态前先将内容都清楚
-const changeShowModal = (mode: 'add' | 'modify' | 'local_import', selected = { key: '', value: '' }) => {
+const changeShowModal = (mode: 'add' | 'modify' | 'local_import', selected = {key: '', value: ''}) => {
     if (mode === 'add') {
         tempPromptKey.value = '';
         tempPromptValue.value = '';
     } else if (mode === 'modify') {
-        tempModifiedItem.value = { ...selected };
+        tempModifiedItem.value = {...selected};
         tempPromptKey.value = selected.key;
         tempPromptValue.value = selected.value;
     } else if (mode === 'local_import') {
@@ -95,11 +95,11 @@ const addPromptTemplate = () => {
             return;
         }
         if (i.value === tempPromptValue.value) {
-            message.error(t('store.addRepeatContentTips', { msg: tempPromptKey.value }));
+            message.error(t('store.addRepeatContentTips', {msg: tempPromptKey.value}));
             return;
         }
     }
-    promptList.value.unshift({ key: tempPromptKey.value, value: tempPromptValue.value } as never);
+    promptList.value.unshift({key: tempPromptKey.value, value: tempPromptValue.value} as never);
     message.success(t('common.addSuccess'));
     changeShowModal('add');
 };
@@ -124,12 +124,12 @@ const modifyPromptTemplate = () => {
             return;
         }
         if (i.value === tempPromptValue.value) {
-            message.error(t('store.editRepeatContentTips', { msg: i.key }));
+            message.error(t('store.editRepeatContentTips', {msg: i.key}));
             return;
         }
     }
 
-    promptList.value = [{ key: tempPromptKey.value, value: tempPromptValue.value }, ...tempList] as never;
+    promptList.value = [{key: tempPromptKey.value, value: tempPromptValue.value}, ...tempList] as never;
     message.success(t('common.editSuccess'));
     changeShowModal('modify');
 };
@@ -171,18 +171,18 @@ const importPromptTemplate = (from = 'online') => {
             let safe = true;
             for (const j of promptList.value) {
                 if (j.key === i[key]) {
-                    message.warning(t('store.importRepeatTitle', { msg: i[key] }));
+                    message.warning(t('store.importRepeatTitle', {msg: i[key]}));
                     safe = false;
                     break;
                 }
                 if (j.value === i[value]) {
-                    message.warning(t('store.importRepeatContent', { msg: i[key] }));
+                    message.warning(t('store.importRepeatContent', {msg: i[key]}));
                     safe = false;
                     break;
                 }
             }
             if (safe) {
-                promptList.value.unshift({ key: i[key], value: i[value] } as never);
+                promptList.value.unshift({key: i[key], value: i[value]} as never);
             }
         }
         message.success(t('common.importSuccess'));
@@ -198,7 +198,7 @@ const importPromptTemplate = (from = 'online') => {
 const exportPromptTemplate = () => {
     exportLoading.value = true;
     const jsonDataStr = JSON.stringify(promptList.value);
-    const blob = new Blob([jsonDataStr], { type: 'application/json' });
+    const blob = new Blob([jsonDataStr], {type: 'application/json'});
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.href = url;
@@ -274,7 +274,7 @@ const createColumns = (): DataTableColumns<DataProps> => {
             width: 100,
             align: 'center',
             render(row) {
-                return h('div', { class: 'flex items-center flex-col gap-2' }, {
+                return h('div', {class: 'flex items-center flex-col gap-2'}, {
                     default: () => [h(
                         NButton,
                         {
@@ -283,7 +283,7 @@ const createColumns = (): DataTableColumns<DataProps> => {
                             type: 'info',
                             onClick: () => changeShowModal('modify', row),
                         },
-                        { default: () => t('common.edit') },
+                        {default: () => t('common.edit')},
                     ),
                     h(
                         NButton,
@@ -293,7 +293,7 @@ const createColumns = (): DataTableColumns<DataProps> => {
                             type: 'error',
                             onClick: () => deletePromptTemplate(row),
                         },
-                        { default: () => t('common.delete') },
+                        {default: () => t('common.delete')},
                     ),
                     ],
                 });
@@ -309,7 +309,7 @@ watch(
     () => {
         promptStore.updatePromptList(promptList.value);
     },
-    { deep: true },
+    {deep: true},
 );
 
 const dataSource = computed(() => {

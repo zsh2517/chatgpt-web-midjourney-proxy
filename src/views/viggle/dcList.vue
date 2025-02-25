@@ -1,28 +1,28 @@
 <script setup lang="ts"> 
-import { FeedViggleTask } from '@/api/viggle';
-import { ViggleTask, viggleStore } from '@/api/viggleStore';
-import {NEmpty ,NButton,NPopover, NTag,NButtonGroup,useMessage ,NPopconfirm} from 'naive-ui';
+import {FeedViggleTask} from '@/api/viggle';
+import {ViggleTask, viggleStore} from '@/api/viggleStore';
+import {NEmpty, NButton, NPopover, NTag, NButtonGroup, useMessage, NPopconfirm} from 'naive-ui';
  
-import { ref, watch } from 'vue';
+import {ref, watch} from 'vue';
 import {SvgIcon} from '@/components/common';
-import { homeStore } from '@/store';
-import { t } from '@/locales';
+import {homeStore} from '@/store';
+import {t} from '@/locales';
 
-const st= ref({pIndex:-1});
-const list= ref<ViggleTask[]>([]);
+const st = ref({pIndex:-1});
+const list = ref<ViggleTask[]>([]);
 const ms = useMessage();
 const csuno = new viggleStore();
-const initLoad=()=>{
+const initLoad = ()=>{
     let arr = csuno.getObjs();
-    list.value= arr.reverse();
+    list.value = arr.reverse();
 };
-const TaskDown=async (item:ViggleTask)=>{
+const TaskDown = async (item:ViggleTask)=>{
     
     const link = document.createElement('a');
     link.href = item.result ;
-    link.download = item.taskID+'.mp4';
+    link.download = item.taskID + '.mp4';
     link.target = '_blank';
-    link.rel='noreferrer';
+    link.rel = 'noreferrer';
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -30,12 +30,12 @@ const TaskDown=async (item:ViggleTask)=>{
 };
 
 watch(()=>homeStore.myData.act, (n)=>{
-    if(n=='FeedViggleTask')  {
+    if (n == 'FeedViggleTask')  {
         initLoad();
     } 
 });
-const deleteGo=(v:ViggleTask)=>{
-    if(csuno.delete(v)) {
+const deleteGo = (v:ViggleTask)=>{
+    if (csuno.delete(v)) {
         ms.success( t('common.deleteSuccess'));
         initLoad();
     }

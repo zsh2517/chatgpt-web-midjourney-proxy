@@ -30,7 +30,7 @@ export default {
     },
     chat: {
         newChatButton: '新增對話',
-        //placeholder: '來說點什麼...（Shift + Enter = 換行，"/" 觸發提示詞）',
+        // placeholder: '來說點什麼...（Shift + Enter = 換行，"/" 觸發提示詞）',
         placeholder: '可輸入說點什麼，也可貼截圖或拖拽檔案（Shift + Enter = 換行，"/" 觸發提示詞）',
         placeholderMobile: '來說點什麼...',
         copy: '複製',
@@ -189,8 +189,8 @@ export default {
         'micRec': '開始錄音，請說話！2秒內無聲音將自動關閉',
         'micRecEnd': '錄音已結束',
         subtle: '高清2倍'
-        ,creative: '高清2倍. 創意'
-        ,gpt_gx: 'GPTs 用 g-*',
+        , creative: '高清2倍. 創意'
+        , gpt_gx: 'GPTs 用 g-*',
         'ideoabout': '有關 Ideogram',
         'ideoserver': 'Ideogram 伺服器',
         'ideokeyPlaceholder': 'Ideogram 的 API 金鑰（可選）',
@@ -209,13 +209,13 @@ export default {
         needImg: '請傳參考圖才生效！',
         seed: '種子數字 1~2147483647',
         klingInfo: '說明： <li>1. 高表現是3.5倍的價格</li> <li>2. 10秒是2倍的價格</li> <li>3. 尾幀必須有參考圖片才生效</li>'
-        ,'camera_type': '鏡頭',
+        , 'camera_type': '鏡頭',
         'cnull': '智能配對',
         'down_back': '下移拉遠',
         'forward_up': '推進上移',
         'right_turn_forward': '右旋推進',
         'left_turn_forward': '左旋推進'
-        ,kling:'可灵',
+        , kling:'可灵',
         rttab: '語音',
         rtinfo: '實時語音對話服務(realtime)',
         rtsetting: '請設置服務器，目前Realtime僅支持遠程服務；需本地服務請聯繫作者',
@@ -438,7 +438,7 @@ export default {
             landscape: '風景 (3:2)',
         },
     }
-    ,suno:{
+    , suno:{
         'description': '描述模式',
         'custom': '專業模式',
         'style': '歌曲風格',
@@ -474,7 +474,7 @@ export default {
         info: '說明：<br>上載音頻的持續時間必須在6秒到60秒之間'
 
     }
-    ,video:{
+    , video:{
         'menu': '視頻',
         'menuinfo': 'Luma及其他視頻創作',
         'descpls': '視頻創作描述',

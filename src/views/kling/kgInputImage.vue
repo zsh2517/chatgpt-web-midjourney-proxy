@@ -1,67 +1,67 @@
 <script setup lang="ts">
-import { onMounted, ref } from 'vue';
-import {useMessage, NButton,NInput,NTag} from 'naive-ui';
-import { clearImageBase64, mlog, upImg } from '@/api';
-import { homeStore } from '@/store';
-import { klingFeed, klingFetch } from '@/api/kling';
+import {onMounted, ref} from 'vue';
+import {useMessage, NButton, NInput, NTag} from 'naive-ui';
+import {clearImageBase64, mlog, upImg} from '@/api';
+import {homeStore} from '@/store';
+import {klingFeed, klingFetch} from '@/api/kling';
 
-const f= ref({prompt:'',negative_prompt:'',image:'',image_fidelity:0.5,n:1,aspect_ratio:'1:1'});
-const st= ref({bili:0,isLoading:false});
+const f = ref({prompt:'', negative_prompt:'', image:'', image_fidelity:0.5, n:1, aspect_ratio:'1:1'});
+const st = ref({bili:0, isLoading:false});
 
-const fsRef= ref() ; 
+const fsRef = ref() ; 
 const ms = useMessage();
 
 
-const vf=[{s:'width: 100%; height: 100%;',label:'1:1',value:'1:1'}
-    ,{s:'width: 100%; height: 75%;',label:'4:3',value:'4:3'}
-    ,{s:'width: 75%; height: 100%;',label:'3:4',value:'3:4'}
-    ,{s:'width: 100%; height: 50%;',label:'16:9',value:'16:9'}
-    ,{s:'width: 50%; height: 100%;',label:'9:16',value:'9:16'}
+const vf = [{s:'width: 100%; height: 100%;', label:'1:1', value:'1:1'}
+    , {s:'width: 100%; height: 75%;', label:'4:3', value:'4:3'}
+    , {s:'width: 75%; height: 100%;', label:'3:4', value:'3:4'}
+    , {s:'width: 100%; height: 50%;', label:'16:9', value:'16:9'}
+    , {s:'width: 50%; height: 100%;', label:'9:16', value:'9:16'}
 ];
 
 
-function selectFile(input:any){
+function selectFile(input:any) {
     // fsFile.value= input.target.files[0];
     upImg(input.target.files[0]).then(d=>{
-        f.value.image= d;
-        fsRef.value='';
+        f.value.image = d;
+        fsRef.value = '';
     }).catch(e=>ms.error(e));
     
 }
 
 const clearInput = ()=>{
-    f.value.prompt='';
-    f.value.image= '';
-    fsRef.value='';
+    f.value.prompt = '';
+    f.value.image = '';
+    fsRef.value = '';
 };
 
 const createImg = async ()=>{
-    st.value.isLoading= true;
-    f.value.aspect_ratio= vf[st.value.bili].value;
-    let abc= {...f.value};
-    if(abc.image) {
-        abc.image= clearImageBase64( abc.image );
+    st.value.isLoading = true;
+    f.value.aspect_ratio = vf[st.value.bili].value;
+    let abc = {...f.value};
+    if (abc.image) {
+        abc.image = clearImageBase64( abc.image );
     }
     try {
-        const d:any= await klingFetch('/v1/images/generations ' , abc  );
+        const d:any = await klingFetch('/v1/images/generations ', abc  );
         mlog('img', d );
-        klingFeed( d.data.task_id ,'image',  f.value.prompt );
-    //f.value.image= ''
+        klingFeed( d.data.task_id, 'image',  f.value.prompt );
+    // f.value.image= ''
     } catch (error) {
     }  
-    st.value.isLoading= false;
+    st.value.isLoading = false;
 };
 
 onMounted(() => {
     homeStore.setMyData({ms:ms});
 });
 
-const test=()=>{
-    klingFetch('https://api.openai-hk.com/v1/models').then(d=>mlog('models',d ) );
+const test = ()=>{
+    klingFetch('https://api.openai-hk.com/v1/models').then(d=>mlog('models', d ) );
 };
-//Cl6NIGbYLVQAAAAAALp
-//klingFeed('Cl6NIGbYLVQAAAAAALp-jw','image',"测试啊").then(d=>mlog('d>>',d ) ) 
-//klingFeed('Cl6NIGbYLVQAAAAAALXTmA','image',"大雪纷飞").then(d=>mlog('d>>',d ) ) 
+// Cl6NIGbYLVQAAAAAALp
+// klingFeed('Cl6NIGbYLVQAAAAAALp-jw','image',"测试啊").then(d=>mlog('d>>',d ) ) 
+// klingFeed('Cl6NIGbYLVQAAAAAALXTmA','image',"大雪纷飞").then(d=>mlog('d>>',d ) ) 
 </script>
 <template>
 <div class="overflow-y-auto bg-[#fafbfc]   dark:bg-[#18181c] h-full ">

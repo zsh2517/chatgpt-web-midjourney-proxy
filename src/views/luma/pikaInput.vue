@@ -1,35 +1,35 @@
 <script setup lang="ts">
-import { ref } from 'vue';
-import { mlog, upImg } from '@/api'; 
-import { useMessage,NButton,NInput,NTag,NSelect,NPopover,NSwitch } from 'naive-ui';
+import {ref} from 'vue';
+import {mlog, upImg} from '@/api'; 
+import {useMessage, NButton, NInput, NTag, NSelect, NPopover, NSwitch} from 'naive-ui';
  
-import { t } from '@/locales'; 
-import { pikaFeed, pikaFetch } from '@/api/pika';
+import {t} from '@/locales'; 
+import {pikaFeed, pikaFetch} from '@/api/pika';
 
-let txt2v={
+let txt2v = {
  	'pikaffect': '',
     'promptText': '',
     'model': '1.5',
-    'options': {'aspectRatio':1.7777777777777777,'frameRate':24,'camera':{},'parameters':{'guidanceScale':12,'motion':1,'negativePrompt':''},'extend':false}
+    'options': {'aspectRatio':1.7777777777777777, 'frameRate':24, 'camera':{}, 'parameters':{'guidanceScale':12, 'motion':1, 'negativePrompt':''}, 'extend':false}
    
 };
-let img2v={
+let img2v = {
  	'pikaffect': '',
     'promptText': '',
     'model': '1.5',
-    'options': {'frameRate':24,'camera':{},'parameters':{'guidanceScale':12,'motion':1,'negativePrompt':''},'extend':false}
-    ,'image':'https://www.openai-hk.com/res/img/open.png'
+    'options': {'frameRate':24, 'camera':{}, 'parameters':{'guidanceScale':12, 'motion':1, 'negativePrompt':''}, 'extend':false}
+    , 'image':'https://www.openai-hk.com/res/img/open.png'
 };
 
-const vf=[{s:'width: 100%; height: 100%;',label:'1:1',value:1}
-    ,{s:'width: 100%; height: 75%;',label:'4:3',value:1.3333333333333333}
-    ,{s:'width: 75%; height: 100%;',label:'3:4',value:0.75}
-    ,{s:'width: 100%; height: 50%;',label:'16:9',value:1.7777777777777777}
-    ,{s:'width: 50%; height: 100%;',label:'9:16',value:0.5625}
+const vf = [{s:'width: 100%; height: 100%;', label:'1:1', value:1}
+    , {s:'width: 100%; height: 75%;', label:'4:3', value:1.3333333333333333}
+    , {s:'width: 75%; height: 100%;', label:'3:4', value:0.75}
+    , {s:'width: 100%; height: 50%;', label:'16:9', value:1.7777777777777777}
+    , {s:'width: 50%; height: 100%;', label:'9:16', value:0.5625}
 ];
-const mvOption= [
-    {label:'verion: v2.0',value: '2.0'}
-    ,{label:'verion: v1.5',value: '1.5'}
+const mvOption = [
+    {label:'verion: v2.0', value: '2.0'}
+    , {label:'verion: v1.5', value: '1.5'}
 ];
 
 let ezOption = [
@@ -58,7 +58,7 @@ let ezOption = [
         poster: 'https://cdn.pika.art/feature/v1.5/pikaffect/decapitate.jpg',
         title: 'Decapitate'
             
-    },{
+    }, {
         video: 'https://cdn.pika.art/feature/v1.5/pikaffect/eye-pop.webm',
         poster: 'https://cdn.pika.art/feature/v1.5/pikaffect/eye-pop.jpg',
         title: 'Eye-pop'
@@ -104,58 +104,58 @@ let ezOption = [
         video: 'https://cdn.pika.art/feature/v1.5/pikaffect/explode.webm',
         poster: 'https://cdn.pika.art/feature/v1.5/pikaffect/explode.jpg',
         title: 'Explode',
-    //text:'Explode it'
+    // text:'Explode it'
     }];
 
-const pika= ref({image:'',prompt:'',aspectRatio:1.7777777777777777,negativePrompt:'',pe_index:-1,mv:'2.0'});
-const fsRef= ref() ; 
+const pika = ref({image:'', prompt:'', aspectRatio:1.7777777777777777, negativePrompt:'', pe_index:-1, mv:'2.0'});
+const fsRef = ref() ; 
 const ms = useMessage();
-const st= ref({ isLoading:false});
+const st = ref({isLoading:false});
 
-function selectFile(input:any){
+function selectFile(input:any) {
     // fsFile.value= input.target.files[0];
     upImg(input.target.files[0]).then(d=>{
-        pika.value.image= d;
-        fsRef.value='';
+        pika.value.image = d;
+        fsRef.value = '';
     }).catch(e=>ms.error(e));
 }
 const clearInput = ()=>{
-    pika.value.prompt='';
-    pika.value.image= ''; 
-    fsRef.value=''; 
-    pika.value.pe_index= -1;
+    pika.value.prompt = '';
+    pika.value.image = ''; 
+    fsRef.value = ''; 
+    pika.value.pe_index = -1;
 };
-const createVideo = async()=>{
-    let sb= pika.value.image ? {...img2v} : {...txt2v};
-    sb.promptText= pika.value.prompt; 
-    sb.options.parameters.negativePrompt= pika.value.negativePrompt;
-    if( pika.value.image ){
-        sb.image= pika.value.image;
-    }else{
-        sb.options.aspectRatio= pika.value.aspectRatio;
+const createVideo = async ()=>{
+    let sb = pika.value.image ? {...img2v} : {...txt2v};
+    sb.promptText = pika.value.prompt; 
+    sb.options.parameters.negativePrompt = pika.value.negativePrompt;
+    if ( pika.value.image ) {
+        sb.image = pika.value.image;
+    } else {
+        sb.options.aspectRatio = pika.value.aspectRatio;
     }
-    if(pika.value.pe_index>=0){
-        sb.pikaffect= ezOption[pika.value.pe_index].title;
+    if (pika.value.pe_index >= 0) {
+        sb.pikaffect = ezOption[pika.value.pe_index].title;
     }
-    sb.model= pika.value.mv;
-    mlog('sb>> '  ,  sb  );
-    st.value.isLoading= true;
+    sb.model = pika.value.mv;
+    mlog('sb>> ',  sb  );
+    st.value.isLoading = true;
     try {
-        const a:any= await pikaFetch('/generate' , sb  );
-        st.value.isLoading= false;
-        if(a.id){
+        const a:any = await pikaFetch('/generate', sb  );
+        st.value.isLoading = false;
+        if (a.id) {
             pikaFeed( a.id);
-        }else{
-            ms.error( t('mj.createFail') );//createFail
+        } else {
+            ms.error( t('mj.createFail') );// createFail
         }
     } catch (error) {
-        st.value.isLoading= false;
+        st.value.isLoading = false;
     } 
 };
 
 const selecteffect = (i:number)=>{
-    pika.value.pe_index= i ;
-    pika.value.prompt= ezOption[i].title+' it';
+    pika.value.pe_index = i ;
+    pika.value.prompt = ezOption[i].title + ' it';
 };
 </script>
 <template>

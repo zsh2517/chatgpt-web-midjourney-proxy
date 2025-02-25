@@ -30,7 +30,7 @@ export default {
     },
     chat: {
         newChatButton: 'Yeni Sohbet',
-        //placeholder: 'Ask me anything...(Shift + Enter = line break, "/" to trigger prompts)',
+        // placeholder: 'Ask me anything...(Shift + Enter = line break, "/" to trigger prompts)',
         placeholder: 'Bana her şeyi sor, veya ekran görüntüleri yapıştır veya dosyayı sürükleyip bırak. (Shift + Enter = satır atla, "/" prompts tetiklemek için)',
         placeholderMobile: 'Bana her şeyi sor...',
         copy: 'Kopyala',
@@ -121,7 +121,7 @@ export default {
         'pan_up': 'Yukarı',
         'pan_down': 'Aşağı',
         'up2': 'HD 2x',
-        'up4': 'HD 4x' ,
+        'up4': 'HD 4x',
 
         'thinking': 'Düşünüyor...',
         'noReUpload': 'Yeniden yüklenemiyor',
@@ -182,7 +182,7 @@ export default {
         'presence_penaltyInfo': '(presence_penalty) değeri arttıkça, yeni konulara genişleme olasılığı daha yüksektir',
         'frequency_penalty': 'Frekans Cezası',
         'frequency_penaltyInfo': '(frequency_penalty) değeri arttıkça, tekrarlanan kelimelerin azaltılma olasılığı daha yüksektir'
-        ,'tts_voice': 'TTS Ses Karakteri',
+        , 'tts_voice': 'TTS Ses Karakteri',
         'typing': 'Yazıyor',
         'authErro': 'Yetkilendirme başarısız',
         'authBt': 'Lütfen yetkilendirme erişim şifresini yeniden girin',
@@ -192,8 +192,8 @@ export default {
         'micRecEnd': 'Kayıt sona erdi',
 
         subtle: 'Haute définition 2x'
-        ,creative: 'Haute définition 2x. Créatif'
-        ,gpt_gx: 'Les GPT utilisent g-*',
+        , creative: 'Haute définition 2x. Créatif'
+        , gpt_gx: 'Les GPT utilisent g-*',
 
         'ideoabout': 'Ideogram Hakkında',
         'ideoserver': 'Ideogram Sunucusu',
@@ -214,13 +214,13 @@ export default {
         seed: 'Tohum numarası 1~2147483647',
         klingInfo: 'Açıklama: <li>1. Yüksek kalite fiyatın 3.5 katıdır</li> <li>2. 10 saniye fiyatın 2 katıdır</li> <li>3. Son kare etkili olması için bir referans resmine sahip olmalıdır</li>'
     
-        ,'camera_type': 'Lens',
+        , 'camera_type': 'Lens',
         'cnull': 'Akıllı eşleştirme',
         'down_back': 'Aşağı ve geri git',
         'forward_up': 'İleri it ve yukarı kaldır',
         'right_turn_forward': 'Sağa dön ve ileri git',
         'left_turn_forward': 'Sola dön ve ileri git'
-        ,kling:'Kling',
+        , kling:'Kling',
         rttab: 'Ses',
         rtinfo: 'Gerçek zamanlı sesli görüşme hizmeti (realtime)',
         rtsetting: 'Lütfen sunucuyu ayarlayın. Şu anda Realtime yalnızca uzaktan hizmetleri desteklemektedir; yerel hizmetler için lütfen yazarla iletişime geçin.',
@@ -444,7 +444,7 @@ export default {
             landscape: 'Landscape (3:2)',
         },
     }
-    ,suno:{
+    , suno:{
         'description': 'Açıklama Modu',
         'custom': 'Profesyonel Mod',
         'style': 'Şarkı Tarzı',
@@ -478,7 +478,7 @@ export default {
         fail: 'Başarısız',
         info: 'Açıklamalar:<br>Yüklenen sesin süresi 6 saniye ile 60 saniye arasında olmalıdır'
     }
-    ,video:{
+    , video:{
         'menu': 'Videolar',
         'menuinfo': 'Luma ve diğer video oluşturma',
         'descpls': 'Video oluşturma açıklaması',

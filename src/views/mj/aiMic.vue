@@ -1,71 +1,71 @@
 <script setup lang="ts">
-import { mlog } from '@/api';
-import { SvgIcon } from '@/components/common';
+import {mlog} from '@/api';
+import {SvgIcon} from '@/components/common';
 import Recorder from 'js-audio-recorder';
-import  { NButton,useMessage,NButtonGroup } from 'naive-ui';
-import { useBasicLayout } from '@/hooks/useBasicLayout';
-import { ref,watch,onUnmounted } from 'vue';
-import { t } from '@/locales';
+import  {NButton, useMessage, NButtonGroup} from 'naive-ui';
+import {useBasicLayout} from '@/hooks/useBasicLayout';
+import {ref, watch, onUnmounted} from 'vue';
+import {t} from '@/locales';
 
-const emit = defineEmits(['process' ,'send','cancel']);
+const emit = defineEmits(['process', 'send', 'cancel']);
 let recorder = new Recorder();
 interface statType{
     duration: number
     fileSize: number
     vol: number
 }
-const stat = ref<statType>({duration:0,fileSize:0,vol:0});
-const st =ref({start:0,isGo:false});
+const stat = ref<statType>({duration:0, fileSize:0, vol:0});
+const st = ref({start:0, isGo:false});
 
 const ms = useMessage();
-const { isMobile } = useBasicLayout();
+const {isMobile} = useBasicLayout();
 
 recorder.onprogress =  (params) => {
-    stat.value = {duration: params.duration , fileSize: params.fileSize, vol: params.vol };
-    //emit('process', stat.value);
+    stat.value = {duration: params.duration, fileSize: params.fileSize, vol: params.vol};
+    // emit('process', stat.value);
 };
 const start = ()=>{
     recorder.start().then(()=>{
-        st.value.start=1;
-        st.value.isGo=true;
+        st.value.start = 1;
+        st.value.isGo = true;
         ms.info( t('mj.micIng') );
     }).catch(e=>{
         mlog('录音错误', e );
-        ms.error( t('mj.fail')+':'+e );
+        ms.error( t('mj.fail') + ':' + e );
         emit('cancel');
     });
 };
-const pause=()=>{
+const pause = ()=>{
     recorder.pause(); 
-    st.value.start=2;
+    st.value.start = 2;
 
 };
-const pauseGoon=()=>{
+const pauseGoon = ()=>{
     recorder.resume();
-    st.value.start=1;
+    st.value.start = 1;
     recorder.stopPlay();
 };
-const send=()=>{
+const send = ()=>{
     stop();
-    emit('send',{blob: recorder.getWAVBlob() , stat:stat.value });
-    stat.value= {duration:0,fileSize:0,vol:0} ;
+    emit('send', {blob: recorder.getWAVBlob(), stat:stat.value});
+    stat.value = {duration:0, fileSize:0, vol:0} ;
 };
-const play=()=>{
-    //if(st.value.start==1) pause();
+const play = ()=>{
+    // if(st.value.start==1) pause();
     recorder.play();
     stop();
 };
-const stopAdnRecord= ()=>{
+const stopAdnRecord = ()=>{
     stop();
     start();
-    st.value.start=1;
+    st.value.start = 1;
 };
-const stop=()=>{
-    st.value.start=0;
+const stop = ()=>{
+    st.value.start = 0;
     recorder.stop();
     recorder.stopPlay();
 };
-const cancal=()=>{
+const cancal = ()=>{
     stop();
     emit('cancel');
 };
@@ -73,7 +73,7 @@ onUnmounted(() => {
     recorder.stop();
     recorder.destroy();
 }),
-watch(()=> stat.value , (n)=> emit('process', stat.value) ,{deep:true} );
+watch(()=> stat.value, (n)=> emit('process', stat.value), {deep:true} );
 
 start();
 </script>

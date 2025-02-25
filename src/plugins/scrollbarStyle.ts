@@ -1,4 +1,4 @@
-import { darkTheme, lightTheme } from 'naive-ui';
+import {darkTheme, lightTheme} from 'naive-ui';
 
 const setupScrollbarStyle = () => {
     const style = document.createElement('style');

@@ -1,30 +1,30 @@
 <script setup lang="ts">
-import { computed,defineAsyncComponent ,ref} from 'vue';
-import { SvgIcon ,HoverButton} from '@/components/common';
-import { useBasicLayout } from '@/hooks/useBasicLayout';
-const { isMobile } = useBasicLayout();
-import { NAvatar,NTooltip } from 'naive-ui';
-import { homeStore, useUserStore,useChatStore } from '@/store';
+import {computed, defineAsyncComponent, ref} from 'vue';
+import {SvgIcon, HoverButton} from '@/components/common';
+import {useBasicLayout} from '@/hooks/useBasicLayout';
+const {isMobile} = useBasicLayout();
+import {NAvatar, NTooltip} from 'naive-ui';
+import {homeStore, useUserStore, useChatStore} from '@/store';
 import defaultAvatar from '@/assets/avatar.jpg';
-import { router } from '@/router';
-import { isDisableMenu } from '@/api';
-import { useRouter } from 'vue-router';
+import {router} from '@/router';
+import {isDisableMenu} from '@/api';
+import {useRouter} from 'vue-router';
 
-//import gallery from '@/views/gallery/index.vue'
+// import gallery from '@/views/gallery/index.vue'
 
 const chatStore = useChatStore();
 const Setting = defineAsyncComponent(() => import('@/components/common/Setting/index.vue'));
 const userStore = useUserStore();
 
-const st= ref({'show':false,showImg:false, menu:[],active:'chat'});
+const st = ref({'show':false, showImg:false, menu:[], active:'chat'});
 
 
 const userInfo = computed(() => userStore.userInfo);
 
 const urouter = useRouter(); //
  
-const goHome =computed(  () => {
-    //router.push('/')
+const goHome = computed(  () => {
+    // router.push('/')
     return router.currentRoute.value.name;
 });
 // const go=(n:string)=>{
@@ -36,8 +36,8 @@ const goHome =computed(  () => {
 //         st.value.show=true;
 //     }
 // }
-//mlog('g', goHome() );
-const chatId= computed(()=>chatStore.active??'1002' );
+// mlog('g', goHome() );
+const chatId = computed(()=>chatStore.active ?? '1002' );
 </script>
 <template>
 <div v-if="!isMobile" class="flex-shrink-0 w-[60px] z-[1000]  h-full" data-tauri-drag-region>

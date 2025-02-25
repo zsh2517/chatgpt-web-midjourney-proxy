@@ -1,4 +1,4 @@
-import { ss } from '@/utils/storage';
+import {ss} from '@/utils/storage';
 
 const LOCAL_NAME = 'chatStorage';
 
@@ -7,14 +7,14 @@ export function defaultState(): Chat.ChatState {
     return {
         active: uuid,
         usingContext: true,
-        history: [{ uuid, title: 'New Chat', isEdit: false }],
-        chat: [{ uuid, data: [] }],
+        history: [{uuid, title: 'New Chat', isEdit: false}],
+        chat: [{uuid, data: []}],
     };
 }
 
 export function getLocalState(): Chat.ChatState {
     const localState = ss.get(LOCAL_NAME);
-    return { ...defaultState(), ...localState };
+    return {...defaultState(), ...localState};
 }
 
 export function setLocalState(state: Chat.ChatState) {

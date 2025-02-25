@@ -144,7 +144,7 @@ export default {
 
         'totalUsage': 'Tổng số tiền đăng ký',
         'disableGpt4': 'GPT4 đã tắt',
-        'setTextInfo': 'Lỗi Khóa API OpenAI, nhấp vào đây để thử lại' ,
+        'setTextInfo': 'Lỗi Khóa API OpenAI, nhấp vào đây để thử lại',
 
         'attr1': 'Đính',
         'ulink': 'Liên kết Ảnh gốc',
@@ -180,7 +180,7 @@ export default {
         'presence_penaltyInfo': 'Khi giá trị (presence_penalty) tăng, có khả năng mở rộng đến các chủ đề mới cao hơn',
         'frequency_penalty': 'Hình Phạt Tần Số',
         'frequency_penaltyInfo': 'Khi giá trị (frequency_penalty) tăng, có khả năng giảm sự lặp lại của các từ nhiều hơn'
-        ,'tts_voice': 'Nhân vật giọng TTS',
+        , 'tts_voice': 'Nhân vật giọng TTS',
         'typing': 'Đang nhập',
         'authErro': 'Xác thực không thành công',
         'authBt': 'Vui lòng nhập lại mật khẩu truy cập xác thực',
@@ -191,8 +191,8 @@ export default {
         'micRecEnd': 'Ghi âm đã kết thúc',
 
         subtle: 'Cao độ phân giải cao gấp 2 lần'
-        ,creative: 'Cao độ phân giải cao gấp 2 lần. Sáng tạo'
-        ,gpt_gx: 'GPTs sử dụng g-*',
+        , creative: 'Cao độ phân giải cao gấp 2 lần. Sáng tạo'
+        , gpt_gx: 'GPTs sử dụng g-*',
 
         'ideoabout': 'Về Ideogram',
         'ideoserver': 'Máy chủ Ideogram',
@@ -213,14 +213,14 @@ export default {
         seed: 'Số hạt 1~2147483647',
         klingInfo: 'Mô tả: <li>1. Chất lượng cao gấp 3,5 lần giá</li> <li>2. 10 giây gấp 2 lần giá</li> <li>3. Khung cuối cùng phải có hình ảnh tham khảo để có hiệu lực</li>'
 
-        ,'camera_type': 'Ống kính',
+        , 'camera_type': 'Ống kính',
         'cnull': 'Ghép thông minh',
         'down_back': 'Di chuyển xuống và thu nhỏ',
         'forward_up': 'Đẩy tới và di chuyển lên',
         'right_turn_forward': 'Quay phải và đẩy tới',
         'left_turn_forward': 'Quay trái và đẩy tới'
-        ,kling:'Kling'
-        ,rttab: 'Giọng nói',
+        , kling:'Kling'
+        , rttab: 'Giọng nói',
         rtinfo: 'Dịch vụ hội thoại giọng nói thời gian thực (realtime)',
         rtsetting: 'Vui lòng thiết lập máy chủ. Hiện tại, Realtime chỉ hỗ trợ dịch vụ từ xa; nếu cần dịch vụ cục bộ, vui lòng liên hệ với tác giả.',
         rjcloded: 'Kết nối đã bị ngắt',
@@ -444,7 +444,7 @@ export default {
             landscape: 'Landscape (3:2)',
         },
     }
-    ,suno:{
+    , suno:{
         'description': 'Chế độ mô tả',
         'custom': 'Chế độ chuyên nghiệp',
         'style': 'Phong cách bài hát',
@@ -480,7 +480,7 @@ export default {
         info: 'Hướng dẫn:<br>Thời lượng tải lên âm thanh phải từ 6 giây đến 60 giây'
 
     }
-    ,video:{
+    , video:{
         'menu': 'Video',
         'menuinfo': 'Tạo video Luma và các video khác',
         'descpls': 'Mô tả tạo video',
@@ -508,7 +508,7 @@ export default {
         'repeat2':'Expired.Reget'
 
     }
-    ,dance:{
+    , dance:{
         menu: 'Nhảy múa',
         menuinfo: 'Tạo video nhảy múa với Viggle và các dịch vụ khác.',
         character: 'Nhân vật', 

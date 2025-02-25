@@ -72,7 +72,7 @@ export class WavPacker {
         } else if (!audio?.data) {
             throw new Error('Missing "data"');
         }
-        const { bitsPerSample, channels, data } = audio;
+        const {bitsPerSample, channels, data} = audio;
         const output = [
             // Header
             'RIFF',
@@ -98,7 +98,7 @@ export class WavPacker {
             ), // Chunk length
             data,
         ];
-        const blob = new Blob(output, { type: 'audio/mpeg' });
+        const blob = new Blob(output, {type: 'audio/mpeg'});
         const url = URL.createObjectURL(blob);
         return {
             blob,

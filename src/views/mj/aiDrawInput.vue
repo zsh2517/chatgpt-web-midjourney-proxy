@@ -1,29 +1,29 @@
 <script setup lang="ts">
-import { NTabs,NTabPane } from 'naive-ui';
+import {NTabs, NTabPane} from 'naive-ui';
 import aiDrawInputItem from './aiDrawInputItem.vue';
 import aiFace from './aiFace.vue';
 import aiBlend from './aiBlend.vue';
 import aiDall from './aiDall.vue';
 import aiIdeoInput from './aiIdeoInput.vue';
-import { useBasicLayout } from '@/hooks/useBasicLayout';
-import { SvgIcon } from '@/components/common';
-import { onMounted, ref, watch } from 'vue';
-import { gptServerStore } from '@/store';
-import { mlog } from '@/api';
-import { useRoute } from 'vue-router'; 
+import {useBasicLayout} from '@/hooks/useBasicLayout';
+import {SvgIcon} from '@/components/common';
+import {onMounted, ref, watch} from 'vue';
+import {gptServerStore} from '@/store';
+import {mlog} from '@/api';
+import {useRoute} from 'vue-router'; 
 
 const route = useRoute(); // 获取当前路由对象
 
-const $emit=defineEmits(['drawSent','close']);
-const drawSent=(d:any )=> $emit('drawSent',d);
-const {isMobile}= useBasicLayout();
+const $emit = defineEmits(['drawSent', 'close']);
+const drawSent = (d:any )=> $emit('drawSent', d);
+const {isMobile} = useBasicLayout();
 
-const st= ref({drawType:'draw',tab:''});
+const st = ref({drawType:'draw', tab:''});
 
 onMounted(()=>{
-    //st.value.drawType='draw'
-    if(gptServerStore.myData.DRAW_TYPE) {
-        st.value.drawType=gptServerStore.myData.DRAW_TYPE;
+    // st.value.drawType='draw'
+    if (gptServerStore.myData.DRAW_TYPE) {
+        st.value.drawType = gptServerStore.myData.DRAW_TYPE;
     }
 });
 
@@ -32,20 +32,20 @@ onMounted(()=>{
 //   gptServerStore.setMyData({DRAW_TYPE:n})
 // } )
 
-const handleUpdateValue=(v:string)=>{
-    //mlog("handleUpdateValue",v)
+const handleUpdateValue = (v:string)=>{
+    // mlog("handleUpdateValue",v)
     gptServerStore.setMyData({DRAW_TYPE:v});
 };
-const initLoad=()=>{
-    if(route.query.tab){
-        st.value.tab= 'midjourney';//route.query.tab as string;
-        let tt= (route.query.tab as string).toLocaleLowerCase();
-        if( ['dall.e','ideogram'].indexOf(tt)>-1 ){
-            st.value.tab=tt;
+const initLoad = ()=>{
+    if (route.query.tab) {
+        st.value.tab = 'midjourney';// route.query.tab as string;
+        let tt = (route.query.tab as string).toLocaleLowerCase();
+        if ( ['dall.e', 'ideogram'].indexOf(tt) > -1 ) {
+            st.value.tab = tt;
         }
         handleUpdateValue(   st.value.tab );
     } else {
-        st.value.tab=( gptServerStore.myData.DRAW_TYPE?gptServerStore.myData.DRAW_TYPE:'midjourney');
+        st.value.tab = ( gptServerStore.myData.DRAW_TYPE ? gptServerStore.myData.DRAW_TYPE : 'midjourney');
     }
 };
 initLoad();

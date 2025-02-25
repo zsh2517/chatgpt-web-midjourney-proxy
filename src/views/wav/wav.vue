@@ -1,39 +1,39 @@
 <script setup lang="ts">
-import { NButton,NInput, useMessage,NEmpty } from 'naive-ui';
-//import { WavRecorder, WavStreamPlayer } from '@/lib/wavtools/index.js';
-import { WavRecorder, WavStreamPlayer } from '@openai/realtime-wavtools';
-import { RealtimeClient } from '@openai/realtime-api-beta';
-import { ItemType } from '@openai/realtime-api-beta/dist/lib/client.js';
-import { ref,onMounted } from 'vue';
-import { mlog } from '@/api';
+import {NButton, NInput, useMessage, NEmpty} from 'naive-ui';
+// import { WavRecorder, WavStreamPlayer } from '@/lib/wavtools/index.js';
+import {WavRecorder, WavStreamPlayer} from '@openai/realtime-wavtools';
+import {RealtimeClient} from '@openai/realtime-api-beta';
+import {ItemType} from '@openai/realtime-api-beta/dist/lib/client.js';
+import {ref, onMounted} from 'vue';
+import {mlog} from '@/api';
 import realtime from './realtime.vue';
-import { homeStore } from '@/store';
+import {homeStore} from '@/store';
 
-const ms= useMessage();
+const ms = useMessage();
 
-const wavRecorder= new  WavRecorder({ sampleRate: 24000 });
-const wavStreamPlayer= new WavStreamPlayer({ sampleRate: 24000 }); 
+const wavRecorder = new  WavRecorder({sampleRate: 24000});
+const wavStreamPlayer = new WavStreamPlayer({sampleRate: 24000}); 
  
-const st= ref({apikey:'', isConnect:false,baseUrl:'',isRealtime:true });
+const st = ref({apikey:'', isConnect:false, baseUrl:'', isRealtime:true});
 
 
-const realtimeEvents= ref<RealtimeEvent[]>([]);
-const items= ref<ItemType[]>([]);
+const realtimeEvents = ref<RealtimeEvent[]>([]);
+const items = ref<ItemType[]>([]);
 
-const clientRef= ref<RealtimeClient>();
-const go= async()=>{
-    if(st.value.isConnect){
+const clientRef = ref<RealtimeClient>();
+const go = async ()=>{
+    if (st.value.isConnect) {
         mlog('isConnect yes!'  );
         ms.info('isConnect yes!');
         return;
     }
-    if(!clientRef.value || !st.value.isConnect ){
-        if(!st.value.apikey){
+    if (!clientRef.value || !st.value.isConnect ) {
+        if (!st.value.apikey) {
             mlog('api key null'  );
             ms.error('api key null');
             return;
         }
-        clientRef.value= new RealtimeClient( { 
+        clientRef.value = new RealtimeClient( { 
             apiKey:st.value.apikey,
             dangerouslyAllowAPIKeyInBrowser: true,
             baseUrl: st.value.baseUrl,
@@ -42,18 +42,18 @@ const go= async()=>{
         );
     }
     mlog('go', st.value.apikey );
-    const client= clientRef.value;
+    const client = clientRef.value;
     // Connect to realtime API
-    try{
+    try {
         await client.connect(); 
-    }catch(e ){
+    } catch (e ) {
         ms.error('websocket 连接服务器错误！');
         return; 
     }
-    try{
+    try {
     // Connect to microphone
         await wavRecorder.begin();
-    }catch(e){
+    } catch (e) {
         ms.error('不支持录音，可能是设备原因');
         return; 
     }
@@ -61,7 +61,7 @@ const go= async()=>{
     // Connect to audio output
     await wavStreamPlayer.connect();
 
-    st.value.isConnect=true;
+    st.value.isConnect = true;
 
     client.sendUserMessageContent([
         {
@@ -73,16 +73,16 @@ const go= async()=>{
     
 
     client.updateSession({
-        turn_detection:  { type: 'server_vad' },
+        turn_detection:  {type: 'server_vad'},
     });
     // client.on('error', (event: any) =>{
     //      ms.error('发生错误：'+event);
     //      console.error('error.event>>',event);
     // });
     await wavRecorder.record((data: { mono: Int16Array | ArrayBuffer; }) => {
-        try{
+        try {
             client.appendInputAudio(data.mono);
-        }catch(e){
+        } catch (e) {
             disconnectConversation();
             ms.error('请检查 api key 是否正确');
             mlog('appendInputAudio error', e );
@@ -96,11 +96,11 @@ const go= async()=>{
 
 };
 
-const disconnectConversation= async()=>{
-    //clientRef.value?.disconnect();
-    st.value.isConnect=false;
-    const client= clientRef.value;
-    //client?.reset();
+const disconnectConversation = async ()=>{
+    // clientRef.value?.disconnect();
+    st.value.isConnect = false;
+    const client = clientRef.value;
+    // client?.reset();
     client?.disconnect();
     await wavRecorder.end();
     await wavStreamPlayer.interrupt();
@@ -117,30 +117,30 @@ interface RealtimeEvent {
   event: { [key: string]: any };
 }
 
-const myListen=()=>{
-    const client= clientRef.value;
-    if( !client){
+const myListen = ()=>{
+    const client = clientRef.value;
+    if ( !client) {
         return;
     }
     // Set transcription, otherwise we don't get user transcriptions back
-    client.updateSession({ input_audio_transcription: { model: 'whisper-1' } });
+    client.updateSession({input_audio_transcription: {model: 'whisper-1'}});
 
     // handle realtime events from client + server for event logging
     client.on('realtime.event', (realtimeEvent: RealtimeEvent) => {
         setRealtimeEvents(realtimeEvent);
     });
     client.on('error', (event: any) =>{
-        ms.error('发生错误：'+event);
-        console.error('error.event>>',event);
+        ms.error('发生错误：' + event);
+        console.error('error.event>>', event);
     });
     client.on('conversation.interrupted', async () => {
         const trackSampleOffset = await wavStreamPlayer.interrupt();
         if (trackSampleOffset?.trackId) {
-            const { trackId, offset } = trackSampleOffset;
+            const {trackId, offset} = trackSampleOffset;
             await client.cancelResponse(trackId, offset);
         }
     });
-    client.on('conversation.updated', async ({ item, delta }: any) => {
+    client.on('conversation.updated', async ({item, delta}: any) => {
         const items = client.conversation.getItems();
         if (delta?.audio) {
             wavStreamPlayer.add16BitPCM(delta.audio, item.id);
@@ -156,14 +156,14 @@ const myListen=()=>{
         setItems(items);
     });
 };
-const setItems=(iitems: ItemType[])=>{
-    //mlog("setItems", iitems.length, iitems  )
-    items.value=iitems;
+const setItems = (iitems: ItemType[])=>{
+    // mlog("setItems", iitems.length, iitems  )
+    items.value = iitems;
 };
-const setRealtimeEvents=(realtimeEvent: RealtimeEvent )=>{
-    //mlog("setRealtimeEvents", realtimeEvent.event ,  realtimeEvent  )
-    let ev= {...realtimeEvent.event};
-    if(ev.type=='error' && ev.error && ev.error.message){
+const setRealtimeEvents = (realtimeEvent: RealtimeEvent )=>{
+    // mlog("setRealtimeEvents", realtimeEvent.event ,  realtimeEvent  )
+    let ev = {...realtimeEvent.event};
+    if (ev.type == 'error' && ev.error && ev.error.message) {
         ms.error(ev.error.message);
     }
     

@@ -1,5 +1,5 @@
-import type { Router } from 'vue-router';
-import { useAuthStoreWithout } from '@/store/modules/auth';
+import type {Router} from 'vue-router';
+import {useAuthStoreWithout} from '@/store/modules/auth';
 
 export function setupPageGuard(router: Router) {
     router.beforeEach(async (to, from, next) => {
@@ -11,13 +11,13 @@ export function setupPageGuard(router: Router) {
                     authStore.removeToken();
                 }
                 if (to.path === '/500') {
-                    next({ name: 'Root' });
+                    next({name: 'Root'});
                 } else {
                     next();
                 }
             } catch (error) {
                 if (to.path !== '/500') {
-                    next({ name: '500' });
+                    next({name: '500'});
                 } else {
                     next();
                 }

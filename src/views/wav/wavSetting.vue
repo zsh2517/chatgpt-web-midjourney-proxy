@@ -1,31 +1,31 @@
 <script setup lang="ts">
-import { gptServerStore } from '@/store';
-import { NInput, NButton, NSwitch,NSelect ,useMessage} from 'naive-ui';
-import { computed } from 'vue';
+import {gptServerStore} from '@/store';
+import {NInput, NButton, NSwitch, NSelect, useMessage} from 'naive-ui';
+import {computed} from 'vue';
 import {instructions} from '@/api';
-import { t } from '@/locales';
+import {t} from '@/locales';
 
-const blurClean=()=>{
+const blurClean = ()=>{
 };
-const ms= useMessage();
-const emit= defineEmits(['close']);
+const ms = useMessage();
+const emit = defineEmits(['close']);
 const save = ()=>{
     gptServerStore.setMyData( gptServerStore.myData );
     ms.success( t('mjchat.success'));
     emit('close');
 };
 
-const voiceList= computed(()=>{
-    let rz=[]; //'alloy','shimmer','echo'
-    for(let o of 'alloy,echo,shimmer'.split(/[ ,]+/ig)){
-        rz.push({label:o,value:o});
+const voiceList = computed(()=>{
+    let rz = []; // 'alloy','shimmer','echo'
+    for (let o of 'alloy,echo,shimmer'.split(/[ ,]+/ig)) {
+        rz.push({label:o, value:o});
     } 
     return rz;
 });
-const modelList= computed(()=>{
-    let rz=[]; //'alloy','shimmer','echo'
-    for(let o of 'gpt-4o-realtime-preview-2024-12-17,gpt-4o-mini-realtime-preview-2024-12-17,gpt-4o-realtime-preview-2024-10-01'.split(/[ ,]+/ig)){
-        rz.push({label:o,value:o});
+const modelList = computed(()=>{
+    let rz = []; // 'alloy','shimmer','echo'
+    for (let o of 'gpt-4o-realtime-preview-2024-12-17,gpt-4o-mini-realtime-preview-2024-12-17,gpt-4o-realtime-preview-2024-10-01'.split(/[ ,]+/ig)) {
+        rz.push({label:o, value:o});
     } 
     return rz;
 });

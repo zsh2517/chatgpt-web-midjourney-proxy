@@ -1,7 +1,7 @@
-import type { GlobalThemeOverrides } from 'naive-ui';
-import { computed, watch } from 'vue';
-import { darkTheme, useOsTheme } from 'naive-ui';
-import { useAppStore } from '@/store';
+import type {GlobalThemeOverrides} from 'naive-ui';
+import {computed, watch} from 'vue';
+import {darkTheme, useOsTheme} from 'naive-ui';
+import {useAppStore} from '@/store';
 
 export function useTheme() {
     const appStore = useAppStore();
@@ -38,8 +38,8 @@ export function useTheme() {
                 document.documentElement.classList.remove('dark');
             }
         },
-        { immediate: true },
+        {immediate: true},
     );
 
-    return { theme, themeOverrides };
+    return {theme, themeOverrides};
 }

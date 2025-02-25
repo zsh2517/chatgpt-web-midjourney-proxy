@@ -1,31 +1,31 @@
 <script setup lang="ts">
-import { mlog, upImg } from '@/api';
-import { runwayFeed, runwayFetch, runwayUpload } from '@/api/runway';
-import { gptServerStore, homeStore } from '@/store';
-import { useMessage,NInput,NButton, NTag,NSelect,NPopover,NSwitch } from 'naive-ui';
-import { computed, onMounted, ref, watch } from 'vue';
-import { SvgIcon } from '@/components/common';
-import { t } from '@/locales'; 
-import { RunwayTask } from '@/api/runwayStore';
+import {mlog, upImg} from '@/api';
+import {runwayFeed, runwayFetch, runwayUpload} from '@/api/runway';
+import {gptServerStore, homeStore} from '@/store';
+import {useMessage, NInput, NButton, NTag, NSelect, NPopover, NSwitch} from 'naive-ui';
+import {computed, onMounted, ref, watch} from 'vue';
+import {SvgIcon} from '@/components/common';
+import {t} from '@/locales'; 
+import {RunwayTask} from '@/api/runwayStore';
 
-const fsRef= ref() ;
-const runway= ref<{image_prompt?:string,seed:number,text_prompt:string}>({image_prompt:'',seed:1675247627,text_prompt:''});
-const st= ref({isDo:false,uploading:false, version:'gen2',time:5,image_as_end_frame:false});
+const fsRef = ref() ;
+const runway = ref<{image_prompt?:string, seed:number, text_prompt:string}>({image_prompt:'', seed:1675247627, text_prompt:''});
+const st = ref({isDo:false, uploading:false, version:'gen2', time:5, image_as_end_frame:false});
 const ms = useMessage();
-const exRunway= ref<RunwayTask>();
-async function  selectFile(input:any){
+const exRunway = ref<RunwayTask>();
+async function  selectFile(input:any) {
     mlog('selectFile', input.target.files[0]);
     const file = input.target.files[0];  
 
-    st.value.uploading= true;
-    try{
-        let d= await runwayUpload( file,'DATASET_PREVIEW');
-        mlog('runwayFetch',d);
-        runway.value.image_prompt= d.url;
-    }catch(e :any){
+    st.value.uploading = true;
+    try {
+        let d = await runwayUpload( file, 'DATASET_PREVIEW');
+        mlog('runwayFetch', d);
+        runway.value.image_prompt = d.url;
+    } catch (e :any) {
         ms.error(e );
     }
-    st.value.uploading= false;
+    st.value.uploading = false;
     
 }
 function getRandomInt(min: number, max: number): number {
@@ -35,15 +35,15 @@ function getRandomInt(min: number, max: number): number {
 }
 
 const canPost = computed(() => {
-    return (runway.value.image_prompt!='' || runway.value.text_prompt!='' ) && !st.value.isDo;
+    return (runway.value.image_prompt != '' || runway.value.text_prompt != '' ) && !st.value.isDo;
 });
 
-const generate= async ()=>{
-    st.value.isDo= true;
-    //runway.value.seed= getRandomInt(1675247627, 3275247627)
-    let seed= getRandomInt(1375247627, 3975247627);
-    try{
-        let obj={
+const generate = async ()=>{
+    st.value.isDo = true;
+    // runway.value.seed= getRandomInt(1675247627, 3275247627)
+    let seed = getRandomInt(1375247627, 3975247627);
+    try {
+        let obj = {
             'taskType': 'gen2',
             'internal': false,
             'options': {
@@ -80,7 +80,7 @@ const generate= async ()=>{
         //   "resolution": "720p",
         //   "assetGroupName": "Generative Video"
         // }
-        let gen3= {
+        let gen3 = {
             'taskType': 'europa',
             'internal': false,
             'options': {
@@ -97,18 +97,18 @@ const generate= async ()=>{
                 'assetGroupName': 'Generative Video',
                 'init_image': runway.value.image_prompt,
                 'resolution': '720p'// runway.value.image_prompt,
-                ,'extended_from_task_id':(exRunway.value&&exRunway.value.id)?exRunway.value.id:undefined
-                ,'init_video': ( exRunway.value && exRunway.value.artifacts && exRunway.value.artifacts[0].url)?exRunway.value.artifacts[0].url:undefined
+                , 'extended_from_task_id':(exRunway.value && exRunway.value.id) ? exRunway.value.id : undefined
+                , 'init_video': ( exRunway.value && exRunway.value.artifacts && exRunway.value.artifacts[0].url) ? exRunway.value.artifacts[0].url : undefined
             },
             //    "asTeamId": 17511575
         };
-        let gen3_trubo=    {
+        let gen3_trubo =    {
             'taskType': 'gen3a_turbo',
             'internal': false,
             'options': {
                 'name': `Gen-3 Alpha Turbo ${seed}`,
                 'seconds':st.value.time,
-                'text_prompt': runway.value.text_prompt ,
+                'text_prompt': runway.value.text_prompt,
                 'seed': seed,
                 'exploreMode': false,
                 'watermark': false,
@@ -117,11 +117,11 @@ const generate= async ()=>{
                 'resolution': '720p',
                 'image_as_end_frame': false,
                 'assetGroupName': 'Generative Video'
-                ,'extended_from_task_id':(exRunway.value&&exRunway.value.id)?exRunway.value.id:undefined
-                ,'init_video': ( exRunway.value && exRunway.value.artifacts && exRunway.value.artifacts[0].url)?exRunway.value.artifacts[0].url:undefined
+                , 'extended_from_task_id':(exRunway.value && exRunway.value.id) ? exRunway.value.id : undefined
+                , 'init_video': ( exRunway.value && exRunway.value.artifacts && exRunway.value.artifacts[0].url) ? exRunway.value.artifacts[0].url : undefined
             }
         };
-        let v_gen3={
+        let v_gen3 = {
             'taskType': 'europa',
             'internal': false,
             'options': {
@@ -132,7 +132,7 @@ const generate= async ()=>{
                 'exploreMode': true,
                 'watermark': false,
                 'enhance_prompt': true,
-                'video_prompt':  runway.value.image_prompt ,
+                'video_prompt':  runway.value.image_prompt,
                 'structure_transformation': 0.3,
                 'width': 1280,
                 'height': 768,
@@ -141,91 +141,91 @@ const generate= async ()=>{
         };
   
 
-        if( obj.options.gen2Options.image_prompt==''){
+        if ( obj.options.gen2Options.image_prompt == '') {
             delete obj.options.gen2Options.image_prompt;
             delete obj.options.gen2Options.init_image;
         }
-        if( gen3.options.init_image=='' ){
+        if ( gen3.options.init_image == '' ) {
             delete gen3.options.init_image;
             delete gen3_trubo.options.init_image;
         }
-        if( !gen3.options.init_video  ){
+        if ( !gen3.options.init_video  ) {
             delete gen3.options.init_video;
             delete gen3_trubo.options.init_video;
         }
-        if( !gen3.options.extended_from_task_id  ){
+        if ( !gen3.options.extended_from_task_id  ) {
             delete gen3.options.extended_from_task_id;
             delete gen3_trubo.options.extended_from_task_id;
         }
-        gen3.options.image_as_end_frame=st.value.image_as_end_frame;
-        gen3_trubo.options.image_as_end_frame=st.value.image_as_end_frame;
+        gen3.options.image_as_end_frame = st.value.image_as_end_frame;
+        gen3_trubo.options.image_as_end_frame = st.value.image_as_end_frame;
         
-        gen3.options.exploreMode= st.value.version=='europa';
-        v_gen3.options.exploreMode= st.value.version=='europa';
+        gen3.options.exploreMode = st.value.version == 'europa';
+        v_gen3.options.exploreMode = st.value.version == 'europa';
         let sobj:any = gen3;
-        if(  st.value.version=='gen2' ){
-            sobj= obj;
+        if (  st.value.version == 'gen2' ) {
+            sobj = obj;
         }
-        if(  st.value.version=='gen3a_turbo' ){
-            sobj= gen3_trubo;
-            if(gen3_trubo.options.init_image=='') {
+        if (  st.value.version == 'gen3a_turbo' ) {
+            sobj = gen3_trubo;
+            if (gen3_trubo.options.init_image == '') {
                 ms.error( t('video.gen3a_turbo_img') );
                 return; 
             }
         }
-        if(runway.value.image_prompt && isMp4(runway.value.image_prompt)){
-            if( st.value.version=='gen2'){
+        if (runway.value.image_prompt && isMp4(runway.value.image_prompt)) {
+            if ( st.value.version == 'gen2') {
                 ms.error( 'gen2 不支持视频' );
                 return; 
             }
-            v_gen3.taskType='europa';
-            if( st.value.version=='gen3a_turbo' ){
-                v_gen3.taskType='gen3a_turbo';
+            v_gen3.taskType = 'europa';
+            if ( st.value.version == 'gen3a_turbo' ) {
+                v_gen3.taskType = 'gen3a_turbo';
             }
-            sobj= v_gen3;
+            sobj = v_gen3;
         }
         // const d=  await runwayFetch('/tasks', st.value.version=='gen2'?obj: gen3 ) 
-        const d=  await runwayFetch('/tasks',  sobj ); 
-        mlog('runwayGen2',d); 
-        d.task && d.task.id&& runwayFeed(d.task.id);
-    }catch(e:any){
+        const d =  await runwayFetch('/tasks',  sobj ); 
+        mlog('runwayGen2', d); 
+        d.task && d.task.id && runwayFeed(d.task.id);
+    } catch (e:any) {
         ms.error(e);
     }
-    st.value.isDo=false;
+    st.value.isDo = false;
 
 };
-const isMp4=(url:string)=>{
-    return url.indexOf('.mp4')>0;
+const isMp4 = (url:string)=>{
+    return url.indexOf('.mp4') > 0;
 };
 
-const mvOption= [
-    {label: t('video.rwgen2'),value: 'gen2'}
-    ,{label:t('video.rwgen3'),value: 'europa'}
-    ,{label:t('video.rwgen3fast'),value: 'europa-fast'}
-    ,{label:t('video.rwgen3turbo'),value: 'gen3a_turbo'}
+const mvOption = [
+    {label: t('video.rwgen2'), value: 'gen2'}
+    , {label:t('video.rwgen3'), value: 'europa'}
+    , {label:t('video.rwgen3fast'), value: 'europa-fast'}
+    , {label:t('video.rwgen3turbo'), value: 'gen3a_turbo'}
 ];
-const timeOption= [
-    {label: 'Duration: 5s',value: 5}
-    ,{label:'Duration: 10s',value: 10}
+const timeOption = [
+    {label: 'Duration: 5s', value: 5}
+    , {label:'Duration: 10s', value: 10}
 ];
 
  
 
-const clearInput=()=>{
-    runway.value.image_prompt =''; 
-    runway.value.text_prompt ='';
-    exRunway.value= undefined;
+const clearInput = ()=>{
+    runway.value.image_prompt = ''; 
+    runway.value.text_prompt = '';
+    exRunway.value = undefined;
 };
-watch(()=>st.value.version,(n:string)=>{
+watch(()=>st.value.version, (n:string)=>{
     gptServerStore.setMyData({RRUNWAY_VERSION:n});
 });
 onMounted(() => {
     homeStore.setMyData({ms:ms});
-    st.value.version= gptServerStore.myData.RRUNWAY_VERSION?gptServerStore.myData.RRUNWAY_VERSION: 'gen2';
+    st.value.version = gptServerStore.myData.RRUNWAY_VERSION ? gptServerStore.myData.RRUNWAY_VERSION : 'gen2';
 });
 
 watch(()=>homeStore.myData.act, (n)=>{
-    if(n=='runway.extend'){
+    if (n == 'runway.extend') {
         mlog('runway.extend', homeStore.myData.actData );
         exRunway.value = homeStore.myData.actData as RunwayTask;
     }

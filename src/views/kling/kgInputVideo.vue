@@ -1,49 +1,49 @@
 <script setup lang="ts">
-import { onMounted, ref } from 'vue';
-import {useMessage, NButton,NInput,NTag,NSelect} from 'naive-ui';
-import { clearImageBase64, mlog, upImg } from '@/api';
-import { homeStore } from '@/store';
-import { klingFeed, klingFetch } from '@/api/kling';
-import { t } from '@/locales';
+import {onMounted, ref} from 'vue';
+import {useMessage, NButton, NInput, NTag, NSelect} from 'naive-ui';
+import {clearImageBase64, mlog, upImg} from '@/api';
+import {homeStore} from '@/store';
+import {klingFeed, klingFetch} from '@/api/kling';
+import {t} from '@/locales';
 
-const f= ref({prompt:'',negative_prompt:'',image:'',image_tail:'',aspect_ratio:'1:1',mode:'std', duration:'5',model:'kling-v1-6'});
-const st= ref({bili:0,isLoading:false,camera_type:''});
+const f = ref({prompt:'', negative_prompt:'', image:'', image_tail:'', aspect_ratio:'1:1', mode:'std', duration:'5', model:'kling-v1-6'});
+const st = ref({bili:0, isLoading:false, camera_type:''});
 
-const fsRef= ref() ; 
-const fsRef2= ref() ; 
+const fsRef = ref() ; 
+const fsRef2 = ref() ; 
 const ms = useMessage();
 
 
-const vf=[
-    {s:'width: 100%; height: 100%;',label:'1:1',value:'1:1'}
-    ,{s:'width: 100%; height: 50%;',label:'16:9',value:'16:9'}
-    ,{s:'width: 50%; height: 100%;',label:'9:16',value:'9:16'}
+const vf = [
+    {s:'width: 100%; height: 100%;', label:'1:1', value:'1:1'}
+    , {s:'width: 100%; height: 50%;', label:'16:9', value:'16:9'}
+    , {s:'width: 50%; height: 100%;', label:'9:16', value:'9:16'}
 ];
 
-const modeOptions=[ {label:t('mj.std'),value:'std'},{label:t('mj.pro'),value:'pro'}];
-const durationOptions=[ {label:'5s',value:'5'},{label:'10s',value:'10'}];
-const cameraOption=[ {label: t('mj.cnull'),value:''},{label: t('mj.down_back'),value:'down_back'}
-    ,{label:t('mj.forward_up'),value:'forward_up'},{label:t('mj.right_turn_forward'),value:'right_turn_forward'},{label:t('mj.left_turn_forward'),value:'left_turn_forward'}
+const modeOptions = [{label:t('mj.std'), value:'std'}, {label:t('mj.pro'), value:'pro'}];
+const durationOptions = [{label:'5s', value:'5'}, {label:'10s', value:'10'}];
+const cameraOption = [{label: t('mj.cnull'), value:''}, {label: t('mj.down_back'), value:'down_back'}
+    , {label:t('mj.forward_up'), value:'forward_up'}, {label:t('mj.right_turn_forward'), value:'right_turn_forward'}, {label:t('mj.left_turn_forward'), value:'left_turn_forward'}
 ];
-const mvOption= [
-    {label:'kling-v1-6',value: 'kling-v1-6'}
-    ,{label:'kling-v1-5',value: 'kling-v1-5'}
-    ,{label:'kling-v1',value: 'kling-v1'}
+const mvOption = [
+    {label:'kling-v1-6', value: 'kling-v1-6'}
+    , {label:'kling-v1-5', value: 'kling-v1-5'}
+    , {label:'kling-v1', value: 'kling-v1'}
 ];
 
-function selectFile(input:any){
+function selectFile(input:any) {
     // fsFile.value= input.target.files[0];
     upImg(input.target.files[0]).then(d=>{
-        f.value.image= d;
-        fsRef.value='';
+        f.value.image = d;
+        fsRef.value = '';
     }).catch(e=>ms.error(e));
 }
-function selectFile2(input:any){ 
+function selectFile2(input:any) { 
     
     upImg(input.target.files[0]).then(d=>{
-        f.value.image_tail= d;
-        fsRef2.value='';
-        if(f.value.image==''){
+        f.value.image_tail = d;
+        fsRef2.value = '';
+        if (f.value.image == '') {
             ms.info( t('mj.needImg'));
         }
     }).catch(e=>ms.error(e));
@@ -51,37 +51,37 @@ function selectFile2(input:any){
 
 
 const clearInput = ()=>{
-    f.value.prompt='';
-    f.value.image= '';
-    f.value.image_tail= '';
-    fsRef.value='';
-    fsRef2.value='';
+    f.value.prompt = '';
+    f.value.image = '';
+    f.value.image_tail = '';
+    fsRef.value = '';
+    fsRef2.value = '';
 };
 
 const createImg = async ()=>{
-    st.value.isLoading= true;
-    f.value.aspect_ratio= vf[st.value.bili].value;
+    st.value.isLoading = true;
+    f.value.aspect_ratio = vf[st.value.bili].value;
     try {
-        let cat= 'text2video'; 
+        let cat = 'text2video'; 
         let abc:any  = {...f.value};
-        //if(abc.image) abc.image= clearImageBase64( abc.image )
-        if(f.value.image!=''){
-            cat='image2video';
-            abc.image= clearImageBase64( abc.image );
-            if( f.value.image_tail) {
-                abc.image_tail= clearImageBase64( f.value.image_tail );
+        // if(abc.image) abc.image= clearImageBase64( abc.image )
+        if (f.value.image != '') {
+            cat = 'image2video';
+            abc.image = clearImageBase64( abc.image );
+            if ( f.value.image_tail) {
+                abc.image_tail = clearImageBase64( f.value.image_tail );
             }
-        }else if( st.value.camera_type ){
-            abc.camera_control={ type:st.value.camera_type };
+        } else if ( st.value.camera_type ) {
+            abc.camera_control = {type:st.value.camera_type};
         }
         //  mlog('abc>> ',  abc  );
         // return 
-        const d:any= await klingFetch('/v1/videos/'+ cat , abc  );
+        const d:any = await klingFetch('/v1/videos/' + cat, abc  );
         mlog('img', d );
-        klingFeed( d.data.task_id , cat ,  f.value.prompt );
+        klingFeed( d.data.task_id, cat,  f.value.prompt );
     } catch (error) {
     }  
-    st.value.isLoading= false;
+    st.value.isLoading = false;
 };
 
 onMounted(() => {

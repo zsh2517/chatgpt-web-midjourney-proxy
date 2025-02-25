@@ -1,4 +1,4 @@
-import { ss } from '@/utils/storage';
+import {ss} from '@/utils/storage';
  
 export type SunoMedia = {
     id: string;
@@ -37,41 +37,41 @@ export type SunoMedia = {
     upvote_count: number;
     is_public: boolean;
 };
-export class sunoStore{
-    //private id: string;
-    private localKey='suno-store';
-    public save(obj:SunoMedia ){
-        if(!obj.id ) {
+export class sunoStore {
+    // private id: string;
+    private localKey = 'suno-store';
+    public save(obj:SunoMedia ) {
+        if (!obj.id ) {
             throw 'id must';
         }
-        const arr=  this.getObjs();
-        const i= arr.findIndex( v=>v.id==obj.id );
-        if(i>-1) {
-            arr[i]= obj;
+        const arr =  this.getObjs();
+        const i = arr.findIndex( v=>v.id == obj.id );
+        if (i > -1) {
+            arr[i] = obj;
         } else {
             arr.push(obj);
         }
         ss.set(this.localKey, arr );
         return this;
     } 
-    public findIndex(id:string){ 
-        return this.getObjs().findIndex( v=>v.id== id );
+    public findIndex(id:string) { 
+        return this.getObjs().findIndex( v=>v.id == id );
     }
 
-    public getObjs():SunoMedia[]{
+    public getObjs():SunoMedia[] {
         const obj = ss.get( this.localKey ) as  undefined| SunoMedia[];
-        if(!obj) {
+        if (!obj) {
             return [];
         }
         return obj;
     }
-    public delete( obj:SunoMedia ){
-        if(!obj.id ) {
+    public delete( obj:SunoMedia ) {
+        if (!obj.id ) {
             throw 'id must';
         }
-        const arr=  this.getObjs();
-        const i= arr.findIndex( v=>v.id==obj.id );
-        if(i<0) {
+        const arr =  this.getObjs();
+        const i = arr.findIndex( v=>v.id == obj.id );
+        if (i < 0) {
             return false;
         }
         arr.splice(i, 1);

@@ -1,71 +1,71 @@
 <script setup lang="ts">
-import { onMounted, ref } from 'vue';
-import { NSelect,NInput, useMessage,NButton,NTag } from 'naive-ui';
-import { IdeoImageData, ideoFetch, mlog, upImg } from '@/api';
-import { homeStore } from '@/store';
+import {onMounted, ref} from 'vue';
+import {NSelect, NInput, useMessage, NButton, NTag} from 'naive-ui';
+import {IdeoImageData, ideoFetch, mlog, upImg} from '@/api';
+import {homeStore} from '@/store';
 
-const vf=[{s:'width: 100%; height: 100%;',label:'1:1',value:'ASPECT_1_1'}
-    ,{s:'width: 100%; height: 75%;',label:'4:3',value:'ASPECT_4_3'}
-    ,{s:'width: 75%; height: 100%;',label:'3:4',value:'ASPECT_3_4'}
-    ,{s:'width: 100%; height: 50%;',label:'16:9',value:'ASPECT_16_9'}
-    ,{s:'width: 50%; height: 100%;',label:'9:16',value:'ASPECT_9_16'}
+const vf = [{s:'width: 100%; height: 100%;', label:'1:1', value:'ASPECT_1_1'}
+    , {s:'width: 100%; height: 75%;', label:'4:3', value:'ASPECT_4_3'}
+    , {s:'width: 75%; height: 100%;', label:'3:4', value:'ASPECT_3_4'}
+    , {s:'width: 100%; height: 50%;', label:'16:9', value:'ASPECT_16_9'}
+    , {s:'width: 50%; height: 100%;', label:'9:16', value:'ASPECT_9_16'}
 ];
 
-const f= ref({
+const f = ref({
     'model': 'V_2_TURBO',
     'magic_prompt_option': 'AUTO',
     'prompt': '',
     'aspect_ratio': 'ASPECT_9_16',
     'seed': 123456,
-    //"style_type": "REALISTIC",
+    // "style_type": "REALISTIC",
     'negative_prompt': '',
-    //"resolution": "RESOLUTION_576_1408"
+    // "resolution": "RESOLUTION_576_1408"
 });
-const st=ref({bili:0,image_url:'' ,seed:''});
-const fsRef= ref() ;
-const fsFile= ref<any>();
+const st = ref({bili:0, image_url:'', seed:''});
+const fsRef = ref() ;
+const fsFile = ref<any>();
 const ms = useMessage();
-function selectFile(input:any){
-    fsFile.value= input.target.files[0];
+function selectFile(input:any) {
+    fsFile.value = input.target.files[0];
     upImg(input.target.files[0]).then(d=>{
-        st.value.image_url= d;
-        fsRef.value='';
+        st.value.image_url = d;
+        fsRef.value = '';
     }).catch(e=>ms.error(e));
     
 }
-const createImg= async ()=>{
-    if(st.value.seed && !isNaN(parseInt(st.value.seed))){
-        f.value.seed= parseInt(st.value.seed);
+const createImg = async ()=>{
+    if (st.value.seed && !isNaN(parseInt(st.value.seed))) {
+        f.value.seed = parseInt(st.value.seed);
     }
-    f.value.aspect_ratio= vf[st.value.bili].value;
-    let data:any ={
+    f.value.aspect_ratio = vf[st.value.bili].value;
+    let data:any = {
         image_request:f.value,
         file:fsFile.value,
-        model:'ideogram_'+f.value.model.toLocaleLowerCase(),
+        model:'ideogram_' + f.value.model.toLocaleLowerCase(),
         prompt: f.value.prompt,
     //  fileBase64:st.value.image_url
     };
-    if(st.value.image_url){
-        data.fileBase64=   st.value.image_url;
+    if (st.value.image_url) {
+        data.fileBase64 =   st.value.image_url;
     }
     // const d:any = await ideoFetch('/generate ' ,data ) 
     // mlog('img', d ); 
     // const dimg:IdeoImageData= d.data.data  
-    let obj= {
+    let obj = {
         action:'gpt.dall-e-3',
         data:data
     };
     homeStore.setMyData({act:'draw', actData:obj});
 };
 onMounted(()=>{
-    homeStore.setMyData({ms:ms });
+    homeStore.setMyData({ms:ms});
 });
 
 const clearInput = ()=>{
-    st.value.image_url='';
-    f.value.prompt='';
-    f.value.seed=123456;
-    fsFile.value= null;
+    st.value.image_url = '';
+    f.value.prompt = '';
+    f.value.seed = 123456;
+    fsFile.value = null;
 };
 </script>
 <template>

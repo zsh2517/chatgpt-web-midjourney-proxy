@@ -1,7 +1,7 @@
-import { computed } from 'vue';
-import { enUS, koKR, zhCN, zhTW } from 'naive-ui';
-import { useAppStore } from '@/store';
-import { setLocale } from '@/locales';
+import {computed} from 'vue';
+import {enUS, koKR, zhCN, zhTW} from 'naive-ui';
+import {useAppStore} from '@/store';
+import {setLocale} from '@/locales';
 
 export function useLanguage() {
     const appStore = useAppStore();
@@ -38,5 +38,5 @@ export function useLanguage() {
         }
     });
 
-    return { language };
+    return {language};
 }

@@ -1,8 +1,8 @@
 <script setup lang='ts'>
-import type { Ref } from 'vue';
-import { computed, h, onMounted, onUnmounted, ref, watch } from 'vue';
-import { useRoute, useRouter } from 'vue-router';
-import { storeToRefs } from 'pinia';
+import type {Ref} from 'vue';
+import {computed, h, onMounted, onUnmounted, ref, watch} from 'vue';
+import {useRoute, useRouter} from 'vue-router';
+import {storeToRefs} from 'pinia';
 import {
     NAutoComplete,
     NButton,
@@ -12,13 +12,13 @@ import {
     NAvatar,
 } from 'naive-ui';
 import html2canvas from 'html2canvas';
-import { Message } from './components';
-import { useScroll } from './hooks/useScroll';
-import { useChat } from './hooks/useChat';
-import { useUsingContext } from './hooks/useUsingContext';
+import {Message} from './components';
+import {useScroll} from './hooks/useScroll';
+import {useChat} from './hooks/useChat';
+import {useUsingContext} from './hooks/useUsingContext';
 import HeaderComponent from './components/Header/index.vue';
-import { SvgIcon } from '@/components/common';
-import { useBasicLayout } from '@/hooks/useBasicLayout';
+import {SvgIcon} from '@/components/common';
+import {useBasicLayout} from '@/hooks/useBasicLayout';
 import {
     gptConfigStore,
     gptServerStore,
@@ -34,13 +34,13 @@ import {
     mlog,
     myFetch,
 } from '@/api';
-import { t } from '@/locales';
+import {t} from '@/locales';
 import drawListVue from '../mj/drawList.vue';
 import aiGPT from '../mj/aiGpt.vue';
 import AiSiderInput from '../mj/aiSiderInput.vue';
 import aiGptInput from '../mj/aiGptInput.vue';
 import AiTextSetting from '../mj/aiTextSetting.vue';
-import { useUserStore } from '@/store';
+import {useUserStore} from '@/store';
 
 let controller = new AbortController();
 
@@ -52,13 +52,13 @@ const ms = useMessage();
 const router = useRouter();
 const chatStore = useChatStore();
 
-const { isMobile } = useBasicLayout();
-const { addChat, updateChat, updateChatSome, getChatByUuidAndIndex } =
+const {isMobile} = useBasicLayout();
+const {addChat, updateChat, updateChatSome, getChatByUuidAndIndex} =
   useChat();
-const { scrollRef, scrollToBottom, scrollToBottomIfAtBottom } = useScroll();
-const { usingContext, toggleUsingContext } = useUsingContext();
+const {scrollRef, scrollToBottom, scrollToBottomIfAtBottom} = useScroll();
+const {usingContext, toggleUsingContext} = useUsingContext();
 
-const { uuid } = route.params as { uuid: string };
+const {uuid} = route.params as { uuid: string };
 
 const dataSources = computed(() => chatStore.getChatByUuid(+uuid));
 const conversationList = computed(() =>
@@ -75,12 +75,12 @@ const inputRef = ref<Ref | null>(null);
 const promptStore = usePromptStore();
 
 // 使用storeToRefs，保证store修改后，联想部分能够重新渲染
-const { promptList: promptTemplate } = storeToRefs<any>(promptStore);
+const {promptList: promptTemplate} = storeToRefs<any>(promptStore);
 
 // 未知原因刷新页面，loading 状态不会重置，手动重置
 dataSources.value.forEach((item, index) => {
     if (item.loading) {
-        updateChatSome(+uuid, index, { loading: false });
+        updateChatSome(+uuid, index, {loading: false});
     }
 });
 
@@ -91,7 +91,7 @@ const userInfo = computed(() => userStore.userInfo);
 const backgroundImage = computed(()=>userInfo.value.backgroundImage ?? '');
 
 function handleSubmit() {
-    //onConversation() //把这个放到aiGpt
+    // onConversation() //把这个放到aiGpt
     let message = prompt.value;
     if (!message || message.trim() === '') {
         return;
@@ -102,7 +102,7 @@ function handleSubmit() {
     loading.value = true;
     homeStore.setMyData({
         act: 'gpt.submit',
-        actData: { prompt: prompt.value, uuid },
+        actData: {prompt: prompt.value, uuid},
     });
     prompt.value = '';
 }
@@ -126,7 +126,7 @@ async function onConversation() {
         inversion: true,
         error: false,
         conversationOptions: null,
-        requestOptions: { prompt: message, options: null },
+        requestOptions: {prompt: message, options: null},
     });
     scrollToBottom();
 
@@ -139,7 +139,7 @@ async function onConversation() {
         ?.conversationOptions;
 
     if (lastContext && usingContext.value) {
-        options = { ...lastContext };
+        options = {...lastContext};
     }
 
     addChat(+uuid, {
@@ -149,7 +149,7 @@ async function onConversation() {
         inversion: false,
         error: false,
         conversationOptions: null,
-        requestOptions: { prompt: message, options: { ...options } },
+        requestOptions: {prompt: message, options: {...options}},
     });
     scrollToBottom();
 
@@ -160,9 +160,9 @@ async function onConversation() {
                 prompt: message,
                 options,
                 signal: controller.signal,
-                onDownloadProgress: ({ event }) => {
+                onDownloadProgress: ({event}) => {
                     const xhr = event.target;
-                    const { responseText } = xhr;
+                    const {responseText} = xhr;
                     // Always process the final line
                     const lastIndex = responseText.lastIndexOf(
                         '\n',
@@ -184,7 +184,7 @@ async function onConversation() {
                                 conversationId: data.conversationId,
                                 parentMessageId: data.id,
                             },
-                            requestOptions: { prompt: message, options: { ...options } },
+                            requestOptions: {prompt: message, options: {...options}},
                         });
 
                         if (
@@ -203,7 +203,7 @@ async function onConversation() {
                     }
                 },
             });
-            updateChatSome(+uuid, dataSources.value.length - 1, { loading: false });
+            updateChatSome(+uuid, dataSources.value.length - 1, {loading: false});
         };
 
         await fetchChatAPIOnce();
@@ -239,7 +239,7 @@ async function onConversation() {
             error: true,
             loading: false,
             conversationOptions: null,
-            requestOptions: { prompt: message, options: { ...options } },
+            requestOptions: {prompt: message, options: {...options}},
         });
         scrollToBottomIfAtBottom();
     } finally {
@@ -254,14 +254,14 @@ async function onRegenerate(index: number) {
 
     controller = new AbortController();
 
-    const { requestOptions } = dataSources.value[index];
+    const {requestOptions} = dataSources.value[index];
 
     let message = requestOptions?.prompt ?? '';
 
     let options: Chat.ConversationRequest = {};
 
     if (requestOptions.options) {
-        options = { ...requestOptions.options };
+        options = {...requestOptions.options};
     }
 
     loading.value = true;
@@ -273,7 +273,7 @@ async function onRegenerate(index: number) {
         error: false,
         loading: true,
         conversationOptions: null,
-        requestOptions: { prompt: message, options: { ...options } },
+        requestOptions: {prompt: message, options: {...options}},
     });
 
     try {
@@ -283,9 +283,9 @@ async function onRegenerate(index: number) {
                 prompt: message,
                 options,
                 signal: controller.signal,
-                onDownloadProgress: ({ event }) => {
+                onDownloadProgress: ({event}) => {
                     const xhr = event.target;
-                    const { responseText } = xhr;
+                    const {responseText} = xhr;
                     // Always process the final line
                     const lastIndex = responseText.lastIndexOf(
                         '\n',
@@ -307,7 +307,7 @@ async function onRegenerate(index: number) {
                                 conversationId: data.conversationId,
                                 parentMessageId: data.id,
                             },
-                            requestOptions: { prompt: message, options: { ...options } },
+                            requestOptions: {prompt: message, options: {...options}},
                         });
 
                         if (
@@ -324,7 +324,7 @@ async function onRegenerate(index: number) {
                     }
                 },
             });
-            updateChatSome(+uuid, index, { loading: false });
+            updateChatSome(+uuid, index, {loading: false});
         };
         await fetchChatAPIOnce();
     } catch (error: any) {
@@ -344,7 +344,7 @@ async function onRegenerate(index: number) {
             error: true,
             loading: false,
             conversationOptions: null,
-            requestOptions: { prompt: message, options: { ...options } },
+            requestOptions: {prompt: message, options: {...options}},
         });
     } finally {
         loading.value = false;
@@ -420,7 +420,7 @@ function handleEdit(index: number) {
         return h(NInput, {
             value: editedMessage.value,
             type: 'textarea',
-            autosize: { minRows: 1, maxRows: 8 },
+            autosize: {minRows: 1, maxRows: 8},
             showCount: true,
             'onUpdate:value': (v: string) => {
                 editedMessage.value = v;
@@ -434,7 +434,7 @@ function handleEdit(index: number) {
         positiveText: t('common.yes'),
         negativeText: t('common.no'),
         onPositiveClick: () => {
-            updateChatSome(+uuid, index, { text: editedMessage.value });
+            updateChatSome(+uuid, index, {text: editedMessage.value});
         },
     });
 }
@@ -471,7 +471,7 @@ function handleEnter(event: KeyboardEvent) {
 
 function handleStop() {
     if (loading.value) {
-        homeStore.setMyData({ act: 'abort' });
+        homeStore.setMyData({act: 'abort'});
         controller.abort();
         loading.value = false;
     }
@@ -509,12 +509,12 @@ const searchOptions = computed(() => {
 });
 
 const goUseGpts = async (item: gptsType) => {
-    const saveObj = { model: `${item.gid}`, gpts: item };
+    const saveObj = {model: `${item.gid}`, gpts: item};
     gptConfigStore.setMyData(saveObj);
     if (chatStore.active) {
-    //保存到对话框
+    // 保存到对话框
         const chatSet = new chatSetting(chatStore.active);
-        //if( chatSet.findIndex()>-1 ) chatSet.save( saveObj )
+        // if( chatSet.findIndex()>-1 ) chatSet.save( saveObj )
         chatSet.save(saveObj);
     }
     ms.success(t('mjchat.success2'));
@@ -523,7 +523,7 @@ const goUseGpts = async (item: gptsType) => {
 
     mlog('go local ', homeStore.myData.local);
     if (homeStore.myData.local !== 'Chat') {
-        router.replace({ name: 'Chat', params: { uuid: chatStore.active } });
+        router.replace({name: 'Chat', params: {uuid: chatStore.active}});
     }
 
     gptsUlistStore.setMyData(item);
@@ -532,7 +532,7 @@ const goUseGpts = async (item: gptsType) => {
 // value反渲染key
 const renderOption = (option: { label: string; gpts?: gptsType }) => {
     if (prompt.value == '@') {
-    //return [ h( NAvatar,{src:'https://cos.aitutu.cc/gpts/gpt4all.jpg',size:"small",round:true}),option.label ]
+    // return [ h( NAvatar,{src:'https://cos.aitutu.cc/gpts/gpt4all.jpg',size:"small",round:true}),option.label ]
         return [
             h(
                 'div',
@@ -554,10 +554,10 @@ const renderOption = (option: { label: string; gpts?: gptsType }) => {
                         round: true,
                         class: 'w-8 h-8',
                     }),
-                    h('span', { class: 'pl-1' }, option.gpts?.name),
+                    h('span', {class: 'pl-1'}, option.gpts?.name),
                     h(
                         'span',
-                        { class: 'line-clamp-1 flex-1 pl-1 opacity-50' },
+                        {class: 'line-clamp-1 flex-1 pl-1 opacity-50'},
                         option.label
                     ),
                 ]
@@ -587,7 +587,7 @@ const footerClass = computed(() => {
     let classes = ['p-4'];
     if (isMobile.value) {
         classes = ['sticky', 'left-0', 'bottom-0', 'right-0', 'p-2', 'pr-3'];
-    } //, 'overflow-hidden'
+    } // , 'overflow-hidden'
     return classes;
 });
 
@@ -602,7 +602,7 @@ onUnmounted(() => {
     if (loading.value) {
         controller.abort();
     }
-    homeStore.setMyData({ isLoader: false });
+    homeStore.setMyData({isLoader: false});
 });
 
 const local = computed(() => homeStore.myData.local);
@@ -623,9 +623,9 @@ watch(
             if (chatStore.active) {
                 const chatSet = new chatSetting(chatStore.active);
                 if (chatSet.findIndex() == -1) {
-                    //如果是空保存到对话框
+                    // 如果是空保存到对话框
                     chatSet.save(chatSet.getGptConfig());
-                    setTimeout(() => homeStore.setMyData({ act: 'saveChat' }), 600);
+                    setTimeout(() => homeStore.setMyData({act: 'saveChat'}), 600);
                 }
             }
         }
@@ -634,11 +634,11 @@ watch(
         }
     }
 );
-const st = ref({ inputme: true });
+const st = ref({inputme: true});
 
 watch(
     () => loading.value,
-    (n) => homeStore.setMyData({ isLoader: n })
+    (n) => homeStore.setMyData({isLoader: n})
 );
 
 const ychat = computed(() => {
@@ -648,7 +648,7 @@ const ychat = computed(() => {
     } else {
         scrollToBottomIfAtBottom();
     }
-    return { text, dateTime: t('chat.preview') } as Chat.Chat;
+    return {text, dateTime: t('chat.preview')} as Chat.Chat;
 });
 </script>
 

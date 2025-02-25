@@ -1,15 +1,15 @@
 <script setup lang='ts'>
-import { computed, ref, watch } from 'vue';
-import { NDropdown, useMessage } from 'naive-ui';
+import {computed, ref, watch} from 'vue';
+import {NDropdown, useMessage} from 'naive-ui';
 import AvatarComponent from './Avatar.vue';
 import TextComponent from './Text.vue';
-import { SvgIcon } from '@/components/common';
-import { useIconRender } from '@/hooks/useIconRender';
-import { t } from '@/locales';
-import { useBasicLayout } from '@/hooks/useBasicLayout';
-import { copyToClip } from '@/utils/copy';
-import { homeStore } from '@/store';
-import { getSeed, mlog ,mjImgUrl, isDallImageModel} from '@/api'; 
+import {SvgIcon} from '@/components/common';
+import {useIconRender} from '@/hooks/useIconRender';
+import {t} from '@/locales';
+import {useBasicLayout} from '@/hooks/useBasicLayout';
+import {copyToClip} from '@/utils/copy';
+import {homeStore} from '@/store';
+import {getSeed, mlog, mjImgUrl, isDallImageModel} from '@/api'; 
 
 interface Props {
   dateTime?: string
@@ -31,9 +31,9 @@ const props = defineProps<Props>();
 
 const emit = defineEmits<Emit>();
 
-const { isMobile } = useBasicLayout();
+const {isMobile} = useBasicLayout();
 
-const { iconRender } = useIconRender();
+const {iconRender} = useIconRender();
 
 const message = useMessage();
 
@@ -48,17 +48,17 @@ const options = computed(() => {
         {
             label: t('chat.copy'),
             key: 'copyText',
-            icon: iconRender({ icon: 'ri:file-copy-2-line' }),
+            icon: iconRender({icon: 'ri:file-copy-2-line'}),
         },
         {
             label: t('common.delete'),
             key: 'delete',
-            icon: iconRender({ icon: 'ri:delete-bin-line' }),
+            icon: iconRender({icon: 'ri:delete-bin-line'}),
         },
         {
             label: t('common.edit'),
             key: 'edit',
-            icon: iconRender({ icon: 'ri:edit-2-line' }),
+            icon: iconRender({icon: 'ri:edit-2-line'}),
         },
     ];
 
@@ -66,12 +66,12 @@ const options = computed(() => {
         common.unshift({
             label: asRawText.value ? t('chat.preview') : t('chat.showRawText'),
             key: 'toggleRenderType',
-            icon: iconRender({ icon: asRawText.value ? 'ic:outline-code-off' : 'ic:outline-code' }),
+            icon: iconRender({icon: asRawText.value ? 'ic:outline-code-off' : 'ic:outline-code'}),
         });
         common.unshift({
             label: t('mj.tts'),
             key: 'tts',
-            icon: iconRender({ icon:'mdi:tts' }),
+            icon: iconRender({icon:'mdi:tts'}),
         });
     }
 
@@ -81,7 +81,7 @@ const options = computed(() => {
 function handleSelect(key: 'copyText' | 'delete' | 'edit' | 'toggleRenderType' | 'tts') {
     switch (key) {
     case 'tts': 
-        homeStore.setMyData({act:'gpt.ttsv2', actData:{ index:props.index , uuid:props.chat.uuid, text:props.text } });
+        homeStore.setMyData({act:'gpt.ttsv2', actData:{index:props.index, uuid:props.chat.uuid, text:props.text}});
         return;
     case 'copyText':
         handleCopy();
@@ -105,7 +105,7 @@ function handleRegenerate() {
 
 async function handleCopy(txt?:string) {
     try {
-        await copyToClip( txt|| props.text || '');
+        await copyToClip( txt || props.text || '');
         message.success( t('chat.copied'));
     } catch {
         message.error( t('mj.copyFail') );
@@ -113,14 +113,14 @@ async function handleCopy(txt?:string) {
 }
 
 const sendReload = () => {
-    homeStore.setMyData({act:'mjReload', actData:{mjID:props.chat.mjID} });
+    homeStore.setMyData({act:'mjReload', actData:{mjID:props.chat.mjID}});
 };
 
 function handleRegenerate2() {
     messageRef.value?.scrollIntoView();
-    //emit('regenerate')
+    // emit('regenerate')
     mlog('重新发送！');
-    homeStore.setMyData({act:'gpt.resubmit', actData:{ index:props.index , uuid:props.chat.uuid } });
+    homeStore.setMyData({act:'gpt.resubmit', actData:{index:props.index, uuid:props.chat.uuid}});
 }
  
 </script>

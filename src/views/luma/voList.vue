@@ -1,41 +1,41 @@
 <script setup lang="ts">
-import { LumaMedia, lumaStore } from '@/api/lumaStore';
-import { computed, ref, watch } from 'vue';
-import {NEmpty ,NButton,NPopover, NTag,NButtonGroup,useMessage,NPopconfirm } from 'naive-ui';
+import {LumaMedia, lumaStore} from '@/api/lumaStore';
+import {computed, ref, watch} from 'vue';
+import {NEmpty, NButton, NPopover, NTag, NButtonGroup, useMessage, NPopconfirm} from 'naive-ui';
 import {FeedLumaTask, lumaFetch, mlog} from '@/api';
-import { homeStore } from '@/store';
+import {homeStore} from '@/store';
 import {SvgIcon} from '@/components/common';
-import { myTestTranscode } from '@/api/mp4img';
-import { t } from '@/locales';
-//import { myTestTranscode } from '@/api/mp4img';
+import {myTestTranscode} from '@/api/mp4img';
+import {t} from '@/locales';
+// import { myTestTranscode } from '@/api/mp4img';
 
-const st= ref({pIndex:-1});
-const list= ref<LumaMedia[]>([]);
-const csuno= new lumaStore();
-const ms= useMessage();
-const initLoad=()=>{
+const st = ref({pIndex:-1});
+const list = ref<LumaMedia[]>([]);
+const csuno = new lumaStore();
+const ms = useMessage();
+const initLoad = ()=>{
     let arr = csuno.getObjs();
-    list.value= arr.reverse();
+    list.value = arr.reverse();
 };
-const nowTime= computed(()=>{
+const nowTime = computed(()=>{
     return new Date().getTime();
 });
-const FeedLumaTaskDown=async (item:LumaMedia)=>{
-    //FeedLumaTask(id)
-    let id= item.id;
-    let url='';
-    try{
-        let d:any= await lumaFetch('/generations/'+id+'/download_video_url' );
+const FeedLumaTaskDown = async (item:LumaMedia)=>{
+    // FeedLumaTask(id)
+    let id = item.id;
+    let url = '';
+    try {
+        let d:any = await lumaFetch('/generations/' + id + '/download_video_url' );
         mlog('d', d );
-        url=d.url?? item.video?.url;
-    }catch(e){
-        url= item.video?.url??'';
+        url = d.url ?? item.video?.url;
+    } catch (e) {
+        url = item.video?.url ?? '';
     }
      
-    //window.open(d.url)
+    // window.open(d.url)
     const link = document.createElement('a');
     link.href = url ;
-    link.download = id+'.mp4';
+    link.download = id + '.mp4';
     link.target = '_blank';
     document.body.appendChild(link);
     link.click();
@@ -43,23 +43,23 @@ const FeedLumaTaskDown=async (item:LumaMedia)=>{
     
 };
 
-//getLastFrameBase64
-const extend= async(item:LumaMedia )=>{
+// getLastFrameBase64
+const extend = async (item:LumaMedia )=>{
     
     mlog('extend ', item ); 
-    homeStore.setMyData({act:'luma.extend', actData: item  });
+    homeStore.setMyData({act:'luma.extend', actData: item});
 
 };
 
 
 watch(()=>homeStore.myData.act, (n)=>{
-    if(n=='FeedLumaTask')  {
+    if (n == 'FeedLumaTask')  {
         initLoad();
     } 
 });
-const deleteGo=(item:LumaMedia)=>{
-    mlog('deleteGo',item );
-    if( csuno.delete( item)){ 
+const deleteGo = (item:LumaMedia)=>{
+    mlog('deleteGo', item );
+    if ( csuno.delete( item)) { 
         ms.success( t('common.deleteSuccess'));
         initLoad();
     }

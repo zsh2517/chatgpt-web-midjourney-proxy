@@ -1,10 +1,10 @@
 <script setup lang='ts'>
-import { computed, onMounted, ref } from 'vue';
-import { NSpin, NButton } from 'naive-ui';
+import {computed, onMounted, ref} from 'vue';
+import {NSpin, NButton} from 'naive-ui';
 import pkg from '../../../../package.json';
-import { fetchChatConfig ,getLastVersion} from '@/api';
-import { useAuthStore } from '@/store';
-import { gptUsage  } from '@/api';
+import {fetchChatConfig, getLastVersion} from '@/api';
+import {useAuthStore} from '@/store';
+import {gptUsage} from '@/api';
 
 interface ConfigState {
   timeoutMs?: number
@@ -33,27 +33,27 @@ async function fetchConfig() {
         // config.value = data
     
 
-        const dd= await gptUsage();
-        config.value= {usage:dd.usage?`${dd.usage}`:'-'
-            ,remaining:dd.remaining?`${dd.remaining}`:'-'
-            ,hard_limit_usd:dd.hard_limit_usd?`${dd.hard_limit_usd}`:'-'
+        const dd = await gptUsage();
+        config.value = {usage:dd.usage ? `${dd.usage}` : '-'
+            , remaining:dd.remaining ? `${dd.remaining}` : '-'
+            , hard_limit_usd:dd.hard_limit_usd ? `${dd.hard_limit_usd}` : '-'
             , 'apiModel': 'ChatGPTAPI',
             'reverseProxy': '-',
             'timeoutMs': 100000,
             'socksProxy': '-',
-            'httpsProxy': '-', } ;
+            'httpsProxy': '-',} ;
 
     } finally {
         loading.value = false;
     }
 }
-const getLastFrom= ()=>{
+const getLastFrom = ()=>{
     const str = localStorage.getItem('lastVersion');
-    if(!str) {
+    if (!str) {
         return '';
     }
     const obj = JSON.parse(str);
-    if( Date.now()- obj.t>1000*60*60 ){
+    if ( Date.now() - obj.t > 1000 * 60 * 60 ) {
         return '';
     }
     return obj.v;
@@ -62,13 +62,13 @@ onMounted( () => {
     fetchConfig();
   
     let t = getLastFrom();
-    if(t){
+    if (t) {
         st.value.lastVersion = t ;
-    }else {
+    } else {
         getLastVersion().then(res=>{
-            if(  res[0] && res[0].name ){
+            if (  res[0] && res[0].name ) {
                 st.value.lastVersion = res[0].name;
-                localStorage.setItem('lastVersion',JSON.stringify( {v:  res[0].name,t: Date.now() } ));
+                localStorage.setItem('lastVersion', JSON.stringify( {v:  res[0].name, t: Date.now()} ));
             }
         });
     }

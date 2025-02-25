@@ -1,166 +1,166 @@
 <script setup lang="ts">
-import { computed, onMounted, ref, watch } from 'vue';
-import { NSelect,NButton,NDrawer,NDrawerContent,NInput, useMessage, NImage } from 'naive-ui';
-import { useBasicLayout } from '@/hooks/useBasicLayout';
+import {computed, onMounted, ref, watch} from 'vue';
+import {NSelect, NButton, NDrawer, NDrawerContent, NInput, useMessage, NImage} from 'naive-ui';
+import {useBasicLayout} from '@/hooks/useBasicLayout';
 import {SvgIcon} from '@/components/common';
 import dcTemple from './dcTemple.vue';
-import { gptServerStore, homeStore } from '@/store';
-import {  mlog, upImg } from '@/api';
-import { FeedViggleTask, ViggleTemplate , viggleFetch } from '@/api/viggle';
-import { t } from '@/locales';
-import { lumaHkStore } from '@/api/lumaStore';
-import { sleep } from '@/api/suno';
+import {gptServerStore, homeStore} from '@/store';
+import {mlog, upImg} from '@/api';
+import {FeedViggleTask, ViggleTemplate, viggleFetch} from '@/api/viggle';
+import {t} from '@/locales';
+import {lumaHkStore} from '@/api/lumaStore';
+import {sleep} from '@/api/suno';
 
-const f= ref({ 'imageID': '', 'bgMode': 2, 'modelInfoID': 4,'templateID': '','videoID':'','watermark':1 });
-const st= ref({isDo:false,showImg:false,q:'',imgSrc:'',vgSrc:'',vgCoverURL:'',version:'relax'});
-const useTem= ref<ViggleTemplate>();
-const fsRef= ref() ;
-const vsRef= ref() ;
+const f = ref({'imageID': '', 'bgMode': 2, 'modelInfoID': 4, 'templateID': '', 'videoID':'', 'watermark':1});
+const st = ref({isDo:false, showImg:false, q:'', imgSrc:'', vgSrc:'', vgCoverURL:'', version:'relax'});
+const useTem = ref<ViggleTemplate>();
+const fsRef = ref() ;
+const vsRef = ref() ;
 const ms = useMessage();
 
-const { isMobile } = useBasicLayout();
+const {isMobile} = useBasicLayout();
 
 
-const modelOption= [
-    {label: t('dance.model')+': V3-Beta',value: 4},
-    {label:t('dance.model')+': V2-Turbo',value:3},
-    {label: t('dance.model')+': V2',value: 2}
+const modelOption = [
+    {label: t('dance.model') + ': V3-Beta', value: 4},
+    {label:t('dance.model') + ': V2-Turbo', value:3},
+    {label: t('dance.model') + ': V2', value: 2}
 
 ];
-const bgOption= [
-    {label:t('dance.bgw') ,value: 0}
-    ,{label:t('dance.bgg'),value:1}
-    ,{label:t('dance.bgmoban') ,value:2}
-    ,{label:t('dance.bgrole') ,value:3}
+const bgOption = [
+    {label:t('dance.bgw'), value: 0}
+    , {label:t('dance.bgg'), value:1}
+    , {label:t('dance.bgmoban'), value:2}
+    , {label:t('dance.bgrole'), value:3}
 ];
 
-const generate= async ()=>{
+const generate = async ()=>{
     ms.loading(t('dance.gring'));
     let d = await viggleFetch( getMyProUrl('/video-task'), f.value); 
     if (d.data && d.data.taskID) {
-        if( st.value.version=='pro' ){
-            const hk= new lumaHkStore();
-            hk.save({id:d.data.taskID,isHK:true});
+        if ( st.value.version == 'pro' ) {
+            const hk = new lumaHkStore();
+            hk.save({id:d.data.taskID, isHK:true});
             await sleep(800);
         }
         FeedViggleTask(d.data.taskID);  
     }
 };
-const search=()=>{
+const search = ()=>{
     
 };
-const canPost= computed(()=>{
-    return (f.value.templateID|| f.value.videoID) && f.value.imageID; 
+const canPost = computed(()=>{
+    return (f.value.templateID || f.value.videoID) && f.value.imageID; 
 });
 
-const clear=(type:number)=>{
-    if(type==1){
-        useTem.value=undefined;
-        f.value.templateID='';
-        f.value.videoID='';
-    }else if(type==3){
-        useTem.value=undefined;
-        f.value.templateID='';
-        f.value.videoID='';
-        st.value.vgSrc='';
-        st.value.vgCoverURL='';
-    }else{
-        f.value.imageID='';
-        st.value.imgSrc='';
+const clear = (type:number)=>{
+    if (type == 1) {
+        useTem.value = undefined;
+        f.value.templateID = '';
+        f.value.videoID = '';
+    } else if (type == 3) {
+        useTem.value = undefined;
+        f.value.templateID = '';
+        f.value.videoID = '';
+        st.value.vgSrc = '';
+        st.value.vgCoverURL = '';
+    } else {
+        f.value.imageID = '';
+        st.value.imgSrc = '';
     }
     
 };
 
-function getMyProUrl( url:string ){
+function getMyProUrl( url:string ) {
     // const is_luma_pro=homeStore.myData.is_luma_pro
-    if (st.value.version=='pro' ) {
-        url= '/pro'+url;
+    if (st.value.version == 'pro' ) {
+        url = '/pro' + url;
     }
     return url ;
 }
 
-async function  selectFileVideo(input:any){  
+async function  selectFileVideo(input:any) {  
     const formData = new FormData(); 
     formData.append('file', input.target.files[0]); 
-    let d:any = await viggleFetch(getMyProUrl( '/asset/video/'+f.value.imageID) , formData,{upFile:true});
+    let d:any = await viggleFetch(getMyProUrl( '/asset/video/' + f.value.imageID), formData, {upFile:true});
     mlog('d Video', d );
-    if(d.data ) {
-        if( d.data.id ) {
-            f.value.videoID= d.data.id;
-            f.value.templateID=''; 
-            st.value.vgCoverURL= d.data.coverURL;
-            st.value.vgSrc= d.data.url;
+    if (d.data ) {
+        if ( d.data.id ) {
+            f.value.videoID = d.data.id;
+            f.value.templateID = ''; 
+            st.value.vgCoverURL = d.data.coverURL;
+            st.value.vgSrc = d.data.url;
         }
     }
    
 }
 
-const selectVideo=()=>{ 
-    if(f.value.imageID==''){
+const selectVideo = ()=>{ 
+    if (f.value.imageID == '') {
         ms.error(t('dance.uprolefirst'));
         return; 
     }
     vsRef.value.click();
 };
 
-async function  selectFile(input:any){  
-    try{
-        let ud= await upImg(input.target.files[0]); 
+async function  selectFile(input:any) {  
+    try {
+        let ud = await upImg(input.target.files[0]); 
         const formData = new FormData(); 
         formData.append('file', input.target.files[0]);
    
-        let d:any = await viggleFetch( getMyProUrl('/asset/image'), formData,{upFile:true});
+        let d:any = await viggleFetch( getMyProUrl('/asset/image'), formData, {upFile:true});
         mlog('d Image', d );
-        if(d.data ) {
-            if( d.data.id ) {
-                f.value.imageID= d.data.id;
-                st.value.imgSrc= ud;//d.data.url
+        if (d.data ) {
+            if ( d.data.id ) {
+                f.value.imageID = d.data.id;
+                st.value.imgSrc = ud;// d.data.url
             }
         }
-        fsRef.value='';
-    }catch(e ){
+        fsRef.value = '';
+    } catch (e ) {
         ms.error( t('dance.uprolefail'));
     }
 }
 
-const isHK= computed(()=> {
-    const url= gptServerStore.myData.VIGGLE_SERVER.toLocaleLowerCase();
-    if(url!=''){
-        return (url.indexOf('hk')>-1 &&  url.indexOf('pro')==-1 ) ;
+const isHK = computed(()=> {
+    const url = gptServerStore.myData.VIGGLE_SERVER.toLocaleLowerCase();
+    if (url != '') {
+        return (url.indexOf('hk') > -1 &&  url.indexOf('pro') == -1 ) ;
     }
    
     return (homeStore.myData.session && homeStore.myData.session.isHk) ;
     
 } );
 
-const saveMyDate=(is_pro:boolean)=>{
+const saveMyDate = (is_pro:boolean)=>{
     homeStore.setMyData({is_viggle_pro: is_pro});
     gptServerStore.setMyData({IS_VIGGLE_PRO: is_pro});
 };
 
-watch(()=>isHK.value , (n)=>    saveMyDate( n && st.value.version=='pro' ) ); 
-watch(()=>st.value.version , ()=>  saveMyDate(isHK.value && st.value.version=='pro' ) );
+watch(()=>isHK.value, (n)=>    saveMyDate( n && st.value.version == 'pro' ) ); 
+watch(()=>st.value.version, ()=>  saveMyDate(isHK.value && st.value.version == 'pro' ) );
 
 watch(()=>homeStore.myData.act, (n)=>{
-    //canPost.value= n.modelInfoID!=0 && n.bgMode!=0
-    if(n=='viggle.useVideo'){
+    // canPost.value= n.modelInfoID!=0 && n.bgMode!=0
+    if (n == 'viggle.useVideo') {
         mlog('viggle.useVideo', homeStore.myData.actData );
-        useTem.value= homeStore.myData.actData as ViggleTemplate;
-        st.value.showImg=false;
-        f.value.templateID= useTem.value.id;
-        f.value.videoID= ''; 
+        useTem.value = homeStore.myData.actData as ViggleTemplate;
+        st.value.showImg = false;
+        f.value.templateID = useTem.value.id;
+        f.value.videoID = ''; 
     }
 });
-const mvOption= [
-    {label: '版本: watermark, 价格实惠',value: 'relax'}
-    ,{label:'版本: pro, 无水印',value: 'pro'}
+const mvOption = [
+    {label: '版本: watermark, 价格实惠', value: 'relax'}
+    , {label:'版本: pro, 无水印', value: 'pro'}
 ];
 
 
-//homeStore.setMyData({ms}) 
+// homeStore.setMyData({ms}) 
 onMounted(() => {
     homeStore.setMyData({ms:ms});
-    st.value.version= gptServerStore.myData.IS_VIGGLE_PRO?'pro':'relax';
+    st.value.version = gptServerStore.myData.IS_VIGGLE_PRO ? 'pro' : 'relax';
 });
 
 </script>

@@ -1,13 +1,13 @@
 <script setup lang='ts'>
-import { computed, ref } from 'vue';
-import { NModal, NTabPane, NTabs } from 'naive-ui';
+import {computed, ref} from 'vue';
+import {NModal, NTabPane, NTabs} from 'naive-ui';
 import General from './General.vue';
 import Advanced from './Advanced.vue';
 import aiModel from '@/views/mj/aiModel.vue';
 import aiSetServer from '@/views/mj/aiSetServer.vue';
 import About from './About.vue';
-import { homeStore, useAuthStore } from '@/store';
-import { SvgIcon } from '@/components/common';
+import {homeStore, useAuthStore} from '@/store';
+import {SvgIcon} from '@/components/common';
 
 interface Props {
   visible: boolean

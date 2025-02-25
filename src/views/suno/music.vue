@@ -1,34 +1,34 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import {ref} from 'vue';
 import McInput from './mcInput.vue';
 import mcList from './mcList.vue';
 import mcplayer from './mcplayer.vue';
-import { NTabs,NTabPane} from 'naive-ui';
+import {NTabs, NTabPane} from 'naive-ui';
 
 import udioInput from './udioInput.vue';
 import udioList from './udioList.vue';
-import { gptServerStore } from '@/store';
-import { useRoute } from 'vue-router'; 
+import {gptServerStore} from '@/store';
+import {useRoute} from 'vue-router'; 
 
 const route = useRoute(); // 获取当前路由对象
-const st= ref({menu:'suno',tab:''});
+const st = ref({menu:'suno', tab:''});
 
-const handleUpdateValue=(v:string)=>{
-    //mlog("handleUpdateValue",v)
+const handleUpdateValue = (v:string)=>{
+    // mlog("handleUpdateValue",v)
     gptServerStore.setMyData({TAB_MUSIC:v});
 };
 
-const initLoad=()=>{
-    if(route.query.tab){ 
-        st.value.tab= 'suno'; 
-        let tt= (route.query.tab as string).toLocaleLowerCase();
-        if( ['suno','udio'].indexOf(tt)>-1 ){
-            st.value.tab=tt;
+const initLoad = ()=>{
+    if (route.query.tab) { 
+        st.value.tab = 'suno'; 
+        let tt = (route.query.tab as string).toLocaleLowerCase();
+        if ( ['suno', 'udio'].indexOf(tt) > -1 ) {
+            st.value.tab = tt;
         }
 
         handleUpdateValue(  st.value.tab );
     } else {
-        st.value.tab=( gptServerStore.myData.TAB_MUSIC?gptServerStore.myData.TAB_MUSIC:'suno');
+        st.value.tab = ( gptServerStore.myData.TAB_MUSIC ? gptServerStore.myData.TAB_MUSIC : 'suno');
     }
 };
 initLoad();

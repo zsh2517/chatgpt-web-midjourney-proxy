@@ -1,18 +1,18 @@
 <script lang="ts" setup>
-import { computed, ref } from 'vue';
-import { NButton, NInput, NPopconfirm, NSelect, useMessage } from 'naive-ui';
-import type { Language, Theme } from '@/store/modules/app/helper';
-import { SvgIcon } from '@/components/common';
-import { useAppStore, useUserStore } from '@/store';
-import type { UserInfo } from '@/store/modules/user/helper';
-import { getCurrentDate } from '@/utils/functions';
-import { useBasicLayout } from '@/hooks/useBasicLayout';
-import { t } from '@/locales';
+import {computed, ref} from 'vue';
+import {NButton, NInput, NPopconfirm, NSelect, useMessage} from 'naive-ui';
+import type {Language, Theme} from '@/store/modules/app/helper';
+import {SvgIcon} from '@/components/common';
+import {useAppStore, useUserStore} from '@/store';
+import type {UserInfo} from '@/store/modules/user/helper';
+import {getCurrentDate} from '@/utils/functions';
+import {useBasicLayout} from '@/hooks/useBasicLayout';
+import {t} from '@/locales';
 
 const appStore = useAppStore();
 const userStore = useUserStore();
 
-const { isMobile } = useBasicLayout();
+const {isMobile} = useBasicLayout();
 
 const ms = useMessage();
 
@@ -56,14 +56,14 @@ const themeOptions: { label: string; key: Theme; icon: string }[] = [
 ];
 
 const languageOptions: { label: string; key: Language; value: Language }[] = [
-    { label: '简体中文', key: 'zh-CN', value: 'zh-CN' },
-    { label: '繁體中文', key: 'zh-TW', value: 'zh-TW' },
-    { label: 'English', key: 'en-US', value: 'en-US' },
-    { label: '한국어', key: 'ko-KR', value: 'ko-KR' },
-    { label: 'Русский язык', key: 'ru-RU', value: 'ru-RU' },
-    { label: 'Tiếng Việt', key: 'vi-VN', value: 'vi-VN' },
-    { label: 'Français', key: 'fr-FR', value: 'fr-FR' },
-    { label: 'Türkçe', key: 'tr-TR', value: 'tr-TR' },
+    {label: '简体中文', key: 'zh-CN', value: 'zh-CN'},
+    {label: '繁體中文', key: 'zh-TW', value: 'zh-TW'},
+    {label: 'English', key: 'en-US', value: 'en-US'},
+    {label: '한국어', key: 'ko-KR', value: 'ko-KR'},
+    {label: 'Русский язык', key: 'ru-RU', value: 'ru-RU'},
+    {label: 'Tiếng Việt', key: 'vi-VN', value: 'vi-VN'},
+    {label: 'Français', key: 'fr-FR', value: 'fr-FR'},
+    {label: 'Türkçe', key: 'tr-TR', value: 'tr-TR'},
 ];
 
 function updateUserInfo(options: Partial<UserInfo>) {
@@ -81,7 +81,7 @@ function exportData(): void {
     const date = getCurrentDate();
     const data: string = localStorage.getItem('chatStorage') || '{}';
     const jsonString: string = JSON.stringify(JSON.parse(data), null, 2);
-    const blob: Blob = new Blob([jsonString], { type: 'application/json' });
+    const blob: Blob = new Blob([jsonString], {type: 'application/json'});
     const url: string = URL.createObjectURL(blob);
     const link: HTMLAnchorElement = document.createElement('a');
     link.href = url;

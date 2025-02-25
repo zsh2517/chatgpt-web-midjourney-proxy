@@ -1,90 +1,90 @@
 <script setup lang="ts">
-import { computed, onMounted, ref, watch } from 'vue';
-import { useMessage,NButton,NInput,NTag,NSelect,NPopover,NSwitch } from 'naive-ui';
-import { t } from '@/locales';
-import { mlog, upImg } from '@/api';
-import { homeStore } from '@/store';
-import { getRandomInt } from '@/api/runwayml';
-import { pixFeed, pixFetch } from '@/api/pixverse';
-import { pixverseTask } from '@/api/pixverseStore';
+import {computed, onMounted, ref, watch} from 'vue';
+import {useMessage, NButton, NInput, NTag, NSelect, NPopover, NSwitch} from 'naive-ui';
+import {t} from '@/locales';
+import {mlog, upImg} from '@/api';
+import {homeStore} from '@/store';
+import {getRandomInt} from '@/api/runwayml';
+import {pixFeed, pixFetch} from '@/api/pixverse';
+import {pixverseTask} from '@/api/pixverseStore';
 import pixEffacts from './pixEffact.json';
 
 
-const vf=[{s:'width: 100%; height: 100%;',label:'1:1',value:'1:1'}
-    ,{s:'width: 100%; height: 75%;',label:'4:3',value:'4:3'}
-    ,{s:'width: 75%; height: 100%;',label:'3:4',value:'3:4'}
-    ,{s:'width: 100%; height: 50%;',label:'16:9',value:'16:9'}
-    ,{s:'width: 50%; height: 100%;',label:'9:16',value:'9:16'}
+const vf = [{s:'width: 100%; height: 100%;', label:'1:1', value:'1:1'}
+    , {s:'width: 100%; height: 75%;', label:'4:3', value:'4:3'}
+    , {s:'width: 75%; height: 100%;', label:'3:4', value:'3:4'}
+    , {s:'width: 100%; height: 50%;', label:'16:9', value:'16:9'}
+    , {s:'width: 50%; height: 100%;', label:'9:16', value:'9:16'}
 ];
 
-const mvOption= [
-    {label:'Verion: V3.5',value: 'v3.5'}
-    ,{label:'Verion: V3',value: 'v3'}
-    ,{label:'Verion: v2.5',value: 'v2.5'}
+const mvOption = [
+    {label:'Verion: V3.5', value: 'v3.5'}
+    , {label:'Verion: V3', value: 'v3'}
+    , {label:'Verion: v2.5', value: 'v2.5'}
 ];
-const qualityOption= [
-    {label:'Quality:  360p Turbo',value: '360p'}
-    ,{label:'Quality: 540p 1.5X',value: '540p'}
-    ,{label:'Quality: 720p 2X',value: '720p'}
-    ,{label:'Quality: 1080p 4X',value: '1080p'}
-];
-
-const modeOption= [
-    {label:t('mj.mode')+': Normal',value: 'normal'}
-    ,{label:t('mj.mode')+': Performance',value: 'performance'} 
+const qualityOption = [
+    {label:'Quality:  360p Turbo', value: '360p'}
+    , {label:'Quality: 540p 1.5X', value: '540p'}
+    , {label:'Quality: 720p 2X', value: '720p'}
+    , {label:'Quality: 1080p 4X', value: '1080p'}
 ];
 
-const styleOption= [
-//{label:'Please select style, can null',value: ''} ,
-    {label:'Style: Cyberpunk',value: 'cyberpunk'}
-    ,{label:'Style: Anime',value: 'anime'} 
-    ,{label:'Style: Comic',value: 'comic'} 
-    ,{label:'Style: Clay',value: 'clay'} 
-    ,{label:'Style: 3D Animation',value: '3d_animation'} 
+const modeOption = [
+    {label:t('mj.mode') + ': Normal', value: 'normal'}
+    , {label:t('mj.mode') + ': Performance', value: 'performance'} 
+];
+
+const styleOption = [
+// {label:'Please select style, can null',value: ''} ,
+    {label:'Style: Cyberpunk', value: 'cyberpunk'}
+    , {label:'Style: Anime', value: 'anime'} 
+    , {label:'Style: Comic', value: 'comic'} 
+    , {label:'Style: Clay', value: 'clay'} 
+    , {label:'Style: 3D Animation', value: '3d_animation'} 
 ];
  
-const durationOptions=[ {label:t('mj.duration')+':5s',value:5},{label:t('mj.duration')+':8s',value:8}];
+const durationOptions = [{label:t('mj.duration') + ':5s', value:5}, {label:t('mj.duration') + ':8s', value:8}];
 
 
-const f= ref({pe_index:-1, style:null, prompt:'',quality:'360p',negative_prompt:'',image:'',image_tail:'',aspect_ratio:'1:1',model:'v3.5', duration:5,motion_mode:'normal'});
-const st= ref({isLoading:false});
-const fsRef= ref() ; 
-const fsRef2= ref() ; 
+const f = ref({pe_index:-1, style:null, prompt:'', quality:'360p', negative_prompt:'', image:'', image_tail:'', aspect_ratio:'1:1', model:'v3.5', duration:5, motion_mode:'normal'});
+const st = ref({isLoading:false});
+const fsRef = ref() ; 
+const fsRef2 = ref() ; 
 const ms = useMessage();
-const exItem= ref<pixverseTask>();
+const exItem = ref<pixverseTask>();
 const clearInput = ()=>{
-    f.value.prompt='';
-    f.value.image= '';
-    f.value.image_tail= '';
-    f.value.style=null;
-    fsRef.value='';
-    fsRef2.value='';
-    f.value.pe_index= -1 ; 
-    exItem.value= undefined;
+    f.value.prompt = '';
+    f.value.image = '';
+    f.value.image_tail = '';
+    f.value.style = null;
+    fsRef.value = '';
+    fsRef2.value = '';
+    f.value.pe_index = -1 ; 
+    exItem.value = undefined;
 };
-function selectFile(input:any){
+function selectFile(input:any) {
     // fsFile.value= input.target.files[0];
     upImg(input.target.files[0]).then(d=>{
-        f.value.image= d;
-        fsRef.value='';
+        f.value.image = d;
+        fsRef.value = '';
     }).catch(e=>ms.error(e));
 }
-function selectFile2(input:any){ 
+function selectFile2(input:any) { 
     
     upImg(input.target.files[0]).then(d=>{
-        f.value.image_tail= d;
-        fsRef2.value='';
-        if(f.value.image==''){
+        f.value.image_tail = d;
+        fsRef2.value = '';
+        if (f.value.image == '') {
             ms.info( t('mj.needImg'));
         }
     }).catch(e=>ms.error(e));
 }
 
-const create= async()=>{
+const create = async ()=>{
     mlog('createImg', 'asdfdfd');
-    st.value.isLoading= true;
-    let  obj={};
-    let objY={
+    st.value.isLoading = true;
+    let  obj = {};
+    let objY = {
         'prompt': f.value.prompt,
         'model': f.value.model,
         'quality': f.value.quality,
@@ -93,40 +93,40 @@ const create= async()=>{
         'motion_mode': f.value.motion_mode,
         'seed':  getRandomInt(648043228, 1648043228)
     };
-    obj={...objY};
-    if( f.value.image && f.value.image_tail){
-        obj={...objY,'frame':[ f.value.image,f.value.image_tail]};
-    }else if( f.value.image){
-        obj={...objY,'img_url': f.value.image };
+    obj = {...objY};
+    if ( f.value.image && f.value.image_tail) {
+        obj = {...objY, 'frame':[f.value.image, f.value.image_tail]};
+    } else if ( f.value.image) {
+        obj = {...objY, 'img_url': f.value.image};
     }
-    if (exItem.value ){
-        obj={...obj,'original_video_id': exItem.value?.video_id, 'extend': 1,  'platform': 'web'};
+    if (exItem.value ) {
+        obj = {...obj, 'original_video_id': exItem.value?.video_id, 'extend': 1,  'platform': 'web'};
     }
-    if(f.value.style){
-        obj={...obj,style:f.value.style};
+    if (f.value.style) {
+        obj = {...obj, style:f.value.style};
     }
-    if(f.value.pe_index>-1){
+    if (f.value.pe_index > -1) {
         try {
-            let template_id= pixEffact.value[f.value.pe_index].template_id;
-            obj={...obj, template_id};
+            let template_id = pixEffact.value[f.value.pe_index].template_id;
+            obj = {...obj, template_id};
         } catch (error) { 
         }
          
     }
     try {
-        const d:any= await pixFetch('/generate' , obj  );
+        const d:any = await pixFetch('/generate', obj  );
         mlog('img', d );
-        if(d.ErrCode==0){ 
+        if (d.ErrCode == 0) { 
             pixFeed(d.Resp.video_id);
         }
     } catch (error) {
         
     }
-    st.value.isLoading= false;
+    st.value.isLoading = false;
 
 };
 watch(()=>homeStore.myData.act, (n)=>{
-    if(n=='pix.extend'){
+    if (n == 'pix.extend') {
         mlog('pix.extend', homeStore.myData.actData );
         exItem.value = homeStore.myData.actData as pixverseTask;
     }
@@ -138,11 +138,11 @@ onMounted(() => {
 });
 
 const selecteffect = (i:number)=>{
-    f.value.pe_index= i ; 
+    f.value.pe_index = i ; 
     
-    f.value.prompt= pixEffact.value[i].display_prompt;
+    f.value.prompt = pixEffact.value[i].display_prompt;
 };
-const pixEffact= computed(()=>{
+const pixEffact = computed(()=>{
     
     return pixEffacts;
 });

@@ -8,22 +8,22 @@ declare namespace Chat {
 		loading?: boolean
 		conversationOptions?: ConversationRequest | null
 		requestOptions: { prompt: string; options?: ConversationRequest | null }
-		model?:string //模型
-		mjID?:string //MJ的ID
+		model?:string // 模型
+		mjID?:string // MJ的ID
 		opt?:{
-			progress?:string,seed?:number, imageUrl?:string
+			progress?:string, seed?:number, imageUrl?:string
 			, status?:string, images?:string[]
-			,promptEn?:string,buttons?:any[]
-			,action?:string
-			,duration?:number
-			,lkey?:string
+			, promptEn?:string, buttons?:any[]
+			, action?:string
+			, duration?:number
+			, lkey?:string
 		} //
 		uuid?:number
 		index?:number
-		myid?:string //唯一随机
+		myid?:string // 唯一随机
 		logo?:string
 		
-		//progress?:string
+		// progress?:string
 	}
 
 	interface History {

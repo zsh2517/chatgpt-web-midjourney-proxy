@@ -1,16 +1,16 @@
 <script setup lang="ts">
 
-import { homeStore } from '@/store';
-import {  computed ,ref } from 'vue';
+import {homeStore} from '@/store';
+import {computed, ref} from 'vue';
 import aiSetServer from './aiSetServer.vue';
-import { NTag,NModal,NButton } from 'naive-ui';
-const isHideServer= computed( ()=>homeStore.myData.session.isHideServer );
-const st= ref({show:false});
+import {NTag, NModal, NButton} from 'naive-ui';
+const isHideServer = computed( ()=>homeStore.myData.session.isHideServer );
+const st = ref({show:false});
 const pp = defineProps<{msgInfo?:string}>();
-const emit =defineEmits(['close']);
-const closeed=()=>{
+const emit = defineEmits(['close']);
+const closeed = ()=>{
     emit('close');
-    st.value.show=false;
+    st.value.show = false;
 };
 </script>
 <template>

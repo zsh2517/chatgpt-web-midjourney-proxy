@@ -1,23 +1,23 @@
 <script setup lang="ts">
-import { ref,computed ,onMounted, watch} from 'vue';
-import { NTabs ,NTabPane ,NInput,NSwitch ,NTooltip, NTag ,NButton, useMessage,NSelect, NImage, NSlider} from 'naive-ui';
-import { SvgIcon } from '@/components/common';
-import { mlog } from '@/api';
-import { sunoFetch ,lyricsFetch, randStyle, FeedTask} from '@/api/suno';
-import { t } from '@/locales';
-import { homeStore } from '@/store';
-import { SunoMedia } from '@/api/sunoStore';
+import {ref, computed, onMounted, watch} from 'vue';
+import {NTabs, NTabPane, NInput, NSwitch, NTooltip, NTag, NButton, useMessage, NSelect, NImage, NSlider} from 'naive-ui';
+import {SvgIcon} from '@/components/common';
+import {mlog} from '@/api';
+import {sunoFetch, lyricsFetch, randStyle, FeedTask} from '@/api/suno';
+import {t} from '@/locales';
+import {homeStore} from '@/store';
+import {SunoMedia} from '@/api/sunoStore';
 import mcUploaderMp3 from './mcUploadMp3.vue';
 
-const st = ref({type:'custom',isLoading:false});
-const exSuno= ref<SunoMedia>();
-const des= ref( {
+const st = ref({type:'custom', isLoading:false});
+const exSuno = ref<SunoMedia>();
+const des = ref( {
     'gpt_description_prompt': '',
     'make_instrumental': false,
     'mv': 'chirp-v4',
     'prompt': ''
 });
-const cs= ref({
+const cs = ref({
     'prompt': '',
     'mv': 'chirp-v4',
     'title': '',
@@ -28,23 +28,23 @@ const cs= ref({
 
 });
 
-const mvOption= [
-    {label: 'verion: v3.5',value: 'chirp-v3-5'}
-    ,{label:'verion: v3',value: 'chirp-v3-0'}
-    ,{label:'verion: v4',value: 'chirp-v4'}
+const mvOption = [
+    {label: 'verion: v3.5', value: 'chirp-v3-5'}
+    , {label:'verion: v3', value: 'chirp-v3-0'}
+    , {label:'verion: v4', value: 'chirp-v4'}
 ];
 
 const canPost = computed(() => {
     // return true; 
-    if( st.value.isLoading ) {
+    if ( st.value.isLoading ) {
         return false;
     }
-    if( st.value.type=='custom'){
+    if ( st.value.type == 'custom') {
         return cs.value.tags && cs.value.title;
     }
-    if( st.value.type=='description' ){
-        mlog('des: ', des.value.gpt_description_prompt , des.value.make_instrumental );
-        return cs.value.title &&( des.value.gpt_description_prompt || des.value.make_instrumental);
+    if ( st.value.type == 'description' ) {
+        mlog('des: ', des.value.gpt_description_prompt, des.value.make_instrumental );
+        return cs.value.title && ( des.value.gpt_description_prompt || des.value.make_instrumental);
     }
     return true;
 });
@@ -53,74 +53,74 @@ const ms = useMessage();
 onMounted(() => {
     homeStore.setMyData({ms:ms});
 });
-//生成歌词
-const generateLyrics= ()=>{
-    //generate/lyrics
+// 生成歌词
+const generateLyrics = ()=>{
+    // generate/lyrics
     let prompt = cs.value.prompt || cs.value.title;
-    if (!prompt){
+    if (!prompt) {
         ms.error(   t('suno.inputly') );
         return; 
     }
-    if(st.value.isLoading) {
+    if (st.value.isLoading) {
         ms.info( t('suno.doingly'));
         return;
     }
-    st.value.isLoading =true;
+    st.value.isLoading = true;
     ms.info( t('suno.doingly2') );
-    sunoFetch(  '/generate/lyrics/' ,  {prompt}).then(async (r:any )=>{
+    sunoFetch(  '/generate/lyrics/',  {prompt}).then(async (r:any )=>{
         mlog('lyrics', r);
         let dz:any = await lyricsFetch( r.id );
         
         mlog('lyrics rz =>', dz );
-        if(dz!=null){  
+        if (dz != null) {  
 
-            cs.value.prompt= dz.text;
-            cs.value.title= dz.title;
-        }else{
+            cs.value.prompt = dz.text;
+            cs.value.title = dz.title;
+        } else {
             ms.error( t('suno.lyricsFail') );
            
         }
-        st.value.isLoading =false;
+        st.value.isLoading = false;
 
-    }).catch(()=>  st.value.isLoading =false );
-    if( !cs.value.tags ) {
-        cs.value.tags= randStyle();
+    }).catch(()=>  st.value.isLoading = false );
+    if ( !cs.value.tags ) {
+        cs.value.tags = randStyle();
     }
 };
 
-const generate= async ()=>{
-    st.value.isLoading =false;
-    let ids:string[]=[];
+const generate = async ()=>{
+    st.value.isLoading = false;
+    let ids:string[] = [];
      
 
-    if(st.value.type=='custom'){ 
-        if(des.value.make_instrumental) {
-            cs.value.prompt='';
+    if (st.value.type == 'custom') { 
+        if (des.value.make_instrumental) {
+            cs.value.prompt = '';
         }
-        if( cs.value.continue_clip_id!=''  ){
-            //chirp-v3-5-upload
+        if ( cs.value.continue_clip_id != ''  ) {
+            // chirp-v3-5-upload
             // cs.value.mv='chirp-v3-5-upload'
-            if( exSuno.value?.metadata?.type=='upload') {
-                cs.value.task='upload_extend';
+            if ( exSuno.value?.metadata?.type == 'upload') {
+                cs.value.task = 'upload_extend';
             } else {
-                cs.value.task='extend';
+                cs.value.task = 'extend';
             }
         }
-        let r:any= await sunoFetch(  '/generate' ,  cs.value ); 
-        st.value.isLoading =false;
+        let r:any = await sunoFetch(  '/generate',  cs.value ); 
+        st.value.isLoading = false;
 
-        ids=r.clips.map((r:any)=>r.id);
+        ids = r.clips.map((r:any)=>r.id);
         mlog('ids ', ids );
-        if( cs.value.mv='chirp-v3-5-upload' ) {
-            cs.value.mv='chirp-v4';
+        if ( cs.value.mv = 'chirp-v3-5-upload' ) {
+            cs.value.mv = 'chirp-v4';
         }
-    }else{
-        des.value.prompt=cs.value.title;
-        let r:any= await sunoFetch(  '/generate/description-mode' ,  des.value );  
-        st.value.isLoading =false; 
-        ids=r.clips.map((r:any)=>r.id);
+    } else {
+        des.value.prompt = cs.value.title;
+        let r:any = await sunoFetch(  '/generate/description-mode',  des.value );  
+        st.value.isLoading = false; 
+        ids = r.clips.map((r:any)=>r.id);
     }
-    cs.value.task='';
+    cs.value.task = '';
     FeedTask(ids);
 };
 
@@ -129,12 +129,12 @@ const generate= async ()=>{
 
 
 watch(()=>homeStore.myData.act, (n)=>{
-    if(n=='suno.extend'){
+    if (n == 'suno.extend') {
         mlog('suno.extend', homeStore.myData.actData );
-        const s= homeStore.myData.actData as SunoMedia;
-        exSuno.value= s; 
-        cs.value.continue_clip_id= s.id;
-        cs.value.continue_at= Math.ceil(s.metadata.duration/2); 
+        const s = homeStore.myData.actData as SunoMedia;
+        exSuno.value = s; 
+        cs.value.continue_clip_id = s.id;
+        cs.value.continue_at = Math.ceil(s.metadata.duration / 2); 
     }
 });
 

@@ -1,33 +1,33 @@
 <script setup lang="ts">
-import {NEmpty, useMessage,NPopover,NPopconfirm,NButton,NButtonGroup  } from 'naive-ui';
-import { RunwayMlStore, RunwayMlTask } from '@/api/runwaymlStore';
-import { ref, watch } from 'vue';
+import {NEmpty, useMessage, NPopover, NPopconfirm, NButton, NButtonGroup} from 'naive-ui';
+import {RunwayMlStore, RunwayMlTask} from '@/api/runwaymlStore';
+import {ref, watch} from 'vue';
 import {runwayMlFeedById} from '@/api/runwayml';
-import { t } from '@/locales';
+import {t} from '@/locales';
 import {SvgIcon} from '@/components/common';
-import { homeStore } from '@/store';
+import {homeStore} from '@/store';
 
 
-//runwayml.feed
-const ms= useMessage();
-const st= ref({pIndex:-1});
-const list= ref<RunwayMlTask[]>([]);
-const csuno= new RunwayMlStore();
-const initLoad=()=>{
+// runwayml.feed
+const ms = useMessage();
+const st = ref({pIndex:-1});
+const list = ref<RunwayMlTask[]>([]);
+const csuno = new RunwayMlStore();
+const initLoad = ()=>{
     let arr = csuno.getObjs();
-    list.value= arr.reverse();
+    list.value = arr.reverse();
 };
 
-const deleteGo=(item:RunwayMlTask)=>{
-    //..mlog('deleteGo',item )
-    if( csuno.delete( item)){ 
+const deleteGo = (item:RunwayMlTask)=>{
+    // ..mlog('deleteGo',item )
+    if ( csuno.delete( item)) { 
         ms.success( t('common.deleteSuccess'));
         initLoad();
     }
 };
  
 watch(()=>homeStore.myData.act, (n)=>{
-    if(n=='runwayml.feed')  {
+    if (n == 'runwayml.feed')  {
         initLoad();
     } 
 });

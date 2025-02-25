@@ -1,26 +1,26 @@
 <script setup lang="ts">
-import { NDrawer,NDrawerContent,NInput } from 'naive-ui';
-import { ref, watch } from 'vue';
-import { useBasicLayout } from '@/hooks/useBasicLayout';
-import { homeStore } from '@/store';
+import {NDrawer, NDrawerContent, NInput} from 'naive-ui';
+import {ref, watch} from 'vue';
+import {useBasicLayout} from '@/hooks/useBasicLayout';
+import {homeStore} from '@/store';
 import AiGptsCom from './aiGptsCom.vue';
-import { SvgIcon } from '@/components/common';
-const { isMobile } = useBasicLayout();
-const qref= ref();
-const st =ref({showImg:false,q:''});
+import {SvgIcon} from '@/components/common';
+const {isMobile} = useBasicLayout();
+const qref = ref();
+const st = ref({showImg:false, q:''});
 watch(()=>homeStore.myData.act, (n)=>{
-    if(n=='showgpts')   {
-        st.value.showImg=true;
+    if (n == 'showgpts')   {
+        st.value.showImg = true;
     }
 });
-const search=()=>{
-    if(!st.value.q ) {
+const search = ()=>{
+    if (!st.value.q ) {
         return ;
     }
     qref.value.searchQ(st.value.q);
 };
-const toq=( d:any )=>{
-    st.value.q= d.q;
+const toq = ( d:any )=>{
+    st.value.q = d.q;
 };
 </script>
 <template>

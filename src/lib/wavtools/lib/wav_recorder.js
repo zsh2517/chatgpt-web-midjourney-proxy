@@ -1,6 +1,6 @@
-import { AudioProcessorSrc } from './worklets/audio_processor.js';
-import { AudioAnalysis } from './analysis/audio_analysis.js';
-import { WavPacker } from './wav_packer.js';
+import {AudioProcessorSrc} from './worklets/audio_processor.js';
+import {AudioAnalysis} from './analysis/audio_analysis.js';
+import {WavPacker} from './wav_packer.js';
 
 /**
  * Decodes audio into a wav file
@@ -61,7 +61,7 @@ export class WavRecorder {
    * @returns {Promise<DecodedAudioType>}
    */
     static async decode(audioData, sampleRate = 44100, fromSampleRate = -1) {
-        const context = new AudioContext({ sampleRate });
+        const context = new AudioContext({sampleRate});
         let arrayBuffer;
         let blob;
         if (audioData instanceof Blob) {
@@ -79,7 +79,7 @@ export class WavRecorder {
                 );
             }
             arrayBuffer = audioData;
-            blob = new Blob([arrayBuffer], { type: 'audio/wav' });
+            blob = new Blob([arrayBuffer], {type: 'audio/wav'});
         } else {
             let float32Array;
             let data;
@@ -312,16 +312,16 @@ export class WavRecorder {
             throw new Error('Could not request user media');
         }
         try {
-            const config = { audio: true };
+            const config = {audio: true};
             if (deviceId) {
-                config.audio = { deviceId: { exact: deviceId } };
+                config.audio = {deviceId: {exact: deviceId}};
             }
             this.stream = await navigator.mediaDevices.getUserMedia(config);
         } catch (err) {
             throw new Error('Could not start media stream');
         }
 
-        const context = new AudioContext({ sampleRate: this.sampleRate });
+        const context = new AudioContext({sampleRate: this.sampleRate});
         const source = context.createMediaStreamSource(this.stream);
         // Load and execute the module script.
         try {
@@ -332,7 +332,7 @@ export class WavRecorder {
         }
         const processor = new AudioWorkletNode(context, 'audio_processor');
         processor.port.onmessage = (e) => {
-            const { event, id, data } = e.data;
+            const {event, id, data} = e.data;
             if (event === 'receipt') {
                 this.eventReceipts[id] = data;
             } else if (event === 'chunk') {

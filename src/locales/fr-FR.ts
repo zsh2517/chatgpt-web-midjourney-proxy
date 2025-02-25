@@ -30,7 +30,7 @@ export default {
     },
     chat: {
         newChatButton: 'Nouveau Chat',
-        //placeholder: 'Ask me anything...(Shift + Enter = line break, "/" to trigger prompts)',
+        // placeholder: 'Ask me anything...(Shift + Enter = line break, "/" to trigger prompts)',
         placeholder: 'Posez-moi n\'importe quoi, ou collez des captures d\'écran ou faites glisser le fichier. (Shift + Enter = saut de ligne, "/" pour déclencher des prompts)',
         placeholderMobile: 'Posez-moi n\'importe quoi...',
         copy: 'Copier',
@@ -121,7 +121,7 @@ export default {
         'pan_up': 'Haut',
         'pan_down': 'Bas',
         'up2': 'HD 2x',
-        'up4': 'HD 4x' ,
+        'up4': 'HD 4x',
 
         'thinking': 'Réflexion...',
         'noReUpload': 'Impossible de réimporter',
@@ -182,7 +182,7 @@ export default {
         'presence_penaltyInfo': 'À mesure que la valeur de (presence_penalty) augmente, il y a plus de chances de s\'étendre à de nouveaux sujets',
         'frequency_penalty': 'Pénalité de fréquence',
         'frequency_penaltyInfo': 'À mesure que la valeur de (frequency_penalty) augmente, il y a plus de chances de réduire les mots répétés'
-        ,'tts_voice': 'Personnage vocal TTS',
+        , 'tts_voice': 'Personnage vocal TTS',
         'typing': 'En train d\'écrire',
         'authErro': 'Échec de l\'autorisation',
         'authBt': 'Veuillez saisir à nouveau le mot de passe d\'accès à l\'autorisation',
@@ -192,8 +192,8 @@ export default {
         'micRecEnd': 'L\'enregistrement est terminé',
 
         subtle: 'Haute définition 2x'
-        ,creative: 'Haute définition 2x. Créatif'
-        ,gpt_gx: 'Les GPT utilisent g-*',
+        , creative: 'Haute définition 2x. Créatif'
+        , gpt_gx: 'Les GPT utilisent g-*',
 
         'ideoabout': 'À propos d\'Ideogram',
         'ideoserver': 'Serveur Ideogram',
@@ -214,14 +214,14 @@ export default {
         seed: 'Numéro de graine 1~2147483647',
         klingInfo: 'Description : <li>1. Haute qualité coûte 3,5 fois le prix</li> <li>2. 10 secondes coûtent 2 fois le prix</li> <li>3. La dernière image doit avoir une image de référence pour prendre effet</li>'
 
-        ,'camera_type': 'Objectif',
+        , 'camera_type': 'Objectif',
         'cnull': 'Correspondance intelligente',
         'down_back': 'Descendre et zoomer',
         'forward_up': 'Avancer et monter',
         'right_turn_forward': 'Tourner à droite et avancer',
         'left_turn_forward': 'Tourner à gauche et avancer'
-        ,kling:'Kling'
-        ,rttab: 'Voix',
+        , kling:'Kling'
+        , rttab: 'Voix',
         rtinfo: 'Service de conversation vocale en temps réel (realtime)',
         rtsetting: 'Veuillez configurer le serveur. Actuellement, Realtime ne prend en charge que les services à distance ; pour les services locaux, veuillez contacter l\'auteur.',
         rjcloded: 'La connexion a été déconnectée',
@@ -445,7 +445,7 @@ export default {
             landscape: 'Landscape (3:2)',
         },
     }
-    ,suno:{
+    , suno:{
         'description': 'Mode de description',
         'custom': 'Mode professionnel',
         'style': 'Style de chanson',
@@ -481,7 +481,7 @@ export default {
         info: 'Instructions :<br>La durée de l\'audio téléchargé doit être comprise entre 6s et 60s'
 
     }
-    ,video:{
+    , video:{
         'menu': 'Vidéos',
         'menuinfo': 'Création de vidéos Luma et autres',
         'descpls': 'Description de création de vidéos',

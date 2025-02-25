@@ -1,8 +1,8 @@
 <script lang="ts" setup>
-import { localGet, mlog } from '@/api';
-import { ref } from 'vue';
-import { NImage } from 'naive-ui';
-import { SvgIcon } from '@/components/common';
+import {localGet, mlog} from '@/api';
+import {ref} from 'vue';
+import {NImage} from 'naive-ui';
+import {SvgIcon} from '@/components/common';
 
 const pp = defineProps<{ image: string }>();
 const images = ref<{ fileName: string; fileBase64: string }[]>([]);
@@ -15,7 +15,7 @@ const isImage = (url:string) => {
 };
 
 const loadImages = async () => {
-    //mlog("loadImages", pp.image);
+    // mlog("loadImages", pp.image);
     try {
         const response = await localGet(pp.image);
         if (response) {

@@ -2,4 +2,4 @@
 
 const fetch = globalThis.fetch;
 
-export { fetch };
+export {fetch};

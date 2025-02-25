@@ -1,58 +1,58 @@
 <script setup lang="ts">
-import { ref ,computed,watch} from 'vue';
-import {useMessage, NButton,NSelect,NInput} from 'naive-ui';
+import {ref, computed, watch} from 'vue';
+import {useMessage, NButton, NSelect, NInput} from 'naive-ui';
 import {gptFetch, mlog, upImg} from '@/api';
-import { homeStore } from '@/store';
-import { SvgIcon } from '@/components/common';
+import {homeStore} from '@/store';
+import {SvgIcon} from '@/components/common';
 
 const ms = useMessage();
 const config = ref( {
     model:[
-        {  'label': 'DALL·E 3', 'value': 'dall-e-3' }
-        ,{  'label': 'DALL·E 2', 'value': 'dall-e-2' }
-        ,{  'label': 'Flux', 'value': 'flux' }
-        ,{  'label': 'Flux-Dev', 'value': 'flux-dev' }
-        ,{  'label': 'Flux-Pro', 'value': 'flux-pro' }
-        ,{  'label': 'Flux.1.1-Pro', 'value': 'flux.1.1-pro' }
+        {'label': 'DALL·E 3', 'value': 'dall-e-3'}
+        , {'label': 'DALL·E 2', 'value': 'dall-e-2'}
+        , {'label': 'Flux', 'value': 'flux'}
+        , {'label': 'Flux-Dev', 'value': 'flux-dev'}
+        , {'label': 'Flux-Pro', 'value': 'flux-pro'}
+        , {'label': 'Flux.1.1-Pro', 'value': 'flux.1.1-pro'}
     ]
 });
-const st =ref({isGo:false });     
-const f = ref({size:'1024x1024', prompt:'','model': 'dall-e-3','n': 1});
-const isDisabled= computed(()=>{
-    if(st.value.isGo) {
+const st = ref({isGo:false});     
+const f = ref({size:'1024x1024', prompt:'', 'model': 'dall-e-3', 'n': 1});
+const isDisabled = computed(()=>{
+    if (st.value.isGo) {
         return true;
     }
-    if(f.value.prompt.trim()=='') {
+    if (f.value.prompt.trim() == '') {
         return true;
     }
     return false;
 });
-const create= async ()=>{
+const create = async ()=>{
     // const d= await gptFetch('/v1/embeddings',{
     // "input":  f.value.prompt,
     // "model": "text-embedding-ada-002"
     // });
     // mlog('test',d );
-    //return ;
-    let obj= {
+    // return ;
+    let obj = {
         action:'gpt.dall-e-3',
         data:f.value
     };
     homeStore.setMyData({act:'draw', actData:obj});
-    st.value.isGo=true;
+    st.value.isGo = true;
 };
-watch(()=>homeStore.myData.act,(n)=>{
-    if(n=='dallReload') {
-        st.value.isGo=false;
-        f.value.prompt='';
+watch(()=>homeStore.myData.act, (n)=>{
+    if (n == 'dallReload') {
+        st.value.isGo = false;
+        f.value.prompt = '';
     }
-    if(n=='updateChat')  {
-        st.value.isGo=false;
+    if (n == 'updateChat')  {
+        st.value.isGo = false;
     }  
 });
 
-const dimensionsList= computed(()=>{
-    if(f.value.model=='dall-e-2'){
+const dimensionsList = computed(()=>{
+    if (f.value.model == 'dall-e-2') {
         return [{ 
             'label': '1024px*1024px',
             'value': '1024x1024'
@@ -78,8 +78,8 @@ const dimensionsList= computed(()=>{
     ];
      
 });
-watch(()=>f.value.model,(n)=>{
-    f.value.size='1024x1024';
+watch(()=>f.value.model, (n)=>{
+    f.value.size = '1024x1024';
 });
 </script>
 <template>

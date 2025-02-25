@@ -1,13 +1,13 @@
-import { gptServerStore,homeStore,useAuthStore } from '@/store';
-import { mlog } from './mjapi';
-import { sunoStore,SunoMedia } from './sunoStore';  
+import {gptServerStore, homeStore, useAuthStore} from '@/store';
+import {mlog} from './mjapi';
+import {sunoStore, SunoMedia} from './sunoStore';  
 
-const getUrl=(url:string)=>{
-    if(url.indexOf('http')==0) {
+const getUrl = (url:string)=>{
+    if (url.indexOf('http') == 0) {
         return url;
     }
-    if(gptServerStore.myData.SUNO_SERVER){
-        if( gptServerStore.myData.SUNO_SERVER.indexOf('suno')>0 ) {
+    if (gptServerStore.myData.SUNO_SERVER) {
+        if ( gptServerStore.myData.SUNO_SERVER.indexOf('suno') > 0 ) {
             return `${ gptServerStore.myData.SUNO_SERVER}${url}`;
         }
 
@@ -15,45 +15,45 @@ const getUrl=(url:string)=>{
     }
     return `/sunoapi${url}`;
 };
-function getHeaderAuthorization(){
-    let headers={};
-    if( homeStore.myData.vtoken ){
-        const  vtokenh={ 'x-vtoken':  homeStore.myData.vtoken ,'x-ctoken':  homeStore.myData.ctoken};
-        headers= {...headers, ...vtokenh};
+function getHeaderAuthorization() {
+    let headers = {};
+    if ( homeStore.myData.vtoken ) {
+        const  vtokenh = {'x-vtoken':  homeStore.myData.vtoken, 'x-ctoken':  homeStore.myData.ctoken};
+        headers = {...headers, ...vtokenh};
     }
-    if(!gptServerStore.myData.SUNO_KEY){
+    if (!gptServerStore.myData.SUNO_KEY) {
         const authStore = useAuthStore();
-        if( authStore.token ) {
-            const bmi= { 'x-ptoken':  authStore.token };
-            headers= {...headers, ...bmi };
+        if ( authStore.token ) {
+            const bmi = {'x-ptoken':  authStore.token};
+            headers = {...headers, ...bmi};
             return headers;
         }
         return headers;
     }
-    const bmi={
-        'Authorization': 'Bearer ' +gptServerStore.myData.SUNO_KEY
+    const bmi = {
+        'Authorization': 'Bearer ' + gptServerStore.myData.SUNO_KEY
     };
-    headers= {...headers, ...bmi };
+    headers = {...headers, ...bmi};
     return headers;
 }
 export function sleep(time: number) {
     return new Promise((resolve) => setTimeout(resolve, time));
 }
-export const lyricsFetch= async ( lid:string)=>{
-    for(let i=0;i<50;i++){
+export const lyricsFetch = async ( lid:string)=>{
+    for (let i = 0;i < 50;i++) {
         const dt:any = await sunoFetch(`/lyrics/${lid}`);
-        mlog('ddd',dt );
-        let time= (i+1);
-        if(time>20) {
-            time=20;
+        mlog('ddd', dt );
+        let time = (i + 1);
+        if (time > 20) {
+            time = 20;
         }
-        if(dt.status=='complete') {
+        if (dt.status == 'complete') {
             return dt ;
         }
-        if( dt.status=='error') {
+        if ( dt.status == 'error') {
             return null;
         }
-        await sleep( time*1000 );
+        await sleep( time * 1000 );
         
     }
     return null;
@@ -72,55 +72,55 @@ export function randStyle(): string {
     return randomS + ' ' + randomL ;
 }
 
-export const FeedTask= async (ids:string[])=>{
+export const FeedTask = async (ids:string[])=>{
     const sunoS = new sunoStore();
-    if(ids.length<=0) {
+    if (ids.length <= 0) {
         return;
     }
     
-    const d:any[] = await sunoFetch('/feed/'+ ids.join(','));
-    mlog('FeedTask',d );
+    const d:any[] = await sunoFetch('/feed/' + ids.join(','));
+    mlog('FeedTask', d );
     d.forEach( (item:SunoMedia) =>{
         sunoS.save( item);
-        if(item.status== 'complete' || item.status== 'error' ){
-            ids= ids.filter(v=>v!=item.id );
+        if (item.status == 'complete' || item.status == 'error' ) {
+            ids = ids.filter(v=>v != item.id );
         }
     });
     homeStore.setMyData({act:'FeedTask'});
-    await sleep(5*1020 );
+    await sleep(5 * 1020 );
     FeedTask(ids);
 
 };
 
 
-export const sunoFetch=(url:string,data?:any,opt2?:any )=>{
+export const sunoFetch = (url:string, data?:any, opt2?:any )=>{
     mlog('sunoFetch', url  );
-    let headers= {'Content-Type':'application/json'};
-    if(opt2 && opt2.headers ) {
-        headers= opt2.headers;
+    let headers = {'Content-Type':'application/json'};
+    if (opt2 && opt2.headers ) {
+        headers = opt2.headers;
     }
 
-    headers={...headers,...getHeaderAuthorization()};
+    headers = {...headers, ...getHeaderAuthorization()};
    
     return new Promise<any>((resolve, reject) => {
-        const opt:RequestInit ={method:'GET'};
+        const opt:RequestInit = {method:'GET'};
        
-        opt.headers= headers ;
-        if(opt2?.upFile ){
-            opt.method='POST';
-            opt.body=data as FormData ;
-        } else if(data) {
-            opt.body= JSON.stringify(data) ;
-            opt.method='POST';
+        opt.headers = headers ;
+        if (opt2?.upFile ) {
+            opt.method = 'POST';
+            opt.body = data as FormData ;
+        } else if (data) {
+            opt.body = JSON.stringify(data) ;
+            opt.method = 'POST';
         }
         fetch(getUrl(url),  opt )
             .then( async (d) =>{
                 if (!d.ok) { 
-                    let msg = '发生错误: '+ d.status;
-                    try{ 
+                    let msg = '发生错误: ' + d.status;
+                    try { 
                         const bjson:any  = await d.json();
-                        msg = '('+ d.status+')发生错误: '+(bjson?.error?.message??'' ); 
-                    }catch( e ){ 
+                        msg = '(' + d.status + ')发生错误: ' + (bjson?.error?.message ?? '' ); 
+                    } catch ( e ) { 
                     }
                     homeStore.myData.ms &&  homeStore.myData.ms.error(msg );
                     throw new Error( msg );
@@ -128,7 +128,7 @@ export const sunoFetch=(url:string,data?:any,opt2?:any )=>{
      
                 d.json().then(d=> resolve(d)).catch(e=>{ 
             
-                    homeStore.myData.ms &&  homeStore.myData.ms.error('发生错误'+ e );
+                    homeStore.myData.ms &&  homeStore.myData.ms.error('发生错误' + e );
                     reject(e); 
                 }
                 );
@@ -137,7 +137,7 @@ export const sunoFetch=(url:string,data?:any,opt2?:any )=>{
                 if (e.name === 'TypeError' && e.message === 'Failed to fetch') {
                     homeStore.myData.ms &&  homeStore.myData.ms.error('跨域|CORS error'  );
                 } else {
-                    homeStore.myData.ms &&  homeStore.myData.ms.error('发生错误:'+e );
+                    homeStore.myData.ms &&  homeStore.myData.ms.error('发生错误:' + e );
                 }
                 mlog('e', e.stat );
                 reject(e);

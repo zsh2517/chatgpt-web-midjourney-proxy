@@ -6,7 +6,7 @@ interface StorageData<T = any> {
 export function createLocalStorage(options?: { expire?: number | null }) {
     const DEFAULT_CACHE_TIME = 60 * 60 * 24 * 7;
 
-    const { expire } = Object.assign({ expire: DEFAULT_CACHE_TIME }, options);
+    const {expire} = Object.assign({expire: DEFAULT_CACHE_TIME}, options);
 
     function set<T = any>(key: string, data: T) {
         const storageData: StorageData<T> = {
@@ -30,7 +30,7 @@ export function createLocalStorage(options?: { expire?: number | null }) {
             }
 
             if (storageData) {
-                const { data, expire } = storageData;
+                const {data, expire} = storageData;
                 if (expire === null || expire >= Date.now()) {
                     return data;
                 }
@@ -49,9 +49,9 @@ export function createLocalStorage(options?: { expire?: number | null }) {
         window.localStorage.clear();
     }
 
-    return { set, get, remove, clear };
+    return {set, get, remove, clear};
 }
 
 export const ls = createLocalStorage();
 
-export const ss = createLocalStorage({ expire: null });
+export const ss = createLocalStorage({expire: null});

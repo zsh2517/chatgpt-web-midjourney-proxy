@@ -102,7 +102,7 @@ export class AudioAnalysis {
        * The reason to do this is that Safari fails when using `createMediaElementSource`
        * This has a non-zero RAM cost so we only opt-in to run it on Safari, Chrome is better
        */
-            const { length, sampleRate } = audioBuffer;
+            const {length, sampleRate} = audioBuffer;
             const offlineAudioContext = new OfflineAudioContext({
                 length,
                 sampleRate,

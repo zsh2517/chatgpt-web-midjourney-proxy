@@ -1,4 +1,4 @@
-//import Keyv from 'keyv'
+// import Keyv from 'keyv'
 
 export type Role = 'user' | 'assistant' | 'system'
 
@@ -27,7 +27,7 @@ export type ChatGPTAPIOptions = {
   /** @defaultValue `1000` **/
   maxResponseTokens?: number
 
-  //messageStore?: Keyv
+  // messageStore?: Keyv
   getMessageById?: GetMessageByIdFunction
   upsertMessage?: UpsertMessageFunction
 

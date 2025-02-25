@@ -1,6 +1,6 @@
 
 
-export const tts=(index:number)=>{
+export const tts = (index:number)=>{
 
 };
 

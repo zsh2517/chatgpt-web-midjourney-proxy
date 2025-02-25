@@ -1,4 +1,4 @@
-import { ss } from '@/utils/storage';
+import {ss} from '@/utils/storage';
 
 interface Options {
     name: string;
@@ -75,49 +75,49 @@ export interface RunwayTask {
     last_feed?:number;
 }
 
-export class runwayStore{
-    //private id: string;
-    private localKey='runway-store';
-    public save(obj:RunwayTask ){
-        if(!obj.id ) {
+export class runwayStore {
+    // private id: string;
+    private localKey = 'runway-store';
+    public save(obj:RunwayTask ) {
+        if (!obj.id ) {
             throw 'taskID must';
         }
-        const arr=  this.getObjs();
-        const i= arr.findIndex( v=>v.id==obj.id );
-        if(i>-1) {
-            arr[i]= obj;
+        const arr =  this.getObjs();
+        const i = arr.findIndex( v=>v.id == obj.id );
+        if (i > -1) {
+            arr[i] = obj;
         } else {
             arr.push(obj);
         }
         ss.set(this.localKey, arr );
         return this;
     } 
-    public findIndex(id:string){ 
-        return this.getObjs().findIndex( v=>v.id== id );
+    public findIndex(id:string) { 
+        return this.getObjs().findIndex( v=>v.id == id );
     }
 
-    public getObjs():RunwayTask[]{
+    public getObjs():RunwayTask[] {
         const obj = ss.get( this.localKey ) as  undefined| RunwayTask[];
-        if(!obj) {
+        if (!obj) {
             return [];
         }
         return obj;
     }
-    public getOneById(id:string):RunwayTask|null{
-        const i= this.findIndex(id);
-        if(i<0) {
+    public getOneById(id:string):RunwayTask|null {
+        const i = this.findIndex(id);
+        if (i < 0) {
             return null;
         }
-        const arr=  this.getObjs();
+        const arr =  this.getObjs();
         return arr[i];
     }
-    public delete( obj:RunwayTask ){
-        if(!obj.id ) {
+    public delete( obj:RunwayTask ) {
+        if (!obj.id ) {
             throw 'id must';
         }
-        const arr=  this.getObjs();
-        const i= arr.findIndex( v=>v.id==obj.id );
-        if(i<0) {
+        const arr =  this.getObjs();
+        const i = arr.findIndex( v=>v.id == obj.id );
+        if (i < 0) {
             return false;
         }
         arr.splice(i, 1);

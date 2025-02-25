@@ -1,4 +1,4 @@
-import { mlog } from './mjapi';
+import {mlog} from './mjapi';
 
 export interface recType{
     timeOut:number 
@@ -14,14 +14,14 @@ export class Recognition {
 
     private isStop = false;
 
-    //选项
-    private recOpt:recType={timeOut:2000}; 
+    // 选项
+    private recOpt:recType = {timeOut:2000}; 
   
     //
     private handleTime: any ;
 
     private hTime:Date | undefined;
-    //语言
+    // 语言
     private asrLanguage = 'cmn-Hans-CN';
     //
     private onEnd?: () => void;
@@ -30,30 +30,30 @@ export class Recognition {
         this.listener = fn;
         return this;
     }
-    public setOnEnd( fn: ( ) => void){
+    public setOnEnd( fn: ( ) => void) {
         this.onEnd = fn;
         return this;
     }
-    public setOpt( opt:recType ){
-        this.recOpt= opt;
+    public setOpt( opt:recType ) {
+        this.recOpt = opt;
 
-        if(opt.listener)  {
+        if (opt.listener)  {
             this.setListener(opt.listener);
         }
-        if(opt.onEnd)  {
+        if (opt.onEnd)  {
             this.setListener(opt.onEnd);
         }
-        if(opt.asrLanguage)  {
+        if (opt.asrLanguage)  {
             this.setLang(opt.asrLanguage);
         }
-        if(opt.onStart) {
-            this.onStart= opt.onStart;
+        if (opt.onStart) {
+            this.onStart = opt.onStart;
         }
 
         return this;
     }
   
-    public setLang( lang:string ){
+    public setLang( lang:string ) {
         this.asrLanguage = lang;
         return this;
     }
@@ -128,16 +128,16 @@ export class Recognition {
         return this;
     }
 
-    private check( that:Recognition ){
-        if( !that.hTime ) {
+    private check( that:Recognition ) {
+        if ( !that.hTime ) {
             mlog('mcheck 未定义');
             return ;
         }  
         const nTime =  new Date();
      
-        const dt =  nTime.getTime()- that.hTime.getTime();
-        mlog('mcheck', dt,that.recOpt.timeOut );
-        if( dt> that.recOpt.timeOut ){
+        const dt =  nTime.getTime() - that.hTime.getTime();
+        mlog('mcheck', dt, that.recOpt.timeOut );
+        if ( dt > that.recOpt.timeOut ) {
             that.stop();
         }
         return this;
@@ -184,7 +184,7 @@ function sleep(time: number) {
     return new Promise((resolve) => setTimeout(resolve, time));
 }
 
-//浏览器文字播放
+// 浏览器文字播放
 export async function speakText(content: string, callback: (playing: boolean) => void) {
     if (!window.speechSynthesis) {
         return;

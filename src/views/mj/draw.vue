@@ -1,18 +1,18 @@
 <script setup lang="ts">
 import aiSiderInput from './aiSiderInput.vue'; 
-//import { useAppStore, useChatStore } from '@/store';
+// import { useAppStore, useChatStore } from '@/store';
 
-import { useBasicLayout } from '@/hooks/useBasicLayout';
-import { mlog } from '@/api';
+import {useBasicLayout} from '@/hooks/useBasicLayout';
+import {mlog} from '@/api';
 import chatIndex from '@/views/chat/index.vue';
 
-const { isMobile } = useBasicLayout();
+const {isMobile} = useBasicLayout();
 // const appStore = useAppStore()
 // const chatStore = useChatStore()
-const drawSent=( obj:any )=>{
-    mlog('drawSent' , obj );
+const drawSent = ( obj:any )=>{
+    mlog('drawSent', obj );
 };
-const mjClose=()=>{
+const mjClose = ()=>{
 };
 
 // function handleAdd() {
@@ -21,7 +21,7 @@ const mjClose=()=>{
 //     appStore.setSiderCollapsed(true)
 // }
 
-//handleAdd();
+// handleAdd();
 </script>
 <template>
          <!-- <chatIndex></chatIndex> -->

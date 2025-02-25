@@ -1,10 +1,10 @@
-import { createParser } from 'eventsource-parser';
+import {createParser} from 'eventsource-parser';
 
 import * as types from './types';
-import { fetch as globalFetch } from './fetch';
-import { streamAsyncIterable } from './stream-async-iterable';
+import {fetch as globalFetch} from './fetch';
+import {streamAsyncIterable} from './stream-async-iterable';
 
-export class ChatGPTError2 extends types.ChatGPTError{
+export class ChatGPTError2 extends types.ChatGPTError {
     reason?:string;
 }
 export async function fetchSSE(
@@ -15,12 +15,12 @@ export async function fetchSSE(
   },
     fetch: types.FetchFn = globalFetch
 ) {
-    const { onMessage, onError, ...fetchOptions } = options;
+    const {onMessage, onError, ...fetchOptions} = options;
     let res ;
-    try{
+    try {
         res = await fetch(url, fetchOptions);
-    }catch(e :any ){ 
-        throw {reason: JSON.stringify({message:'fetch error, pleace check url',url ,code:'fetch_error'}) }; 
+    } catch (e :any ) { 
+        throw {reason: JSON.stringify({message:'fetch error, pleace check url', url, code:'fetch_error'})}; 
     }
     if (!res.ok) {
         let reason: string;
@@ -32,10 +32,10 @@ export async function fetchSSE(
         }
 
         const msg = `ChatGPT error ${res.status}: ${reason}`;
-        const error = new ChatGPTError2(msg, { cause: res });
+        const error = new ChatGPTError2(msg, {cause: res});
         error.statusCode = res.status;
         error.statusText = res.statusText;
-        error.reason =reason;
+        error.reason = reason;
         throw error;
     }
 
@@ -57,7 +57,7 @@ export async function fetchSSE(
 
         if (response?.detail?.type === 'invalid_request_error') {
             const msg = `ChatGPT error ${response.detail.message}: ${response.detail.code} (${response.detail.type})`;
-            const error = new types.ChatGPTError(msg, { cause: response });
+            const error = new types.ChatGPTError(msg, {cause: response});
             error.statusCode = response.detail.code;
             error.statusText = response.detail.message;
 
@@ -92,7 +92,7 @@ export async function fetchSSE(
     } else {
         for await (const chunk of streamAsyncIterable(res.body)) {
             const str = new TextDecoder().decode(chunk);
-            //console.log(str );
+            // console.log(str );
             feed(str);
         }
     }

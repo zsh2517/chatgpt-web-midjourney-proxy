@@ -1,9 +1,9 @@
-import { defineStore } from 'pinia';
-import { getToken, removeToken, setToken } from './helper';
-import { store } from '@/store/helper';
-import { fetchSession } from '@/api';
-import { gptConfigStore, homeStore } from '@/store/homeStore';
-import { useAppStore } from '@/store';
+import {defineStore} from 'pinia';
+import {getToken, removeToken, setToken} from './helper';
+import {store} from '@/store/helper';
+import {fetchSession} from '@/api';
+import {gptConfigStore, homeStore} from '@/store/homeStore';
+import {useAppStore} from '@/store';
 const appStore = useAppStore();
 interface SessionResponse {
   theme?: string
@@ -31,17 +31,17 @@ export const useAuthStore = defineStore('auth-store', {
     actions: {
         async getSession() {
             try {
-                const { data } = await fetchSession<SessionResponse>();
-                this.session = { ...data };
+                const {data} = await fetchSession<SessionResponse>();
+                this.session = {...data};
         
-                homeStore.setMyData({session: data });
-                if(appStore.$state.theme=='auto' ){
-                    appStore.setTheme(  data.theme && data.theme=='light' ?'light':'dark');
+                homeStore.setMyData({session: data});
+                if (appStore.$state.theme == 'auto' ) {
+                    appStore.setTheme(  data.theme && data.theme == 'light' ? 'light' : 'dark');
                 }
 
                 const str = localStorage.getItem('gptConfigStore');
-                if( ! str ) {
-                    setTimeout( ()=>  gptConfigStore.setInit() , 500);
+                if ( ! str ) {
+                    setTimeout( ()=>  gptConfigStore.setInit(), 500);
                 } 
                 return Promise.resolve(data);
             } catch (error) {

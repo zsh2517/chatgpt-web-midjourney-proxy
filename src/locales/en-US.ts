@@ -30,7 +30,7 @@ export default {
     },
     chat: {
         newChatButton: 'New Chat',
-        //placeholder: 'Ask me anything...(Shift + Enter = line break, "/" to trigger prompts)',
+        // placeholder: 'Ask me anything...(Shift + Enter = line break, "/" to trigger prompts)',
         placeholder: 'Ask me anything, or paste screenshots or drag the file .(Shift + Enter = line break, "/" to trigger prompts)',
         placeholderMobile: 'Ask me anything...',
         copy: 'Copy',
@@ -122,7 +122,7 @@ export default {
         'pan_up': 'Up',
         'pan_down': 'Down',
         'up2': 'HD 2x',
-        'up4': 'HD 4x' ,
+        'up4': 'HD 4x',
 
         'thinking': 'Thinking...',
         'noReUpload': 'Cannot re-upload',
@@ -186,15 +186,15 @@ export default {
         'tts_voice': 'Voice Role',
         'typing': 'Typing',
         'authErro': 'Authorization failed',
-        'authBt': 'Please enter the authorization access password again' ,
+        'authBt': 'Please enter the authorization access password again',
         'micWhisper': 'Whisper speech recognition',
         'micAsr': 'Instant recognition',
         'micRec': 'Start recording, please speak! It will automatically stop if there is no sound for 2 seconds.',
         'micRecEnd': 'Recording has ended'
 
-        ,subtle: 'High definition 2x'
-        ,creative: 'High definition 2x. Creative'
-        ,gpt_gx: 'GPTs use g-*',
+        , subtle: 'High definition 2x'
+        , creative: 'High definition 2x. Creative'
+        , gpt_gx: 'GPTs use g-*',
 
         'ideoabout': 'About Ideogram',
         'ideoserver': 'Ideogram Server',
@@ -215,15 +215,15 @@ export default {
         seed: 'Seed number 1~2147483647',
         klingInfo: 'Description: <li>1. High Quality is 3.5 times the price</li> <li>2. 10s is 2 times the price</li> <li>3. The last frame must have a reference image to take effect</li>'
   
-        ,'camera_type': 'Lens',
+        , 'camera_type': 'Lens',
         'cnull': 'Smart Matching',
         'down_back': 'Move Down and Zoom Out',
         'forward_up': 'Push Forward and Move Up',
         'right_turn_forward': 'Turn Right and Push Forward',
         'left_turn_forward': 'Turn Left and Push Forward'
-        ,kling:'Kling'
+        , kling:'Kling'
 
-        ,rttab: 'RealTime',
+        , rttab: 'RealTime',
         rtinfo: 'Realtime voice conversation service',
         rtsetting: 'Please set the server. Currently, Realtime only supports remote services; for local services, please contact the author.',
         rjcloded: 'Connection has been disconnected',
@@ -232,7 +232,7 @@ export default {
         rtservererror: 'WebSocket connection server error!',
         rtservererror2: 'Recording is not supported, it may be due to device reasons!',
         rtconecting: 'Connecting to the server'
-        ,confirmDelete:'Are you sure?',
+        , confirmDelete:'Are you sure?',
         pikaabout: 'About Pika',
         pikaserver: 'Pika API Address',
         pikakeyPlaceholder: 'Pika API Key (optional)',
@@ -352,9 +352,9 @@ export default {
         'add2more': 'Please add two or more images',
         'no1m': 'Image size cannot exceed 1M',
         'imgExt': 'Images support only jpg, gif, png, jpeg formats'
-        ,'setSync': 'Synchronize Midjourney and Suno'
+        , 'setSync': 'Synchronize Midjourney and Suno'
 
-        ,'addGPTS': 'Add GPTs',
+        , 'addGPTS': 'Add GPTs',
         'addPlaceholder': 'Paste the GID of the GPTs here or directly paste the link of the GPTs',
         'gidError': 'Valid GID not found, please fill in again',
         'success3': 'GPTs added successfully!'
@@ -449,7 +449,7 @@ export default {
         },
     }
 
-    ,suno:{
+    , suno:{
         'description': 'Description',
         'custom': 'Custom',
         'style': 'Song Style',
@@ -477,14 +477,14 @@ export default {
         'serverabout': 'Suno Related',
         'setOpenKeyPlaceholder': 'Related KEY for Suno API; optional'
 
-        ,upMps:'Upload'
-        ,extend:'Extend'
-        ,extendFrom:'Extend From'
-        ,extendAt:'Extend at'
-        ,fail:'Fail'
-        ,info:'Note: <br> Uploaded audio must be between 6 seconds and 60 seconds in duration.'
+        , upMps:'Upload'
+        , extend:'Extend'
+        , extendFrom:'Extend From'
+        , extendAt:'Extend at'
+        , fail:'Fail'
+        , info:'Note: <br> Uploaded audio must be between 6 seconds and 60 seconds in duration.'
     }
-    ,video: {
+    , video: {
         menu: 'Videos',
         menuinfo: 'Luma and other video generate',
         descpls: 'Video generate description',

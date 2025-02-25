@@ -1,30 +1,30 @@
 <script setup lang="ts">
-import { SvgIcon } from '@/components/common';
+import {SvgIcon} from '@/components/common';
 import an_main from './an_main.vue';
 import aiTextSetting from '../mj/aiTextSetting.vue';
 import wavSetting from './wavSetting.vue';
-import { WavRecorder, WavStreamPlayer } from '@openai/realtime-wavtools';
-import { onMounted, ref, watch } from 'vue';
-import { mlog,RealtimeEvent,instructions } from '@/api';
-import { WavRenderer } from '@/utils/wav_renderer';
-import { RealtimeClient } from '@openai/realtime-api-beta';
-import { ItemType } from '@openai/realtime-api-beta/dist/lib/client.js';
-import { useMessage ,NModal,NButton} from 'naive-ui';
-import { gptServerStore } from '@/store';
-import { t } from '@/locales';
-const wavRecorderRef=  ref<WavRecorder>( new  WavRecorder({ sampleRate: 24000 })); 
-const wavStreamPlayerRef=  ref<WavStreamPlayer>( new WavStreamPlayer({ sampleRate: 24000 })); 
+import {WavRecorder, WavStreamPlayer} from '@openai/realtime-wavtools';
+import {onMounted, ref, watch} from 'vue';
+import {mlog, RealtimeEvent, instructions} from '@/api';
+import {WavRenderer} from '@/utils/wav_renderer';
+import {RealtimeClient} from '@openai/realtime-api-beta';
+import {ItemType} from '@openai/realtime-api-beta/dist/lib/client.js';
+import {useMessage, NModal, NButton} from 'naive-ui';
+import {gptServerStore} from '@/store';
+import {t} from '@/locales';
+const wavRecorderRef =  ref<WavRecorder>( new  WavRecorder({sampleRate: 24000})); 
+const wavStreamPlayerRef =  ref<WavStreamPlayer>( new WavStreamPlayer({sampleRate: 24000})); 
 const clientCanvasRef = ref<HTMLCanvasElement|null>(null);
 const serverCanvasRef = ref<HTMLCanvasElement|null>(null);
-const items= ref<ItemType[]>([]); 
-const realtimeEvents= ref<RealtimeEvent[]>([]);
-const clientRef= ref<RealtimeClient>();
-const ms= useMessage();
-const st= ref({apikey:'', isConnect:false,baseUrl:'',isRealtime:true,msg:'Waiting',isClosed:false,showSetting:false });
-const edmit= defineEmits(['close']);
+const items = ref<ItemType[]>([]); 
+const realtimeEvents = ref<RealtimeEvent[]>([]);
+const clientRef = ref<RealtimeClient>();
+const ms = useMessage();
+const st = ref({apikey:'', isConnect:false, baseUrl:'', isRealtime:true, msg:'Waiting', isClosed:false, showSetting:false});
+const edmit = defineEmits(['close']);
 
-watch( ()=> wavRecorderRef.value,() => {
-    const wavRecorder= wavRecorderRef.value;  
+watch( ()=> wavRecorderRef.value, () => {
+    const wavRecorder = wavRecorderRef.value;  
     
     const clientCanvas = clientCanvasRef.value;
     const wavStreamPlayer = wavStreamPlayerRef.value;
@@ -39,7 +39,7 @@ watch( ()=> wavRecorderRef.value,() => {
             clientCtx.clearRect(0, 0, clientCanvas.width, clientCanvas.height);
             const result = wavRecorder.recording
                 ? wavRecorder.getFrequencies('voice')
-                : { values: new Float32Array([0]) };
+                : {values: new Float32Array([0])};
             WavRenderer.drawBars(
                 clientCanvas,
                 clientCtx,
@@ -64,7 +64,7 @@ watch( ()=> wavRecorderRef.value,() => {
             serverCtx.clearRect(0, 0, serverCanvas.width, serverCanvas.height);
             const result = wavStreamPlayer.analyser
                 ? wavStreamPlayer.getFrequencies('voice')
-                : { values: new Float32Array([0]) };
+                : {values: new Float32Array([0])};
              
             WavRenderer.drawBars(
                 serverCanvas,
@@ -78,55 +78,55 @@ watch( ()=> wavRecorderRef.value,() => {
         }
     }
 
-},{deep:true,immediate:true});
+}, {deep:true, immediate:true});
 
-const go= async()=>{
-    st.value.msg=  t('mj.rtconecting');
-    if(st.value.isConnect){
-    //mlog("isConnect yes!"  )
+const go = async ()=>{
+    st.value.msg =  t('mj.rtconecting');
+    if (st.value.isConnect) {
+    // mlog("isConnect yes!"  )
         ms.info('isConnect yes!');
         return;
     }
     
-    if(!clientRef.value || !st.value.isConnect ){
-        if(!st.value.apikey){
+    if (!clientRef.value || !st.value.isConnect ) {
+        if (!st.value.apikey) {
             
             ms.error('api key is null');
             return;
         }
-        if(!st.value.baseUrl){ 
+        if (!st.value.baseUrl) { 
             ms.error('baseUrl is null');
             return;
         }
-        //ms.info("go");
-        //console.log("RealtimeClient", st.value.apikey )
+        // ms.info("go");
+        // console.log("RealtimeClient", st.value.apikey )
 
-        clientRef.value= new RealtimeClient( { 
+        clientRef.value = new RealtimeClient( { 
             apiKey:st.value.apikey,
             dangerouslyAllowAPIKeyInBrowser: true,
             baseUrl: st.value.baseUrl,
-            model: gptServerStore.myData.REALTIME_MODEL?gptServerStore.myData.REALTIME_MODEL: 'gpt-4o-realtime-preview-2024-10-01' 
+            model: gptServerStore.myData.REALTIME_MODEL ? gptServerStore.myData.REALTIME_MODEL : 'gpt-4o-realtime-preview-2024-10-01' 
         }
         );
     }
-    //mlog("go", st.value.apikey )
-    const client= clientRef.value;
-    const wavRecorder= wavRecorderRef.value;
-    const wavStreamPlayer= wavStreamPlayerRef.value;
+    // mlog("go", st.value.apikey )
+    const client = clientRef.value;
+    const wavRecorder = wavRecorderRef.value;
+    const wavStreamPlayer = wavStreamPlayerRef.value;
    
-    try{
+    try {
     // Connect to microphone
         await wavRecorder.begin();
-    }catch(e){
-        st.value.msg=t('mj.rtservererror2'); 
+    } catch (e) {
+        st.value.msg = t('mj.rtservererror2'); 
         ms.error(st.value.msg);
         return; 
     }
     // Connect to realtime API
-    try{
+    try {
         await client.connect(); 
-    }catch(e ){
-        st.value.msg= t('mj.rtservererror');
+    } catch (e ) {
+        st.value.msg = t('mj.rtservererror');
         ms.error( st.value.msg);
 
         return; 
@@ -135,7 +135,7 @@ const go= async()=>{
     // Connect to audio output
     await wavStreamPlayer.connect();
 
-    st.value.isConnect=true;
+    st.value.isConnect = true;
 
     client.sendUserMessageContent([
         {
@@ -146,15 +146,15 @@ const go= async()=>{
     
 
     client.updateSession({
-        turn_detection:  { type: 'server_vad' },
+        turn_detection:  {type: 'server_vad'},
     });
     
 
     await wavRecorder.record((data: { mono: Int16Array | ArrayBuffer; }) => {
-        try{ 
+        try { 
             client.appendInputAudio(data.mono);
-            st.value.msg=  t('mj.rtsuccess');
-        }catch(e){
+            st.value.msg =  t('mj.rtsuccess');
+        } catch (e) {
             disconnectConversation();
             // st.value.msg= t('mj.checkkey')
             // ms.error(st.value.msg);
@@ -166,17 +166,17 @@ const go= async()=>{
     myListen();
 };
 
-const disconnectConversation= async()=>{
-    const wavRecorder= wavRecorderRef.value;
-    const wavStreamPlayer= wavStreamPlayerRef.value;
-    //clientRef.value?.disconnect();
-    st.value.isConnect=false;
-    const client= clientRef.value;
-    //client?.reset();
+const disconnectConversation = async ()=>{
+    const wavRecorder = wavRecorderRef.value;
+    const wavStreamPlayer = wavStreamPlayerRef.value;
+    // clientRef.value?.disconnect();
+    st.value.isConnect = false;
+    const client = clientRef.value;
+    // client?.reset();
     client?.disconnect();
     await wavRecorder.end();
     await wavStreamPlayer.interrupt();
-    st.value.msg=t('mj.rjcloded');
+    st.value.msg = t('mj.rjcloded');
     ms.success( st.value.msg);
 };
 
@@ -185,28 +185,28 @@ const disconnectConversation= async()=>{
  */
 
 
-const myListen=()=>{
-    const client= clientRef.value;
-    const wavRecorder= wavRecorderRef.value;
-    const wavStreamPlayer= wavStreamPlayerRef.value;
+const myListen = ()=>{
+    const client = clientRef.value;
+    const wavRecorder = wavRecorderRef.value;
+    const wavStreamPlayer = wavStreamPlayerRef.value;
 
-    if( !client){
+    if ( !client) {
         return;
     }
     // Set instructions
     client.updateSession({ 
-        instructions:  gptServerStore.myData.REALTIME_SYSMSG?  gptServerStore.myData.REALTIME_SYSMSG: instructions,
+        instructions:  gptServerStore.myData.REALTIME_SYSMSG ?  gptServerStore.myData.REALTIME_SYSMSG : instructions,
     });
 
-    if( gptServerStore.myData.TTS_VOICE && ['alloy','shimmer','echo'].indexOf( gptServerStore.myData.TTS_VOICE)>-1) {
-        client.updateSession({ voice: gptServerStore.myData.TTS_VOICE });
-        mlog('log','voice', gptServerStore.myData.TTS_VOICE);
+    if ( gptServerStore.myData.TTS_VOICE && ['alloy', 'shimmer', 'echo'].indexOf( gptServerStore.myData.TTS_VOICE) > -1) {
+        client.updateSession({voice: gptServerStore.myData.TTS_VOICE});
+        mlog('log', 'voice', gptServerStore.myData.TTS_VOICE);
 
     }
     // Set transcription, otherwise we don't get user transcriptions back
 
-    if(gptServerStore.myData.REALTIME_IS_WHISPER) {
-        client.updateSession({ input_audio_transcription: { model: 'whisper-1' } });
+    if (gptServerStore.myData.REALTIME_IS_WHISPER) {
+        client.updateSession({input_audio_transcription: {model: 'whisper-1'}});
     }
 
     // Add tools
@@ -230,13 +230,13 @@ const myListen=()=>{
                 required: ['key', 'value'],
             },
         },
-        async ({ key, value }: { [key: string]: any }) => {
+        async ({key, value}: { [key: string]: any }) => {
             // setMemoryKv((memoryKv) => {
             //   const newKv = { ...memoryKv };
             //   newKv[key] = value;
             //   return newKv;
             // });
-            return { ok: true };
+            return {ok: true};
         }
     );
     client.addTool(
@@ -263,7 +263,7 @@ const myListen=()=>{
                 required: ['lat', 'lng', 'location'],
             },
         },
-        async ({ lat, lng, location }: { [key: string]: any }) => {
+        async ({lat, lng, location}: { [key: string]: any }) => {
             // setMarker({ lat, lng, location });
             // setCoords({ lat, lng, location });
             const result = await fetch(
@@ -289,17 +289,17 @@ const myListen=()=>{
         setRealtimeEvents(realtimeEvent);
     });
     client.on('error', (event: any) =>{
-        ms.error('发生错误：'+event);
-        console.error('error.event>>',event);
+        ms.error('发生错误：' + event);
+        console.error('error.event>>', event);
     });
     client.on('conversation.interrupted', async () => {
         const trackSampleOffset = await wavStreamPlayer.interrupt();
         if (trackSampleOffset?.trackId) {
-            const { trackId, offset } = trackSampleOffset;
+            const {trackId, offset} = trackSampleOffset;
             await client.cancelResponse(trackId, offset);
         }
     });
-    client.on('conversation.updated', async ({ item, delta }: any) => {
+    client.on('conversation.updated', async ({item, delta}: any) => {
         const items = client.conversation.getItems();
         if (delta?.audio) {
             wavStreamPlayer.add16BitPCM(delta.audio, item.id);
@@ -315,17 +315,17 @@ const myListen=()=>{
         setItems(items);
     });
 };
-const setItems=(iitems: ItemType[])=>{
-    //mlog("setItems", iitems.length, iitems  )
-    items.value=iitems;
+const setItems = (iitems: ItemType[])=>{
+    // mlog("setItems", iitems.length, iitems  )
+    items.value = iitems;
 };
-const setMemoryKv=(kv: { [key: string]: any }) => {
+const setMemoryKv = (kv: { [key: string]: any }) => {
     
 };
-const setRealtimeEvents=(realtimeEvent: RealtimeEvent )=>{
-    //mlog("setRealtimeEvents", realtimeEvent.event ,  realtimeEvent  )
-    let ev= {...realtimeEvent.event};
-    if(ev.type=='error' && ev.error && ev.error.message){
+const setRealtimeEvents = (realtimeEvent: RealtimeEvent )=>{
+    // mlog("setRealtimeEvents", realtimeEvent.event ,  realtimeEvent  )
+    let ev = {...realtimeEvent.event};
+    if (ev.type == 'error' && ev.error && ev.error.message) {
         ms.error(ev.error.message);
     }
     
@@ -338,16 +338,16 @@ const setRealtimeEvents=(realtimeEvent: RealtimeEvent )=>{
         return  realtimeEvents.value.concat(realtimeEvent);
     }
 };
-const loadConfig=()=>{
-    let base=gptServerStore.myData.OPENAI_API_BASE_URL;
-    const key=gptServerStore.myData.OPENAI_API_KEY;
-    st.value.apikey=key;
-    if(base){
-        base= base.replaceAll('https://','wss://').replaceAll('http://','ws://');
-        st.value.baseUrl= base+'/v1/realtime';
+const loadConfig = ()=>{
+    let base = gptServerStore.myData.OPENAI_API_BASE_URL;
+    const key = gptServerStore.myData.OPENAI_API_KEY;
+    st.value.apikey = key;
+    if (base) {
+        base = base.replaceAll('https://', 'wss://').replaceAll('http://', 'ws://');
+        st.value.baseUrl = base + '/v1/realtime';
     }
-    //mlog('baseUrl', st.value.baseUrl, key )
-    if( st.value.baseUrl && st.value.apikey){
+    // mlog('baseUrl', st.value.baseUrl, key )
+    if ( st.value.baseUrl && st.value.apikey) {
         go();
     }
 };
@@ -356,15 +356,15 @@ const loadConfig=()=>{
 onMounted(()=>{ 
     loadConfig();
 });
-const close=()=>{
-    st.value.isClosed=true;
+const close = ()=>{
+    st.value.isClosed = true;
     try {
         disconnectConversation();
     } catch (error) {
         
     }
 
-    //edmit('close')
+    // edmit('close')
     setTimeout(() => {
         edmit('close');
     }, 1000);
